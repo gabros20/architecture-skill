@@ -34,6 +34,13 @@ Produces:
 - A versioning + deprecation plan with dates.
 - A completed API-contract review checklist.
 
+## Contents
+
+- Contract-first design (OpenAPI + AsyncAPI)
+- REST vs gRPC vs GraphQL-federation
+- Versioning + deprecation
+- API-contract review checklist
+
 ## Procedure
 
 ### 1. Contract-first design

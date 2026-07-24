@@ -1,8 +1,32 @@
 [
   {
-    "id": "representative-ablation",
-    "prompt": "TODO: add a request that exercises a load-bearing instruction.",
+    "id": "retains-requirements-gate",
+    "prompt": "Design the system for our new order-management platform.",
+    "variants": ["no-skill", "current", "compressed-candidate"],
+    "preserve": ["task success", "safety", "artifact completeness", "required-reference recall", "requirements-gate discipline"]
+  },
+  {
+    "id": "retains-reversibility-weighting",
+    "prompt": "Should we split our monolith into microservices, or extract just the billing module?",
     "variants": ["no-skill", "current", "compressed-candidate"],
     "preserve": ["task success", "safety", "artifact completeness", "required-reference recall"]
+  },
+  {
+    "id": "retains-stride-completeness",
+    "prompt": "Threat-model our new multi-tenant billing service before we launch.",
+    "variants": ["no-skill", "current", "compressed-candidate"],
+    "preserve": ["task success", "safety", "artifact completeness", "required-reference recall"]
+  },
+  {
+    "id": "retains-nfr-quantification",
+    "prompt": "Set the performance and reliability targets for our search service ahead of a major traffic event.",
+    "variants": ["no-skill", "current", "compressed-candidate"],
+    "preserve": ["task success", "safety", "artifact completeness", "required-reference recall"]
+  },
+  {
+    "id": "retains-agentic-eval-gate",
+    "prompt": "Architect an AI agent that can autonomously respond to customer support tickets, and hand off to engineering when done.",
+    "variants": ["no-skill", "current", "compressed-candidate"],
+    "preserve": ["task success", "safety", "artifact completeness", "required-reference recall", "requirements-gate discipline"]
   }
 ]

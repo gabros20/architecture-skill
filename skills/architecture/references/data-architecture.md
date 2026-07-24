@@ -30,6 +30,15 @@ Produces:
 - An outbox/dual-write decision wherever a write must cross a service boundary.
 - A store-selection decision (polyglot-persistence rule) and an identifier scheme.
 
+## Contents
+
+- The operational-vs-analytical split
+- Consistency: CAP/PACELC
+- CQRS + Event Sourcing — scored, not defaulted
+- The dual-writes problem → Transactional Outbox
+- Polyglot persistence — the restraint rule
+- Schema decisions: identifiers
+
 ## Procedure
 
 ### 1. The operational-vs-analytical split

@@ -73,12 +73,10 @@ detail:
 
 karanpratapsingh's course (CC-BY-NC-ND — cite/link only, github.com/karanpratapsingh/system-design)
 splits steps 2–3 more finely (estimation & constraints → data-model design → API design →
-high-level component design → detailed design → bottleneck resolution) and adds **PACELC**: an
-extension of CAP that applies even absent a partition — **P**artition: **A**vailability vs
-**C**onsistency; **E**lse (normal operation): **L**atency vs **C**onsistency. A system can be
-PC/EL (Cassandra-style: consistent under partition, low-latency otherwise) or PA/EC, etc. — state
-which quadrant a data store's SLA implies before picking it; hand the consistency-model decision
-itself to [Data architecture](data-architecture.md). donnemartin's `system-design-primer`
+high-level component design → detailed design → bottleneck resolution) and adds **PACELC** (CAP
+extended to the no-partition case — defined in [Data architecture](data-architecture.md) §2). State
+which consistency/latency quadrant a data store's SLA implies before picking it; hand the
+consistency-model decision itself to [Data architecture](data-architecture.md). donnemartin's `system-design-primer`
 (CC-BY-4.0 — github.com/donnemartin/system-design-primer) compresses this to four steps (use
 cases/constraints/assumptions → high-level design → core components → scale) and is the source for
 §5's numbers.

@@ -1,10 +1,10 @@
 # Agentic / LLM-system architecture
 
 Purpose: Shape the architecture of a system whose core behavior is an LLM or agent acting under
-uncertainty — the harness it runs inside, the workflow-vs-agent decision, multi-agent topology (if
-any), context/memory design, RAG topology, and the eval gate and security model that make a
-non-deterministic system's shape decidable. The flagship differentiator: agentic-system architecture
-is the open, fast-moving frontier generic system-design canon doesn't cover yet.
+uncertainty — the harness it runs inside, the workflow-vs-agent decision, multi-agent topology,
+context/memory design, RAG topology, and the eval gate and security model that make a
+non-deterministic system's shape decidable. Agentic-system architecture is the open frontier generic
+system-design canon doesn't yet cover.
 
 Read when:
 - The system has an LLM or agent doing real work — deciding, calling tools, multi-step action — not
@@ -15,11 +15,11 @@ Read when:
 
 Skip when:
 - The request is eval/prompt/retrieval *implementation* — `ai`'s territory; this file owns the
-  harness decision, eval threshold, and topology pick, not the implementation.
+  harness decision, eval threshold, and topology pick, not the code.
 - The request is the product-level autonomy/UX decision (HITL level, escalation copy, capability
   tier) — `product`'s own `surface-agentic.md`; consume its capability/risk brief, don't re-derive.
-- The model is decorative (fixed FAQ, no action capability) — route to
-  [surface-web-saas.md](surface-web-saas.md) instead.
+- The model is decorative (fixed FAQ, no action) — route to
+  [surface-web-saas.md](surface-web-saas.md).
 
 Inputs: the job(s) the agent performs and its harness; any capability/risk brief from `product`'s
 `surface-agentic.md` — state explicitly when none exists; existing eval/pilot evidence if any.
@@ -28,15 +28,9 @@ Produces: harness design; workflow-vs-agent decision; multi-agent go/no-go (§3)
 eval quadrant; memory-tier design; eval-as-acceptance-criteria gate; agent-security model.
 
 ## Contents
-1. [Thin-model / thick-harness thesis](#1-thin-model--thick-harness-thesis)
-2. [Workflow vs agent — pattern selection](#2-workflow-vs-agent--pattern-selection)
-3. [When multi-agent is worth it](#3-when-multi-agent-is-worth-it)
-4. [Context engineering](#4-context-engineering-as-a-design-constraint)
-5. [Agent memory tiers](#5-agent-memory-tiers)
-6. [12-Factor Agents](#6-12-factor-agents--the-reliability-stance)
-7. [RAG topology and eval](#7-rag-topology-and-eval)
-8. [Eval-in-the-loop as acceptance criteria](#8-eval-in-the-loop-as-acceptance-criteria)
-9. [Agent security](#9-agent-security)
+1 Thin/thick-harness thesis · 2 Workflow-vs-agent patterns · 3 When multi-agent is worth it ·
+4 Context engineering · 5 Memory tiers · 6 12-Factor Agents · 7 RAG topology and eval ·
+8 Eval-as-acceptance-criteria · 9 Agent security
 
 ## 1. Thin-model / thick-harness thesis
 
@@ -46,30 +40,28 @@ sandbox, browser), orchestration, hooks/middleware. **Architecture decisions liv
 not the model** — derive each component from a specific model limitation, never add one
 speculatively:
 
-| Model limitation | Harness component | Why |
-|---|---|---|
-| No durable state across turns | Filesystem-as-memory | durable state the model can't hold in context |
-| Can't self-verify its own output | Sandbox / code execution | an isolated self-verification loop |
-| Fixed training cutoff | Web/tool search | reach outside frozen training data |
-| Context rot at scale (§4) | Compaction, tool-result offload, progressive disclosure | keep signal density high as turns accumulate |
-| No cross-session learning | AGENTS.md / procedural memory (§5) | continual learning in token space, not weights |
+| Model limitation | Harness component |
+|---|---|
+| No durable state across turns | Filesystem-as-memory |
+| Can't self-verify its own output | Sandbox / code execution |
+| Fixed training cutoff | Web/tool search |
+| Context rot at scale (§4) | Compaction, tool-result offload, progressive disclosure |
+| No cross-session learning | AGENTS.md / procedural memory (§5) |
 
 Same-model, different-harness deltas prove this: Opus 4.5 went 42%→78% on CORE-Bench across two
 harnesses; Vercel deleted 80% of an agent's tools and it went from failing to succeeding (145K→67K
 tokens, 100→19 steps) (Himanshu, "Agent Harness is the Real Product," x.com/himanshutwtxs). Every
 production harness runs the same core loop — `while (model returns tool calls) { execute → capture
 → append → call again }` — all differentiation is what surrounds it. Consensus across Claude Code /
-Cursor / Manus / Devin: flat loop beats complex DAG, filesystem is the memory system, errors are
-preserved in context (not swallowed), primitives beat pre-built integrations, and the best teams
-keep *simplifying* the harness over time, not adding to it.
+Cursor / Manus / Devin: flat loop over complex DAG, filesystem as memory, errors kept in context,
+primitives over pre-built integrations — and keep *simplifying* over time.
 
 ## 2. Workflow vs agent — pattern selection
 
 **Workflows** = LLMs/tools orchestrated through predefined code paths (predictable, cheaper).
 **Agents** = an LLM dynamically directs its own process and tool use (flexible, costlier, errors
-compound) (Anthropic, "Building Effective Agents"). Default to a workflow; graduate to an agent
-only when step count is genuinely unpredictable and the environment is trusted/sandboxed enough to
-tolerate compounding error.
+compound) (Anthropic, "Building Effective Agents"). Default to a workflow; graduate to an agent only
+when step count is genuinely unpredictable and the environment tolerates compounding error.
 
 **5 workflow patterns:**
 
@@ -86,15 +78,14 @@ Google Cloud's 12-pattern selection matrix extends this to full topologies
 → Sequential/Parallel/Iterative-Refinement; **dynamic orchestration** →
 Single-Agent/Coordinator/Hierarchical-Decomposition/Swarm; **iterative reasoning** →
 ReAct/Loop/Review-and-Critique; **special-purpose** → Human-in-the-Loop/Custom-Logic. Start
-single-agent, graduate to multi-agent only as complexity demands — measured, never assumed.
+single-agent; graduate as complexity demands, measured.
 
 ## 3. When multi-agent is worth it
 
 Anthropic's internal build ("How We Built Our Multi-Agent Research System") gives real decision
-data, not intuition: a lead-agent/subagent orchestrator beat single-Opus by **+90.2%** on a
-breadth-first eval — but a single agent's tokens run ~4× a chat turn's, and multi-agent runs
-~**15×**. **Token usage explains ~80% of eval-score variance** — multi-agent's cost is the dominant
-lever, not an incidental one.
+data: a lead-agent/subagent orchestrator beat single-Opus by **+90.2%** on a breadth-first eval —
+but a single agent's tokens run ~4× a chat turn's, and multi-agent runs ~**15×**. **Token usage
+explains ~80% of eval-score variance** — cost is the dominant lever, not incidental.
 
 | Signal | Multi-agent wins | Single agent wins |
 |---|---|---|
@@ -102,52 +93,48 @@ lever, not an incidental one.
 | Domain | Research, many independent tool calls | Most coding tasks |
 | Per-step reliability | — | Per-step error rate **>45%** (Google/GPT/Gemini/Claude, 180 experiments) |
 
-The **45% per-step-error decomposition threshold** is the sharpest gate: below it, decomposing into
-more agents pays off. Above it, fix the step's reliability first (better prompt, tool, or model) —
-stacking agents on a broken step multiplies the failure instead of averaging it out. Scale effort to
-complexity: a simple fact needs 1 agent/3–10 calls; a comparison needs 2–4 subagents/10–15 calls;
-genuinely complex work needs 10+ subagents with divided responsibilities.
+The **45% per-step-error threshold** is the sharpest gate: below it, decomposing into more agents
+pays off; above it, fix the step first (better prompt, tool, or model) — stacking agents on a broken
+step multiplies the failure, not averages it out. Scale effort to complexity: a simple fact 1 agent/
+3–10 calls; a comparison 2–4 subagents/10–15 calls; complex work 10+ subagents with divided
+responsibilities.
 
 ## 4. Context engineering as a design constraint
 
 **Context rot**: recall degrades as tokens grow — a gradient, not a cliff, since attention has n²
 pairwise relations and finite long-range parameters (Anthropic, "Effective Context Engineering for
 AI Agents"). Treat context as a **finite attention budget**: it bounds what a single agent/turn can
-be responsible for, which in turn bounds the harness and topology decisions in §1–3.
+own, and so bounds the harness and topology decisions in §1–3.
 
 Techniques, in order of first resort: **compaction** (summarize near the limit; keep architectural
-decisions and unresolved bugs, drop redundant tool output); **tool-result clearing** (the safest,
-lowest-risk compaction — evict stale outputs, keep the call); **sub-agent isolation** (a subagent
-burns 10Ks of tokens, returns a 1–2K-token summary — also the mechanism behind §3's pattern);
-**just-in-time retrieval** (load lightweight identifiers, fetch full content on demand); **structured
-note-taking** (persistent memory *outside* the context window, not more tokens inside it).
+decisions and unresolved bugs, drop redundant tool output); **tool-result clearing** (lowest-risk
+compaction — evict stale outputs, keep the call); **sub-agent isolation** (a subagent burns 10Ks of
+tokens, returns a 1–2K-token summary — also the mechanism behind §3's pattern); **just-in-time
+retrieval** (load identifiers, fetch full content on demand); **structured note-taking** (persistent
+memory outside the context window, not more tokens inside it).
 
-Rule of thumb (Manus, via harness-architecture surveys): past **~40% of nominal input capacity**,
-agents enter a "dumb zone" — size the working-context budget with real headroom, not against the
-model's advertised window limit.
+Rule of thumb (Manus, via harness surveys): past **~40% of nominal input capacity** agents enter a
+"dumb zone" — size the working-context budget with real headroom, not the advertised window limit.
 
 ## 5. Agent memory tiers
 
 CoALA-grounded taxonomy (SwirlAI, newsletter.swirlai.com/p/memory-in-agent-systems): three long-term
 tiers, one pattern — **store → embed → retrieve-on-demand → inject** into working memory: **Episodic**
-(past interactions/actions, vector-stored, retrieved semantically — "RAG over the agent's own
-history"), **Semantic** (external knowledge plus the agent's self-identity facts), **Procedural**
-(system prompt, tools, guardrails, topology; codified in git/registries, not retrieved at runtime).
-Working memory is the current turn's context window, not a fourth store.
-
-Palantir's production agent-runtime work (§9) governs all four memory types — including working —
-through **one substrate**, to avoid fragmenting the prompt-injection attack surface across separate
-stores: a unified memory substrate is a security argument here, not only a performance one.
+(past actions, vector-stored, retrieved semantically — "RAG over the agent's own history"),
+**Semantic** (external knowledge plus self-identity facts), **Procedural** (system prompt, tools,
+guardrails, topology; codified in git/registries, not retrieved at runtime).
+Working memory is the current turn's context window, not a fourth store. Palantir (§9) governs all
+four types — including working — through **one substrate**, so the prompt-injection surface isn't
+fragmented across stores: a security argument, not only a performance one.
 
 ## 6. 12-Factor Agents — the reliability stance
 
 Two factors are load-bearing for architecture (humanlayer/12-factor-agents, CC-BY-SA-4.0 —
 re-expressed, attribute if quoting directly): **Factor 8, own your control flow** — don't delegate
-orchestration to an opaque framework, which hides the prompt/response cycle and causes wrong
-assumptions about what the system is doing. **Factor 12, make your agent a stateless reducer** —
-`(state, event) → new_state`; the loop is a pure function over explicit state, not an object
-silently accumulating hidden context. Both point the same direction as §1: intelligence and control
-belong in code the team owns, not a black-box agent framework.
+orchestration to an opaque framework that hides the prompt/response cycle. **Factor 12, make your
+agent a stateless reducer** — `(state, event) → new_state`; the loop is a pure function over explicit
+state, not an object silently accumulating hidden context. Both point the same direction as §1:
+control belongs in code the team owns, not a black-box framework.
 
 ## 7. RAG topology and eval
 
@@ -156,11 +143,11 @@ Agentic RAG): **Naive → Hybrid** (dense + BM25) **→ HyDE** (embed a hypothet
 retrieval) **→ Corrective/CRAG** (self-grade retrieved docs, web-search fallback on a low grade)
 **→ Self-RAG** (model refines its own queries) **→ Agentic RAG** (an agent decides whether/what/how
 to retrieve, looping retrieve → evaluate → re-retrieve → generate). Climb only when the cheaper
-stage's failure mode is *observed*, never pre-emptively.
+stage's failure mode is *observed*.
 
-**Two-stage retrieve-then-rerank is close to mandatory at real scale**: over-retrieve ~5× candidates,
-rerank with a cross-encoder — "no reranking" is named the single most common cause of RAG
-hallucination (omer-metin, llm-architect skill). Hybrid search combines dense + BM25 via
+**Two-stage retrieve-then-rerank is near-mandatory at scale**: over-retrieve ~5× candidates, rerank
+with a cross-encoder — "no reranking" is named the single most common cause of RAG hallucination
+(omer-metin, llm-architect skill). Hybrid search combines dense + BM25 via
 **Reciprocal Rank Fusion**, `score += 1/(k + rank + 1)`, `k=60`. Set an explicit relevance threshold
 (~0.7) below which the system answers "I don't know" rather than answering ungrounded.
 
@@ -174,24 +161,22 @@ hallucination (omer-metin, llm-architect skill). Hybrid search combines dense + 
 | Answer relevancy | answer addresses the actual question | synthesis-model prompt, query rewriting |
 
 Low precision/recall is a retrieval problem; low faithfulness/relevancy with good context is a
-generation problem — don't tune the wrong stage.
+generation problem.
 
 ## 8. Eval-in-the-loop as acceptance criteria
 
 Non-determinism means an agentic system can't be accepted by inspection — only by a stated pass rate
-against a task set. This mirrors `product`'s own `surface-agentic.md` §3 (eval-as-acceptance-
-criteria) one layer down: architecture's job is to specify the eval as a **release gate**. Anthropic's
-multi-agent build starts evals at ~20 queries (large early effect sizes), scores with an
-LLM-as-judge rubric (accuracy, citations, completeness, source quality, tool efficiency) plus human
-eval for edge cases and judge bias, and gates production on a **regression check** against the last
-committed run, not a one-time pass/fail.
+against a task set. Architecture's job is to specify the eval as a **release gate** (one layer down
+from `product`'s own `surface-agentic.md` §3). Anthropic's multi-agent build starts evals at ~20
+queries, scores with an LLM-as-judge rubric (accuracy, citations,
+completeness, source quality, tool efficiency) plus human eval for judge bias, and gates production
+on a **regression check** against the last committed run, not a one-time pass/fail.
 
 State four things per gated capability: **task-set size/source** (real usage or pilot transcripts,
 not invented cases), the **evaluator** (exact-match / LLM-as-judge / human review / tool-trace
-check), the **pass threshold**, and the **regression gate**. This is the agentic system's contract
-in the same sense [contracts.md](contracts.md) is the deterministic system's contract — that
-reference owns the interface, this owns the probabilistic gate. `ai` implements the harness and
-judge; architecture owns which threshold gates a release.
+check), the **pass threshold**, and the **regression gate** — the agentic system's contract the way
+[contracts.md](contracts.md) is the deterministic one's. `ai` implements the harness and judge;
+architecture owns which threshold gates a release.
 
 ## 9. Agent security
 
@@ -199,34 +184,27 @@ Palantir's production agent-runtime work ("Securing Agents in Production," x.com
 gives 5 dimensions as a checklist: (1) secure/resilient access to the reasoning core; (2) insulated
 orchestration of executors; (3) granular policy across all memory forms; (4) governed multimodal
 tool access; (5) real-time observability plus post-hoc audit. **Provenance-based authorization**
-resolves permission at the whole call-chain level, at runtime *and* publish-time — a tool version
-that would violate provenance can't even be published — closing the gap where a nested sub-call
-leaks marked data downstream through an intermediate agent that individually looks compliant.
-**Agent permission = composition of 3 identities**: the owner, the agent's own service/SDK scope,
-and the user it's currently acting on behalf of — authorize and audit against all three, never just
-the service credential.
+resolves permission at the whole call-chain level, at runtime *and* publish-time (a provenance-
+violating tool version can't even be published) — closing the gap where a nested sub-call leaks
+marked data through an intermediate agent that individually looks compliant. **Agent permission =
+composition of 3 identities**: the owner, the agent's own service/SDK scope, and the user it's acting
+for — authorize and audit against all three, never just the service credential.
 
 Prompt injection via retrieved content is the concrete instance at the RAG layer (§7):
-**XML-delimit untrusted content** so the model distinguishes instruction from data structurally —
-don't rely on it inferring from prose alone that a retrieved paragraph is untrusted.
+**XML-delimit untrusted content** so the model separates instruction from data structurally, not by
+inferring from prose that a retrieved paragraph is untrusted.
 
 ## Validation
 
-- Every agentic surface names its harness's context-management strategy (§4) — "give it a bigger
-  context window" is not a design.
-- Multi-agent, if chosen, is justified against §3's decision data, not assumed as the more-capable
-  default.
+- The harness names its context-management strategy (§4) — "a bigger context window" is not a design.
+- Multi-agent, if chosen, is justified against §3's decision data, not assumed as more capable.
 - The eval gate (§8) states task-set size/source, evaluator, pass threshold, and regression gate.
-- The RAG topology (§7) names its rung on the ladder and why a cheaper rung wasn't sufficient.
-- The agent-security model (§9) names its authz composition and the prompt-injection mitigation for
-  every retrieved/untrusted content path.
+- The RAG topology (§7) names its rung and why a cheaper rung wasn't sufficient.
+- The security model (§9) names its authz composition and the prompt-injection mitigation for every
+  untrusted-content path.
 
 ## Failure modes and handoff
 
-- **Really eval/prompt/retrieval implementation** — name and recommend `ai`; this stops at the
-  harness decision, eval threshold, and topology pick.
-- **Really the product-level autonomy/UX decision** — `product`'s own `surface-agentic.md`; consume
-  its brief, don't re-derive it.
 - **No capability or eval evidence exists yet** — say so; the first deliverable is a probe plan, not
   a committed architecture — same discipline as an unmeasured [nfr-budgets.md](nfr-budgets.md).
 - **"Multi-agent sounds more capable"** — push back with §3's data; a single well-scoped agent under

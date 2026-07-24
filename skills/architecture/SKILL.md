@@ -2,15 +2,15 @@
 name: architecture
 description: >-
   Decide the shape of a software system — boundaries, contracts, NFR budgets, threat model, and
-  ADRs — at the Shape stage between product and the build skills. Use to design the system, do system
-  design, define the architecture, decide microservices vs monolith, draw bounded contexts, spec
+  ADRs — at the Shape stage between product and the build skills. Use to design the system, define
+  the architecture, decide microservices vs monolith, draw bounded contexts, spec
   API/event contracts, set SLO/perf/cost budgets, threat-model (STRIDE), plan a migration or
   deprecation, write an ADR, or architect an agent/LLM system. Not for product discovery/PRD (→
   product), UX/UI (→ design), production code (→ frontend/backend/data/ai), diagram rendering, or
   CI/deploy/runtime ops (→ operate).
 ---
 
-# System Architecture
+# Product Architecture
 
 ## Mission and boundary
 

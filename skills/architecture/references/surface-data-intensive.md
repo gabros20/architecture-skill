@@ -53,11 +53,9 @@ consumer) — don't force one mechanism to serve every freshness requirement; na
 batch and which are stream per consumer, not for the platform as a whole.
 
 ### 3. Data mesh vs centralized lake/warehouse
-Ground: Zhamak Dehghani, Data Mesh — four principles: **domain ownership** (each domain owns its
-analytical data), **data as a product** (discoverable, addressable, self-describing, with an SLA),
-**self-serve data platform** (infra-as-a-platform lowers the barrier to publishing/consuming), and
-**federated computational governance** (interoperability standards enforced computationally, not by
-a central review board). Choose mesh when the actual pain is **organizational** — many domain teams
+[Data architecture](data-architecture.md) §1 defines Data Mesh's four principles (domain ownership ·
+data as a product · self-serve data platform · federated computational governance). The surface-level
+call: choose mesh when the actual pain is **organizational** — many domain teams
 blocked waiting on one central data team — not a technology preference. Choose a centralized
 lake/warehouse/lakehouse when a single team can serve every consumer without becoming that bottleneck;
 adopting mesh below that threshold trades a solvable technology problem for a harder org-design

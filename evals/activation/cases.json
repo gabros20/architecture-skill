@@ -1,12 +1,97 @@
 [
   {
-    "id": "positive-explicit",
-    "prompt": "Use $architecture to TODO: add a realistic in-scope request.",
+    "id": "positive-system-design",
+    "prompt": "Design the system for our new order-management platform from scratch — give me the boundaries, the leveled architecture, and the trade-offs.",
     "should_trigger": true
   },
   {
-    "id": "negative-near-miss",
-    "prompt": "TODO: add a realistic request owned by the closest neighboring skill.",
+    "id": "positive-decomposition",
+    "prompt": "Our monolith is getting painful to change — should this be split into microservices, and where are the bounded contexts?",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-contracts",
+    "prompt": "Define the API contract for the payments service — endpoints, versioning, and a deprecation plan for the old v1 routes.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-data-architecture",
+    "prompt": "Help us choose a consistency model for the inventory-to-order data flow and decide whether we need CQRS/event sourcing here.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-nfr-budgets",
+    "prompt": "Set SLO targets, a latency budget, and a scaling/cost plan for the search service ahead of Black Friday.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-security-architecture",
+    "prompt": "Threat-model the new multi-tenant admin console and decide the auth/authz model and tenant isolation strategy.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-migration",
+    "prompt": "We need to extract the billing module out of the legacy monolith and cut over with minimal downtime — plan the migration.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-adr-and-governance",
+    "prompt": "Write an ADR recording our decision to move from REST to gRPC for internal service calls, and check it against what's actually in the repo.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-surface-web-saas",
+    "prompt": "Architect the multi-tenant SaaS backend for our new expense-reporting product — tenant isolation, BFF layer, the works.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-surface-mobile",
+    "prompt": "Design the client architecture for our new iOS/Android app, including the offline-sync and conflict-resolution story.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-surface-agentic",
+    "prompt": "Architect an AI agent system that can autonomously triage support tickets — harness design, memory, and the eval gate before it ships.",
+    "should_trigger": true
+  },
+  {
+    "id": "positive-surface-data-intensive",
+    "prompt": "Design the architecture for our new analytics platform — batch vs stream, and whether data ownership should be centralized or mesh.",
+    "should_trigger": true
+  },
+  {
+    "id": "negative-product-discovery",
+    "prompt": "We suspect checkout abandonment is a real problem but haven't talked to a single user yet — help us validate it before anyone designs a fix.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-product-prd",
+    "prompt": "Write the PRD for our new bulk-export feature, with Given/When/Then acceptance criteria.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-design-ui",
+    "prompt": "Design the checkout UI — layout, visual style, and the interaction states for the payment step.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-frontend-implement",
+    "prompt": "Implement this REST endpoint in our Express app and wire it up to the existing controller.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-frontend-component",
+    "prompt": "Build the React component for the new pricing table using our existing design tokens.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-operate-deploy",
+    "prompt": "Set up the CI/CD pipeline for this repo and get it deploying to staging on every merge to main.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-quality-load-test",
+    "prompt": "Run a load test against the checkout service and report where it falls over.",
     "should_trigger": false
   }
 ]

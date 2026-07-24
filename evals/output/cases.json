@@ -1,10 +1,80 @@
 [
   {
-    "id": "primary-artifact",
-    "prompt": "TODO: add a representative execution request.",
+    "id": "system-design-requirements-gate",
+    "prompt": "Design the system for our new order-management platform.",
     "assertions": [
-      "TODO: name an observable artifact requirement",
-      "TODO: name an objective validation or completion requirement"
+      "Does not propose or outline a design until functional requirements and NFRs are captured, asking one missing-input question at a time",
+      "Surfaces any contradiction between stated constraints instead of silently picking a side",
+      "Unknown inputs are marked TBD rather than filled in with an invented number",
+      "Once requirements are gated, states explicit options considered for each major decision, not just the final pick",
+      "Each decision is weighted by reversibility — one-way doors (data store, public API shape) get deeper analysis than two-way doors",
+      "Distinguishes facts (stated constraints), decisions made, and assumptions carried forward"
+    ]
+  },
+  {
+    "id": "decomposition-reversibility-and-tradeoffs",
+    "prompt": "Should we split our monolith into microservices? We're a 15-person team with one product and steady (not hypergrowth) traffic.",
+    "assertions": [
+      "Defaults toward a modular monolith recommendation unless a named disintegrator (e.g. independent scaling need, team-boundary conflict) justifies a split",
+      "Names explicit options considered (monolith, modular monolith, microservices) rather than jumping straight to one",
+      "Every recommendation states a concrete pick, what NOT to build, and a stated trade-off",
+      "States 'would choose X if {trigger}' for the rejected option(s) rather than dismissing them outright",
+      "Caps the decision set at 3-5 decisions rather than dumping an exhaustive document"
+    ]
+  },
+  {
+    "id": "contracts-versioned-interface",
+    "prompt": "Define the API contract for the payments service, including how we'll evolve it over time.",
+    "assertions": [
+      "Specifies the contract as a versioned interface (explicit version scheme) rather than an unversioned endpoint list",
+      "Includes a deprecation plan/timeline for superseded versions, not just the new shape",
+      "Produces a concrete API/event skeleton (e.g. OpenAPI/AsyncAPI-shaped), not prose description alone",
+      "States the trade-off behind the protocol choice (REST/gRPC/GraphQL) against at least one rejected option",
+      "Runs the contract review checklist as a uniform table with a self-audit count, not a narrative pass"
+    ]
+  },
+  {
+    "id": "nfr-budgets-as-numbers",
+    "prompt": "Set the performance and reliability targets for our search service ahead of a major traffic event.",
+    "assertions": [
+      "Every NFR target is expressed as a number (e.g. p99 latency in ms, error budget in %, RPS ceiling), never an unquantified adjective like 'fast' or 'highly available'",
+      "An SLO is paired with an explicit error budget",
+      "States scaling triggers tied to the stated numeric thresholds",
+      "Runs the Well-Architected (or equivalent) pillar checklist as a uniform table with a self-audit count against the total pillars covered",
+      "Flags any target the requester hasn't supplied as TBD rather than inventing a plausible-sounding number"
+    ]
+  },
+  {
+    "id": "security-stride-completeness",
+    "prompt": "Threat-model our new multi-tenant billing service before we launch.",
+    "assertions": [
+      "Produces a STRIDE register covering every relevant system element as a table, one row per threat category per element",
+      "Reports a self-audit count of threats covered against the total elements/categories rather than stopping after a narrative pass",
+      "States the auth/authz model and tenant-isolation decision explicitly (not left implicit)",
+      "Each identified threat has a stated mitigation or an explicitly accepted residual risk",
+      "Distinguishes facts about the current system from assumptions made about attacker capability"
+    ]
+  },
+  {
+    "id": "adr-right-weighting",
+    "prompt": "Write an ADR for our decision to move from a shared database to per-service databases.",
+    "assertions": [
+      "Weights the ADR's depth to the decision's reversibility — this is treated as a one-way door given its data-store nature, and gets full analysis rather than a one-line note",
+      "Names the options considered and why the alternatives were rejected",
+      "States the trade-off accepted, not just the benefits of the chosen option",
+      "Follows the right-weight ADR template shape (context, decision, consequences) rather than free-form prose",
+      "Distinguishes the decision itself from any assumptions the decision depends on"
+    ]
+  },
+  {
+    "id": "agentic-eval-gate-and-facts",
+    "prompt": "Architect an AI agent that can autonomously respond to customer support tickets, including retrieval over our knowledge base.",
+    "assertions": [
+      "Defines the eval set and treats it as a release gate rather than an optional afterthought",
+      "States the RAG/retrieval topology and memory-tier decisions explicitly, each with a named trade-off",
+      "Names the security model specific to an agentic system (e.g. tool/action scoping, prompt-injection surface) rather than reusing a generic web-app threat model unmodified",
+      "Distinguishes facts about the current support workflow from assumptions about model capability",
+      "States autonomy boundaries (what the agent may do unsupervised vs. what requires human approval) as an explicit decision"
     ]
   }
 ]

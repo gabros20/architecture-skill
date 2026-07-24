@@ -1,8 +1,132 @@
 [
   {
-    "id": "primary-route",
-    "prompt": "TODO: add a request that selects one reference.",
-    "expected_references": ["references/example.md"],
-    "forbidden_references": []
+    "id": "system-design-greenfield",
+    "prompt": "Design the system for our new order-management platform from scratch — give me the boundaries, the leveled architecture, and the trade-offs.",
+    "expected_references": ["references/system-design.md"],
+    "forbidden_references": [
+      "references/surface-mobile.md",
+      "references/surface-agentic.md",
+      "references/migration.md"
+    ]
+  },
+  {
+    "id": "decomposition-monolith-split",
+    "prompt": "Our monolith is getting painful to change — should this be split into microservices, and where are the bounded contexts?",
+    "expected_references": ["references/decomposition.md"],
+    "forbidden_references": [
+      "references/contracts.md",
+      "references/nfr-budgets.md",
+      "references/migration.md"
+    ]
+  },
+  {
+    "id": "contracts-api-versioning",
+    "prompt": "Define the API contract for the payments service — endpoints, versioning, and a deprecation plan for the old v1 routes.",
+    "expected_references": ["references/contracts.md"],
+    "forbidden_references": [
+      "references/decomposition.md",
+      "references/data-architecture.md",
+      "references/migration.md"
+    ]
+  },
+  {
+    "id": "data-architecture-consistency",
+    "prompt": "Help us choose a consistency model for the inventory-to-order data flow and decide whether we need CQRS/event sourcing here.",
+    "expected_references": ["references/data-architecture.md"],
+    "forbidden_references": [
+      "references/contracts.md",
+      "references/nfr-budgets.md",
+      "references/surface-data-intensive.md"
+    ]
+  },
+  {
+    "id": "nfr-budgets-slo",
+    "prompt": "Set SLO targets, a latency budget, and a scaling/cost plan for the search service ahead of Black Friday.",
+    "expected_references": ["references/nfr-budgets.md"],
+    "forbidden_references": [
+      "references/security-architecture.md",
+      "references/data-architecture.md",
+      "references/migration.md"
+    ]
+  },
+  {
+    "id": "security-threat-model",
+    "prompt": "Threat-model the new multi-tenant admin console and decide the auth/authz model and tenant isolation strategy.",
+    "expected_references": ["references/security-architecture.md", "references/surface-web-saas.md"],
+    "forbidden_references": [
+      "references/surface-mobile.md",
+      "references/surface-agentic.md",
+      "references/migration.md"
+    ]
+  },
+  {
+    "id": "migration-strangler-fig",
+    "prompt": "We need to extract the billing module out of the legacy monolith and cut over with minimal downtime — plan the migration.",
+    "expected_references": ["references/migration.md"],
+    "forbidden_references": [
+      "references/system-design.md",
+      "references/nfr-budgets.md",
+      "references/adr-and-governance.md"
+    ]
+  },
+  {
+    "id": "adr-record-decision",
+    "prompt": "Write an ADR recording our decision to move from REST to gRPC for internal service calls, and check it against what's actually in the repo.",
+    "expected_references": ["references/adr-and-governance.md"],
+    "forbidden_references": [
+      "references/contracts.md",
+      "references/migration.md",
+      "references/decomposition.md"
+    ]
+  },
+  {
+    "id": "system-design-saas-surface",
+    "prompt": "Architect the multi-tenant SaaS backend for our new expense-reporting product from scratch — tenant isolation, BFF layer, the works.",
+    "expected_references": ["references/system-design.md", "references/surface-web-saas.md"],
+    "forbidden_references": [
+      "references/surface-mobile.md",
+      "references/surface-agentic.md",
+      "references/surface-data-intensive.md"
+    ]
+  },
+  {
+    "id": "agentic-rag-topology",
+    "prompt": "Architect a RAG system for our AI support agent — retrieval topology, memory tiers, and the eval gate before it ships.",
+    "expected_references": ["references/surface-agentic.md", "references/data-architecture.md"],
+    "forbidden_references": [
+      "references/surface-mobile.md",
+      "references/surface-web-saas.md",
+      "references/surface-internal-platform.md"
+    ]
+  },
+  {
+    "id": "agentic-security-overlay",
+    "prompt": "Threat-model our AI agent that can execute arbitrary code on behalf of a user — what's the auth/authz model and the agent-specific attack surface?",
+    "expected_references": ["references/security-architecture.md", "references/surface-agentic.md"],
+    "forbidden_references": [
+      "references/surface-mobile.md",
+      "references/surface-web-saas.md",
+      "references/migration.md"
+    ]
+  },
+  {
+    "id": "mobile-contracts-combo",
+    "prompt": "Design the client architecture and the backend API contract for our new mobile banking app, including offline-sync handling.",
+    "expected_references": ["references/contracts.md", "references/surface-mobile.md"],
+    "forbidden_references": [
+      "references/surface-web-saas.md",
+      "references/surface-agentic.md",
+      "references/migration.md"
+    ]
+  },
+  {
+    "id": "dont-over-architect-mvp",
+    "prompt": "We're a two-person startup shipping an MVP in six weeks — should we build this as microservices with event sourcing from day one?",
+    "expected_references": ["references/decomposition.md"],
+    "forbidden_references": [
+      "references/data-architecture.md",
+      "references/surface-internal-platform.md",
+      "references/migration.md"
+    ]
   }
 ]
