@@ -7,6 +7,11 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 
 ## [Unreleased]
 
+### Added
+- Queue unreleased changes here.
+
+## [0.1.1] — 2026-07-24
+
 ### Changed
 - SKILL.md router: clarified that the `agentic` surface overlay is additive — it stacks on top of a
   base surface overlay (web-saas / mobile / data-intensive / internal-platform) rather than replacing
@@ -26,4 +31,5 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
   `ai`/`quality`, and activation/traversal/output/compression evals. Requirements-gated, decision-first,
   monolith-first by default.
 
+[0.1.1]: https://github.com/gabros20/architecture-skill/releases/tag/v0.1.1
 [0.1.0]: https://github.com/gabros20/architecture-skill/releases/tag/v0.1.0
