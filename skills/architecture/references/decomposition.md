@@ -147,7 +147,9 @@ command? (3) what data enforces that invariant? If the answer to (2) is only str
 has a customer"), that needs a foreign key, not an aggregate boundary — a common tell of a
 relationship-driven aggregate is that its methods only add/remove/attach and nothing ever fails
 validation. One aggregate per transaction; load only what you need to enforce the invariant, not
-"everything related." For Clean/Hexagonal/Onion as the surrounding structural choice: all three
+"everything related." Use [Aggregate Design Canvas](../assets/aggregate-design-canvas.md) to work a
+single aggregate's boundary from its invariants. For Clean/Hexagonal/Onion as the surrounding
+structural choice: all three
 share Cockburn's asymmetry (alistair.cockburn.us/hexagonal-architecture) — inside vs outside, not
 top vs bottom — and Uncle Bob's Dependency Rule (blog.cleancoder.com): source dependencies point
 only inward, outer layers know nothing of inner. citypaul's naming rule for ports: name by

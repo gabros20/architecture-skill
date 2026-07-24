@@ -14,7 +14,7 @@
   "interface": {
     "displayName": "Product Architecture",
     "shortDescription": "Shape the system: boundaries, contracts, and NFR budgets",
-    "longDescription": "Shape the system: boundaries, contracts, and NFR budgets",
+    "longDescription": "Decide the shape of a software system at the Shape stage between product and build — service boundaries, API/event contracts, NFR budgets, threat models, migrations, ADRs, and agentic-system architecture. Requirements-gated, decision-first, monolith-first; hands contracts and budgets to the build skills.",
     "developerName": "gabros20",
     "category": "Productivity",
     "capabilities": [],

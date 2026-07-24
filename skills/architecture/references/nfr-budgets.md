@@ -71,7 +71,9 @@ Core Web Vitals (good / target / poor): LCP <2.5s / <2.0s / >4.0s; FID <100ms / 
 <0.1 / <0.05 / >0.25. vasilyu1983/ai-agents-public's `scalability-reliability-guide.md` (MIT) adds
 internal-service p95 benchmarks worth cross-checking a budget against: DB query <10ms, cache read
 <1ms, internal API <50ms, external API <200ms. Enforce budgets at CI (bundlesize/Lighthouse-CI gate,
-`webpack.performance.hints:"error"`) — an unenforced budget decays within a quarter.
+`webpack.performance.hints:"error"`) — an unenforced budget decays within a quarter. Fill
+[nfr-budget-worksheet.md](../assets/nfr-budget-worksheet.md) when the deliverable is a standalone
+budget document rather than an inline answer.
 
 ### 2. Reliability as SLO + error budget
 Ground: Google SRE, *Embracing Risk* — https://sre.google/sre-book/embracing-risk/. **Error budget =

@@ -1,6 +1,6 @@
 interface:
   display_name: "Product Architecture"
   short_description: "Shape the system: boundaries, contracts, and NFR budgets"
-  default_prompt: "Use $architecture to TODO: provide one short, realistic starting request."
+  default_prompt: "Use $architecture to shape the system: gate requirements, then decide boundaries, contracts, and NFR budgets."
 policy:
   allow_implicit_invocation: true
