@@ -1,0 +1,68 @@
+# architecture → build/operate handoff envelope
+# Fill every field for a real run; delete these comments once filled.
+# Only `objective` is required — every other field may be empty; a consumer must tolerate it
+# absent, never treat absence as a schema violation. See references/handoff.md for field-by-field
+# meaning and the seam discipline (this file is a routing index, never a copy of the real artifacts).
+
+handoff_version: 1
+skill: architecture
+status: complete              # complete | partial | blocked — see references/handoff.md
+
+objective: ""                  # one sentence: what this architecture pass decided
+
+inputs_used:
+  - path: ""                    # e.g. artifacts/prd.md, artifacts/product-handoff.yaml
+    type: ""                    # e.g. prd, risk-register, capability-brief, nfr-input
+    owner: product
+
+artifacts_created:
+  - path: ""
+    type: solution-architecture-doc
+    owner: architecture
+  - path: ""
+    type: contracts                # API/event contracts — frontend + backend build to these in parallel
+    owner: architecture
+  - path: ""
+    type: nfr-budgets              # perf/scale/reliability/cost targets, as numbers
+    owner: architecture
+  - path: ""
+    type: adrs                     # the decision log — cite, don't re-litigate
+    owner: architecture
+  - path: ""
+    type: threat-model             # STRIDE register — backend implements, quality verifies
+    owner: architecture
+
+decisions: []                    # material calls made and why — enough for a consumer to trust the
+                                   # reasoning, not just the outcome (e.g. "chose modular monolith over
+                                   # microservices: team <10, no measured disintegrator yet")
+
+assumptions: []                   # unvalidated claims the design rests on — mirror the risk
+                                   # register's assumption entries, don't re-derive them here
+
+constraints: []                   # hard limits downstream must respect: budget, timeline, platform,
+                                   # compliance, data residency
+
+risks: []                          # pointers into a risk-register by id — never inline the whole
+                                   # register here
+
+unresolved:
+  - owner: ""                      # every open question needs a named owner — an orphaned question
+    question: ""                   # with no owner never gets answered
+
+validation:
+  performed: []                     # e.g. "contract linted against OpenAPI schema", "ADR reviewed by
+                                      # 2 senior engineers"
+  remaining: []                     # e.g. "NFR budget stated but not load-tested", "threat model not
+                                      # independently verified by quality"
+
+recommended_next:
+  - skill: frontend
+    reason: ""
+  - skill: backend
+    reason: ""
+  - skill: data
+    reason: ""
+  - skill: ai
+    reason: ""
+  - skill: quality
+    reason: ""

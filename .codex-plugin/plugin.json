@@ -1,6 +1,6 @@
 {
   "name": "architecture-skill",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Shape the system: boundaries, contracts, and NFR budgets",
   "author": {
     "name": "gabros20",
@@ -9,7 +9,7 @@
   "homepage": "https://architecture-skill.vercel.app",
   "repository": "https://github.com/gabros20/architecture-skill",
   "license": "MIT",
-  "keywords": ["agent-skill", "architecture"],
+  "keywords": ["agent-skill", "architecture", "system-design", "software-architecture", "architecture-decision-record", "api-contracts"],
   "skills": "./skills/",
   "interface": {
     "displayName": "Product Architecture",
@@ -19,7 +19,7 @@
     "category": "Productivity",
     "capabilities": [],
     "defaultPrompt": [
-      "Use $architecture to TODO: provide one short starter request."
+      "Use $architecture to shape the system for this product: boundaries, contracts, and NFR budgets."
     ],
     "brandColor": "#2563eb"
   }
