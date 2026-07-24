@@ -54,7 +54,11 @@ explicitly requested a composition workflow.
 | Migrate/replatform, extract a service, deprecate an API, modernize a legacy system | [migration](references/migration.md) | 7 Rs / Strangler-Fig pick, extraction order, comparison-read cutover gate, deprecation timeline |
 | "Write an ADR," record/govern a decision, check code against a prior decision, audit an ADR log | [adr-and-governance](references/adr-and-governance.md) | ADR (right-weight template), lifecycle/immutability rule, drift detection, named fitness functions |
 
-### Surface overlay (add at most one)
+### Surface overlay (add at most one base surface)
+
+Pick the one base surface that fits the system type. The **agentic** overlay is additive: when the
+system is *also* an LLM/agent system, stack `surface-agentic` on top of the base surface — it does not
+replace it (per the invariant below, it changes topology, the eval gate, and the security model).
 
 | System type | Read | Reshapes |
 |---|---|---|

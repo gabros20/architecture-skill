@@ -7,8 +7,11 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 
 ## [Unreleased]
 
-### Added
-- Queue unreleased changes here.
+### Changed
+- SKILL.md router: clarified that the `agentic` surface overlay is additive — it stacks on top of a
+  base surface overlay (web-saas / mobile / data-intensive / internal-platform) rather than replacing
+  it, resolving the "at most one overlay" vs "always add the agentic overlay" ambiguity for systems
+  that are both a base surface and an LLM/agent system. (Surfaced by the installed smoke test.)
 
 ## [0.1.0] — 2026-07-24
 
