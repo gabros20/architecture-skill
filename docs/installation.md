@@ -5,8 +5,8 @@ Install the `architecture` runtime pack from the independently versioned
 
 ## Prerequisites
 
-- An Agent Skills-compatible client.
-- TODO: Add only real skill-specific tools, credentials, or runtime requirements.
+- An Agent Skills-compatible client (Codex, Claude Code, Cursor, or similar).
+- No API keys, credentials, or extra tooling — `architecture` is a reasoning-and-reference skill.
 
 ## Install with skills.sh
 

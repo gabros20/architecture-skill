@@ -1,20 +1,22 @@
 <!doctype html>
-<!-- skill-site scaffold: shared family chrome; identity = the accent triple PLUS sections, components, and a hero designed for THIS skill. Read site/README.md (the design brief) before editing — filling the TODOs is not a site. Keep the hero-terminal and Start-here shapes. -->
+<!-- architecture skill · visual guide. Shared family chrome (tokens, type, hero-terminal, footer);
+     identity = blueprint-blue accent + sections/diagrams/hero designed for THIS skill's faceted router
+     (8 primary jobs × 5 surface overlays) at the Shape stage between product and the build skills. -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f6f7fa">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#12151d">
-<title>architecture — Shape the system: boundaries, contracts, and NFR budgets</title>
-<meta name="description" content="TODO — one to two sentence description of the skill for search engines.">
+<title>architecture — Decide the shape of the system: boundaries, contracts, NFR budgets & ADRs</title>
+<meta name="description" content="A faceted agent skill for the Shape stage between product and build: system design, decomposition, API/event contracts, data & consistency, NFR budgets as real numbers, threat modeling, migration, and ADRs — grounded in the architecture canon, with agentic/LLM-system architecture as a first-class surface.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://architecture-skill.vercel.app/">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="architecture — Shape the system: boundaries, contracts, and NFR budgets">
-<meta property="og:description" content="TODO — one to two sentence description for social previews.">
+<meta property="og:title" content="architecture — decide the shape of the system">
+<meta property="og:description" content="A faceted agent skill for the Shape stage: boundaries, contracts, NFR budgets, threat model, and the ADRs that record why — grounded in the architecture canon, with agentic-system architecture first-class.">
 <meta property="og:url" content="https://architecture-skill.vercel.app/">
 <meta property="og:image" content="https://architecture-skill.vercel.app/og.png">
 <meta property="og:image:width" content="1200">
@@ -22,8 +24,8 @@
 <meta property="og:site_name" content="architecture">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="architecture — Shape the system: boundaries, contracts, and NFR budgets">
-<meta name="twitter:description" content="TODO — one to two sentence description for social previews.">
+<meta name="twitter:title" content="architecture — decide the shape of the system">
+<meta name="twitter:description" content="A faceted agent skill for the Shape stage: boundaries, contracts, NFR budgets, threat model, ADRs — grounded in the architecture canon, agentic-first.">
 <meta name="twitter:image" content="https://architecture-skill.vercel.app/og.png">
 
 <script type="application/ld+json">
@@ -31,9 +33,9 @@
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   "name": "architecture",
-  "applicationCategory": "DesignApplication",
+  "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Claude Code / agent CLIs",
-  "description": "TODO — one to two sentence description of the skill.",
+  "description": "A faceted agent skill for the Shape stage between product and the build skills — system design, decomposition, API/event contracts, data architecture, NFR budgets as numbers, threat modeling, migration, and ADRs — grounded in the named architecture canon, with agentic/LLM-system architecture as a first-class surface.",
   "url": "https://architecture-skill.vercel.app/",
   "offers": {
     "@type": "Offer",
@@ -51,26 +53,35 @@
     --accent:#2563eb; --accent-ink:#ffffff; --amber:#a97a10; --amber-bg:#fdf6e3;
     --good:#1e7f4f; --bad:#b3403a; --code-bg:#eef1f7; --glyph:#8391ad;
     --tok-strat:#2563eb; --tok-dim:#8146c9; --tok-val:#1e7f4f; --tok-file:#a97a10;
+    --dim-bg:rgba(129,70,201,.08);
   }
   @media (prefers-color-scheme: dark){ :root{
     --bg:#12151d; --panel:#1a1f2b; --ink:#e6eaf3; --muted:#93a0b8; --line:#2b3245;
     --accent:#60a5fa; --accent-ink:#0d1220; --amber:#d9a72e; --amber-bg:#26200f;
     --good:#4cc38a; --bad:#e5726c; --code-bg:#141824; --glyph:#5d6a85;
     --tok-strat:#60a5fa; --tok-dim:#b98aef; --tok-val:#4cc38a; --tok-file:#d9a72e;
+    --dim-bg:rgba(185,138,239,.13);
   }}
   :root[data-theme="dark"]{
     --bg:#12151d; --panel:#1a1f2b; --ink:#e6eaf3; --muted:#93a0b8; --line:#2b3245;
     --accent:#60a5fa; --accent-ink:#0d1220; --amber:#d9a72e; --amber-bg:#26200f;
     --good:#4cc38a; --bad:#e5726c; --code-bg:#141824; --glyph:#5d6a85;
     --tok-strat:#60a5fa; --tok-dim:#b98aef; --tok-val:#4cc38a; --tok-file:#d9a72e;
+    --dim-bg:rgba(185,138,239,.13);
   }
   :root[data-theme="light"]{
     --bg:#f6f7fa; --panel:#ffffff; --ink:#1c2333; --muted:#5a6478; --line:#d8dde8;
     --accent:#2563eb; --accent-ink:#ffffff; --amber:#a97a10; --amber-bg:#fdf6e3;
     --good:#1e7f4f; --bad:#b3403a; --code-bg:#eef1f7; --glyph:#8391ad;
     --tok-strat:#2563eb; --tok-dim:#8146c9; --tok-val:#1e7f4f; --tok-file:#a97a10;
+    --dim-bg:rgba(129,70,201,.08);
   }
   *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%; text-size-adjust:100%}
+  html,body{overflow-x:hidden; max-width:100%}
+  /* grid/flex children holding white-space:pre blocks must be allowed to shrink so the block's
+     own overflow-x:auto engages instead of forcing page-level horizontal scroll */
+  .wedgegrid>*,.seam>*,.downstream>*,.seambox,.harnessblock,.artgrid>*{min-width:0}
   body{background:var(--bg); color:var(--ink); font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif; margin:0; -webkit-font-smoothing:antialiased}
   .wrap{max-width:1060px; margin:0 auto; padding:0 24px 96px}
   code,.mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
@@ -81,7 +92,7 @@
   h2::after{content:""; flex:1; height:1px; background:var(--line)}
   h2 .lu{color:var(--accent); width:20px; height:20px}
   section{margin-top:64px}
-  .lede{font-size:19px; color:var(--muted); max-width:60ch; margin:0}
+  .lede{font-size:19px; color:var(--muted); max-width:64ch; margin:0}
   .hosts{display:flex; flex-wrap:wrap; align-items:center; gap:7px; margin:16px 0 0}
   .hosts .hl{font-family:"Avenir Next Condensed","Arial Narrow",system-ui,sans-serif; text-transform:uppercase; letter-spacing:.14em; font-weight:600; font-size:11px; color:var(--muted); margin-right:2px}
   .hosts span:not(.hl){font-family:ui-monospace,Menlo,monospace; font-size:11.5px; color:var(--muted); background:var(--code-bg); border-radius:5px; padding:3px 8px; white-space:nowrap}
@@ -93,10 +104,13 @@
   /* lucide icons */
   .lu{width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.75; stroke-linecap:round; stroke-linejoin:round; flex:none; vertical-align:-3px}
 
-  /* top nav */
-  nav{display:flex; flex-wrap:wrap; gap:8px; margin-top:26px}
-  nav a{font-family:ui-monospace,Menlo,monospace; font-size:12.5px; text-decoration:none; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:4px 12px; background:var(--panel)}
-  nav a:hover,nav a:focus-visible{color:var(--accent); border-color:var(--accent); outline:none}
+  /* top nav + section nav */
+  nav.toplinks{display:flex; flex-wrap:wrap; gap:8px; margin-top:26px}
+  nav.toplinks a{font-family:ui-monospace,Menlo,monospace; font-size:12.5px; text-decoration:none; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:4px 12px; background:var(--panel)}
+  nav.toplinks a:hover,nav.toplinks a:focus-visible{color:var(--accent); border-color:var(--accent); outline:none}
+  .secnav{display:flex; flex-wrap:wrap; gap:8px; margin-top:26px}
+  .secnav a{font-family:ui-monospace,Menlo,monospace; font-size:12.5px; text-decoration:none; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:4px 12px; background:var(--panel)}
+  .secnav a:hover,.secnav a:focus-visible{color:var(--accent); border-color:var(--accent); outline:none}
   .secnav a::before{content:"#"; color:var(--glyph); margin-right:5px}
   .secnav a:hover::before,.secnav a:focus-visible::before{color:var(--accent)}
 
@@ -105,80 +119,154 @@
   .term .c{color:var(--muted)}
   .term .p{color:var(--accent); font-weight:600}
 
-  /* the arc — animated explainer: a Remotion video, light/dark, swapped in
-     as progressive enhancement over the static one-line arc fallback below */
-  .vidwrap{display:none; margin-top:20px}
+  /* the hero — Remotion video (light/dark) over the static router fallback */
+  .vidwrap{display:none; margin-top:22px}
   .vidwrap video{display:block; width:100%; aspect-ratio:16/9; border:1px solid var(--line); border-radius:10px; background:var(--bg); box-shadow:0 30px 70px -40px rgba(0,0,0,.45)}
   body.has-vid .vidwrap{display:block}
-  body.has-vid .poster{display:none}
-  .poster{background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:20px; margin-top:20px}
-  .arcline{font-family:ui-monospace,Menlo,monospace; font-size:14.5px; line-height:2; color:var(--muted); margin:0}
-  .arcline b{color:var(--ink); font-weight:600}
-  .arcline .ar{color:var(--glyph); margin:0 2px}
+  body.has-vid .herofallback{display:none}
+
+  /* router fallback / centerpiece — facet composition */
+  .router{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:22px 24px; margin-top:22px}
+  .gate{display:flex; align-items:center; gap:10px; font-family:ui-monospace,Menlo,monospace; font-size:12.5px; color:var(--muted); padding:0 0 16px; margin-bottom:16px; border-bottom:1px dashed var(--line)}
+  .gate .lu{width:16px; height:16px; color:var(--accent); flex:none}
+  .gate b{color:var(--ink)}
+  .rlane{display:grid; grid-template-columns:150px 1fr; gap:14px 16px; align-items:center}
+  .rlane + .rlane{margin-top:12px}
+  .rlabel{font-family:"Avenir Next Condensed","Arial Narrow",system-ui,sans-serif; text-transform:uppercase; letter-spacing:.1em; font-weight:600; font-size:12px; color:var(--muted); text-align:right; line-height:1.25}
+  .rlabel small{display:block; font-family:ui-monospace,Menlo,monospace; text-transform:none; letter-spacing:0; font-weight:400; font-size:10.5px; color:var(--glyph)}
+  .chips{display:flex; flex-wrap:wrap; gap:7px}
+  .chip{font-family:ui-monospace,Menlo,monospace; font-size:12.5px; padding:5px 11px; border-radius:8px; white-space:nowrap; color:var(--muted); background:var(--bg); border:1px solid var(--line)}
+  .chip.on{color:var(--accent-ink); background:var(--accent); border-color:var(--accent); font-weight:600}
+  .chip.dimon{color:var(--tok-dim); background:var(--dim-bg); border-color:var(--tok-dim); font-weight:600}
+  .rdown{display:flex; align-items:center; gap:10px; margin:16px 0 14px; color:var(--glyph)}
+  .rdown::before,.rdown::after{content:""; flex:1; height:1px; background:var(--line)}
+  .rdown span{font-family:ui-monospace,Menlo,monospace; font-size:12px; color:var(--muted)}
+  .readset{display:flex; flex-wrap:wrap; gap:9px; align-items:center}
+  .readset code{font-family:ui-monospace,Menlo,monospace; font-size:12.5px; padding:6px 12px; border-radius:8px; color:var(--accent); background:var(--code-bg); border:1px solid var(--accent)}
+  .readset .cnt{font-family:ui-monospace,Menlo,monospace; font-size:12px; color:var(--muted); margin-left:4px}
+  .readset .cnt b{color:var(--ink)}
+  .rrule{margin:16px 0 0; font-size:13.5px; color:var(--muted); display:flex; gap:9px; line-height:1.55}
+  .rrule .lu{color:var(--accent); flex:none; margin-top:1px; width:17px; height:17px}
+  .rrule b{color:var(--ink)}
   .pcap{font-size:13.5px; color:var(--muted); margin:14px 0 0; max-width:68ch}
   .pcap b{color:var(--ink)}
+  @media (max-width:560px){ .rlane{grid-template-columns:1fr; gap:6px} .rlabel{text-align:left} }
 
-  /* numbered stage timeline */
-  .steps{margin-top:20px; counter-reset:step}
-  .steps>div{position:relative; padding:0 0 22px 46px; --sc:var(--accent)}
-  .steps>div::before{counter-increment:step; content:counter(step); position:absolute; left:0; top:-3px; width:28px; height:28px; border-radius:50%; background:var(--panel); border:2px solid var(--sc); color:var(--sc); font-family:ui-monospace,Menlo,monospace; font-size:13px; font-weight:600; display:flex; align-items:center; justify-content:center}
-  .steps>div::after{content:""; position:absolute; left:13px; top:31px; bottom:-6px; width:2px; background:var(--line)}
-  .steps>div:last-child{padding-bottom:0}
-  .steps>div:last-child::after{display:none}
-  .steps b{display:flex; align-items:center; gap:8px; font-family:ui-monospace,Menlo,monospace; font-size:14px; margin:2px 0 4px}
-  .steps b .lu{width:15px; height:15px; color:var(--sc)}
-  .steps span{font-size:13.5px; color:var(--muted); display:block; line-height:1.55; max-width:66ch}
-  .steps span b{display:inline; font-family:inherit; font-size:inherit; color:var(--ink); margin:0; font-weight:600}
-  .steps span code{font-size:12px; background:var(--code-bg); padding:1px 4px; border-radius:4px; overflow-wrap:anywhere}
-
-  /* reference cards, grouped by stage */
-  /* reference map — stage → chips definition list (voids impossible by construction; lighter
-     than the card-heavy neighbouring sections, so it varies the page rhythm) */
-  .refmap{margin-top:20px}
-  .refrow{display:grid; grid-template-columns:200px 1fr; gap:8px 18px; padding:14px 0; align-items:start}
-  .refrow + .refrow{border-top:1px solid var(--line)}
-  .refrow dt, .refrow dd{margin:0}
-  .reflabel{display:flex; align-items:center; gap:8px; font-family:ui-monospace,Menlo,monospace; font-size:14px; letter-spacing:-.01em; color:var(--ink)}
-  .reflabel .lu{color:var(--accent); width:16px; height:16px; flex:none}
-  .reflabel .ct{margin-left:auto; font-size:11px; color:var(--accent); border:1px solid var(--accent); border-radius:999px; padding:1px 8px; font-family:system-ui; flex:none}
-  .refchips{display:flex; flex-wrap:wrap; gap:7px 8px; align-items:baseline}
-  .refchips .ref{display:inline-flex; align-items:baseline; gap:6px}
-  .refchips code{background:var(--code-bg); padding:2px 8px; border-radius:5px; font-size:12px; white-space:nowrap}
-  .refchips .d{font-size:11.5px; color:var(--muted)}
-  @media (max-width:640px){
-    .refrow{grid-template-columns:1fr; gap:9px 0}
-    .reflabel .ct{margin-left:8px}
-  }
+  /* boundary — owns vs hands off */
+  .boundary{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:20px}
+  .bcol{border:1px solid var(--line); border-radius:10px; padding:16px 18px; background:var(--panel)}
+  .bcol.own{border-left:3px solid var(--accent)}
+  .bcol.off{border-left:3px solid var(--glyph)}
+  .bcol h3{font-family:ui-monospace,Menlo,monospace; font-size:13.5px; margin:0 0 4px; display:flex; align-items:center; gap:8px}
+  .bcol.own h3{color:var(--accent)} .bcol.own h3 .lu{color:var(--accent)}
+  .bcol.off h3{color:var(--muted)} .bcol.off h3 .lu{color:var(--glyph)}
+  .bcol .sub{font-size:12.5px; color:var(--muted); margin:0 0 12px}
+  .bitems{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px}
+  .bitems li{font-size:13.5px; line-height:1.4}
+  .bitems li b{font-family:ui-monospace,Menlo,monospace; font-weight:600; font-size:12.5px; color:var(--ink)}
+  .bitems.hand li b{color:var(--tok-dim)}
+  .bitems li .d{color:var(--muted)}
+  .bnote{margin-top:14px; font-size:13.5px; color:var(--muted); display:flex; gap:9px; line-height:1.55}
+  .bnote .lu{color:var(--accent); flex:none; margin-top:1px; width:17px; height:17px}
+  .bnote b{color:var(--ink)}
+  @media (max-width:640px){ .boundary{grid-template-columns:1fr} }
 
   /* tables */
   .tblwrap{overflow-x:auto; border:1px solid var(--line); border-radius:8px; margin-top:20px}
   table{border-collapse:collapse; width:100%; font-size:14px; background:var(--panel)}
   th{font-family:"Avenir Next Condensed","Arial Narrow",system-ui,sans-serif; text-transform:uppercase; letter-spacing:.08em; font-size:12.5px; font-weight:600; text-align:left; color:var(--muted); padding:10px 16px; border-bottom:1px solid var(--line)}
-  td{padding:10px 16px; border-bottom:1px solid var(--line); vertical-align:top}
+  td{padding:11px 16px; border-bottom:1px solid var(--line); vertical-align:top}
   tr:last-child td{border-bottom:none}
   td code{background:var(--code-bg); padding:1px 6px; border-radius:4px; font-size:12.5px; white-space:nowrap}
   td code a{color:inherit; text-decoration:none}
   td code a:hover{text-decoration:underline}
-  td.dim{font-weight:600; font-family:ui-monospace,Menlo,monospace; font-size:13px; color:var(--tok-dim); white-space:nowrap}
-  td .d{color:var(--muted)}
+  td.job{font-weight:600; color:var(--ink); line-height:1.4}
+  td .canon{color:var(--muted); font-size:12.5px; line-height:1.5}
+  td .canon b{color:var(--ink); font-weight:600}
+  td .prod{color:var(--muted); font-size:12.5px; line-height:1.45}
 
   .note{background:var(--amber-bg); border:1px solid var(--amber); border-radius:8px; padding:12px 16px; font-size:14px; margin-top:16px; max-width:none}
   .note b{color:var(--amber)}
 
-  /* rails — the laws */
+  /* canon chip cloud */
+  .canonband{margin-top:18px; display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:10px}
+  .canongrp{border:1px solid var(--line); border-radius:9px; padding:12px 14px; background:var(--panel)}
+  .canongrp h4{font-family:ui-monospace,Menlo,monospace; font-size:12px; margin:0 0 8px; color:var(--accent); letter-spacing:-.01em}
+  .canongrp .cc{display:flex; flex-wrap:wrap; gap:5px}
+  .canongrp .cc span{font-size:11.5px; color:var(--muted); background:var(--code-bg); border:1px solid var(--line); border-radius:5px; padding:2px 7px; line-height:1.4}
+
+  /* surface overlays */
+  .overlays{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:12px; margin-top:20px}
+  .ov{border:1px solid var(--line); border-radius:10px; padding:15px 17px; background:var(--panel)}
+  .ov.wedge{border-color:var(--accent); box-shadow:0 0 0 1px var(--accent) inset; background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 6%,var(--panel)),var(--panel))}
+  .ov h3{font-family:ui-monospace,Menlo,monospace; font-size:14px; margin:0 0 3px; display:flex; align-items:center; gap:8px; color:var(--ink)}
+  .ov h3 .lu{color:var(--accent); width:16px; height:16px}
+  .ov .file{font-family:ui-monospace,Menlo,monospace; font-size:11px; color:var(--muted); margin-left:auto; font-weight:400}
+  .ov .reshape{font-size:13px; color:var(--muted); margin:6px 0 10px; line-height:1.5}
+  .ov .reshape b{color:var(--ink); font-weight:600}
+  .ov .lens{font-size:12px; color:var(--muted); border-top:1px solid var(--line); padding-top:9px; display:flex; gap:7px}
+  .ov .lens .k{font-family:"Avenir Next Condensed","Arial Narrow",system-ui,sans-serif; text-transform:uppercase; letter-spacing:.08em; font-weight:600; color:var(--accent); flex:none}
+  .ov.wedge .badge{display:inline-block; font-family:"Avenir Next Condensed","Arial Narrow",system-ui,sans-serif; text-transform:uppercase; letter-spacing:.08em; font-weight:600; font-size:10.5px; color:var(--accent-ink); background:var(--accent); border-radius:999px; padding:1px 9px; margin-left:auto}
+
+  /* agentic wedge deep block */
+  .wedgehead{background:var(--accent); color:var(--accent-ink); border-radius:10px 10px 0 0; padding:14px 20px; font-family:ui-monospace,Menlo,monospace; font-size:15px; font-weight:600; display:flex; align-items:center; gap:10px; margin-top:20px}
+  .wedgehead .lu{width:19px; height:19px}
+  .wedgebody{border:1px solid var(--accent); border-top:none; border-radius:0 0 10px 10px; padding:20px; background:var(--panel)}
+  .wedgegrid{display:grid; grid-template-columns:1.05fr 1fr; gap:18px}
+  @media (max-width:720px){ .wedgegrid{grid-template-columns:1fr} }
+  .harnessblock{background:var(--code-bg); border:1px solid var(--line); border-radius:8px; padding:14px 16px; font-family:ui-monospace,Menlo,monospace; font-size:12.5px; line-height:1.75; overflow-x:auto; white-space:pre; margin:0; min-width:0; max-width:100%}
+  .harnessblock .k{color:var(--tok-dim)}
+  .harnessblock .s{color:var(--accent)}
+  .harnessblock .c{color:var(--muted)}
+  .wcol h3{font-family:ui-monospace,Menlo,monospace; font-size:13px; margin:0 0 8px; color:var(--ink)}
+  .ladder{list-style:none; padding:0; margin:0 0 16px; display:flex; flex-direction:column; gap:6px}
+  .ladder li{font-size:12.5px; line-height:1.4; display:flex; gap:9px; align-items:baseline}
+  .ladder li .t{font-family:ui-monospace,Menlo,monospace; font-weight:600; font-size:12px; flex:none; width:112px; color:var(--ink)}
+  .ladder li .d{color:var(--muted)}
+  .ladder li.good .t{color:var(--good)} .ladder li.warn .t{color:var(--amber)} .ladder li.bad .t{color:var(--bad)}
+  .sharprule{margin-top:18px; background:var(--amber-bg); border:1px solid var(--amber); border-radius:8px; padding:13px 16px; font-size:13.5px; line-height:1.5}
+  .sharprule b{color:var(--amber)}
+  .sharprule .cc{display:flex; flex-wrap:wrap; gap:6px; margin-top:9px}
+  .sharprule .cc span{font-family:ui-monospace,Menlo,monospace; font-size:11.5px; color:var(--muted); background:var(--panel); border:1px solid var(--line); border-radius:5px; padding:2px 8px}
+
+  /* invariants — the spine */
   .rules{list-style:none; padding:0; margin:20px 0 0; display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:12px}
-  .rules li{background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--amber); border-radius:6px; padding:12px 16px; font-size:14px; line-height:1.5}
-  .rules li b{display:flex; align-items:center; gap:7px; font-family:ui-monospace,Menlo,monospace; font-size:13px; margin-bottom:3px}
+  .rules li{background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--amber); border-radius:6px; padding:12px 16px; font-size:13.5px; line-height:1.5}
+  .rules li b{display:flex; align-items:center; gap:7px; font-family:ui-monospace,Menlo,monospace; font-size:13px; margin-bottom:3px; color:var(--ink)}
   .rules li b .lu{width:15px; height:15px; color:var(--amber)}
-  /* if the laws list ends on an orphan cell, make the last item a full-width capstone
-     (title | text) so the wide card reads as a deliberate closing emphasis, not a gap */
   .rules li:last-child{grid-column:1 / -1; display:flex; align-items:baseline; gap:22px}
-  .rules li:last-child b{margin-bottom:0; flex:none; width:230px}
+  .rules li:last-child b{margin-bottom:0; flex:none; width:250px}
   @media (max-width:620px){ .rules li:last-child{flex-direction:column; gap:3px} .rules li:last-child b{width:auto} }
-  .loopback{display:flex; gap:10px; margin-top:12px; font-size:13.5px; color:var(--muted); line-height:1.55; max-width:none}
-  .loopback .ic{color:var(--accent); flex:none; margin-top:1px}
-  .loopback .ic .lu{width:17px; height:17px}
-  .loopback b{color:var(--ink)}
+
+  /* artifacts grid */
+  .artgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px; margin-top:20px}
+  .art{border:1px solid var(--line); border-radius:10px; padding:15px 17px; background:var(--panel)}
+  .art h3{font-family:ui-monospace,Menlo,monospace; font-size:13.5px; margin:0 0 4px; display:flex; align-items:center; gap:8px; color:var(--ink)}
+  .art h3 .lu{color:var(--accent); width:16px; height:16px; flex:none}
+  .art .file{display:block; font-family:ui-monospace,Menlo,monospace; font-size:11px; color:var(--muted); margin:0 0 8px}
+  .art p{font-size:12.5px; color:var(--muted); margin:0; line-height:1.5; max-width:none}
+  .art p b{color:var(--ink); font-weight:600}
+
+  /* handoff seam */
+  .seam{display:grid; grid-template-columns:1fr auto 1fr; gap:0 18px; align-items:stretch; margin-top:20px}
+  .seambox{border:1px solid var(--line); border-radius:10px; padding:16px 18px; background:var(--panel)}
+  .seambox.mid{border-color:var(--accent); background:var(--code-bg)}
+  .seambox h3{font-family:ui-monospace,Menlo,monospace; font-size:13.5px; margin:0 0 8px; display:flex; align-items:center; gap:8px; color:var(--ink)}
+  .seambox h3 .lu{width:16px; height:16px; color:var(--accent)}
+  .seambox p{font-size:12.5px; color:var(--muted); margin:0; line-height:1.5; max-width:none}
+  .seamyaml{font-family:ui-monospace,Menlo,monospace; font-size:11.5px; line-height:1.7; color:var(--muted); margin:0; white-space:pre; overflow-x:auto; min-width:0; max-width:100%}
+  .seamyaml .k{color:var(--tok-dim)} .seamyaml .v{color:var(--ink)} .seamyaml .req{color:var(--accent)}
+  .seamarrows{display:flex; flex-direction:column; justify-content:center; gap:16px; color:var(--accent); font-family:ui-monospace,Menlo,monospace; font-size:22px}
+  .downstream{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  @media (max-width:760px){
+    .seam{grid-template-columns:1fr; gap:14px}
+    .seamarrows{flex-direction:row; justify-content:center; gap:40px}
+    .seamarrows span{transform:rotate(90deg)}
+    .downstream{grid-template-columns:1fr}
+  }
+  .seamnote{margin-top:14px; font-size:13.5px; color:var(--muted); display:flex; gap:9px; line-height:1.55}
+  .seamnote .lu{color:var(--accent); flex:none; margin-top:1px; width:17px; height:17px}
+  .seamnote b{color:var(--ink)}
 
   /* details / appendix */
   details.disc{background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:0; margin-top:14px}
@@ -196,150 +284,444 @@
   .files .hl{color:var(--accent); font-weight:600}
 
   footer{margin-top:72px; padding-top:20px; border-top:1px solid var(--line); font-size:13px; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px}
-  /* iOS 26 chrome tint: Safari samples fixed edge elements; theme-color alone is ignored */
   .edge{position:fixed; left:0; right:0; height:8px; background:var(--bg); z-index:0; pointer-events:none}
   .edge.top{top:0} .edge.bottom{bottom:0}
-  @media (max-width:720px){
-    .prow{flex-direction:column; align-items:flex-start}
-    .prow .arr{transform:rotate(90deg); margin-left:18px}
-  }
 </style>
 </head>
 <body>
 <div class="edge top" aria-hidden="true"></div>
 <div class="edge bottom" aria-hidden="true"></div>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="lu-file-input" viewBox="0 0 24 24"><path d="M4 11V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.706.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-1"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M2 15h10"/><path d="m9 18 3-3-3-3"/></symbol>
+  <symbol id="lu-route" viewBox="0 0 24 24"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></symbol>
+  <symbol id="lu-git-fork" viewBox="0 0 24 24"><circle cx="12" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><path d="M18 9v2c0 .6-.4 1-1 1H7c-.6 0-1-.4-1-1V9"/><path d="M12 12v3"/></symbol>
   <symbol id="lu-shield-check" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
-  <symbol id="lu-scroll-text" viewBox="0 0 24 24"><path d="M15 12h-5"/><path d="M15 8h-5"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/></symbol>
-  <symbol id="lu-clipboard-list" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></symbol>
-  <symbol id="lu-clipboard-check" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></symbol>
-  <symbol id="lu-search-check" viewBox="0 0 24 24"><path d="m8 11 2 2 4-4"/><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
-  <symbol id="lu-file-output" viewBox="0 0 24 24"><path d="M4.226 20.925A2 2 0 0 0 6 22h12a2 2 0 0 0 2-2V8a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 14 2H6a2 2 0 0 0-2 2v3.127"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="m5 11-3 3"/><path d="m5 17-3-3h10"/></symbol>
-  <symbol id="lu-files" viewBox="0 0 24 24"><path d="M15 2h-4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/><path d="M16.706 2.706A2.4 2.4 0 0 0 15 2v5a1 1 0 0 0 1 1h5a2.4 2.4 0 0 0-.706-1.706z"/><path d="M5 7a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h8a2 2 0 0 0 1.732-1"/></symbol>
-  <symbol id="lu-sliders-horizontal" viewBox="0 0 24 24"><path d="M10 5H3"/><path d="M12 19H3"/><path d="M14 3v4"/><path d="M16 17v4"/><path d="M21 12h-9"/><path d="M21 19h-5"/><path d="M21 5h-7"/><path d="M8 10v4"/><path d="M8 12H3"/></symbol>
+  <symbol id="lu-shield-alert" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="M12 8v4"/><path d="M12 16h.01"/></symbol>
+  <symbol id="lu-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></symbol>
+  <symbol id="lu-pencil-ruler" viewBox="0 0 24 24"><path d="M13 7 8.7 2.7a2.41 2.41 0 0 0-3.4 0L2.7 5.3a2.41 2.41 0 0 0 0 3.4L7 13"/><path d="m8 6 2-2"/><path d="m18 16 2-2"/><path d="m17 11 4.3 4.3c.94.94.94 2.46 0 3.4l-2.6 2.6c-.94.94-2.46.94-3.4 0L11 17"/><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></symbol>
+  <symbol id="lu-boxes" viewBox="0 0 24 24"><path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z"/><path d="m7 16.5-4.74-2.85"/><path d="m7 16.5 5-3"/><path d="M7 16.5v5.17"/><path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z"/><path d="m17 16.5-5-3"/><path d="m17 16.5 4.74-2.85"/><path d="M17 16.5v5.17"/><path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z"/><path d="M12 8 7.26 5.15"/><path d="m12 8 4.74-2.85"/><path d="M12 13.5V8"/></symbol>
+  <symbol id="lu-braces" viewBox="0 0 24 24"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"/><path d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"/></symbol>
+  <symbol id="lu-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></symbol>
   <symbol id="lu-gauge" viewBox="0 0 24 24"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></symbol>
-  <symbol id="lu-coins" viewBox="0 0 24 24"><path d="M13.744 17.736a6 6 0 1 1-7.48-7.48"/><path d="M15 6h1v4"/><path d="m6.134 14.768.866-.5 2 3.464"/><circle cx="16" cy="8" r="6"/></symbol>
-  <symbol id="lu-split" viewBox="0 0 24 24"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3"/><path d="m15 9 6-6"/></symbol>
-  <symbol id="lu-copy-x" viewBox="0 0 24 24"><line x1="12" x2="18" y1="12" y2="18"/><line x1="12" x2="18" y1="18" y2="12"/><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></symbol>
-  <symbol id="lu-workflow" viewBox="0 0 24 24"><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></symbol>
+  <symbol id="lu-git-branch" viewBox="0 0 24 24"><line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></symbol>
+  <symbol id="lu-scroll-text" viewBox="0 0 24 24"><path d="M15 12h-5"/><path d="M15 8h-5"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/></symbol>
+  <symbol id="lu-bot" viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></symbol>
   <symbol id="lu-layers" viewBox="0 0 24 24"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="m6.08 9.5-3.5 1.6a1 1 0 0 0 0 1.81l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9a1 1 0 0 0 0-1.83l-3.5-1.59"/><path d="m6.08 14.5-3.5 1.6a1 1 0 0 0 0 1.81l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9a1 1 0 0 0 0-1.83l-3.5-1.59"/></symbol>
-  <symbol id="lu-eye" viewBox="0 0 24 24"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="lu-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></symbol>
+  <symbol id="lu-smartphone" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></symbol>
+  <symbol id="lu-network" viewBox="0 0 24 24"><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/></symbol>
+  <symbol id="lu-server" viewBox="0 0 24 24"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></symbol>
+  <symbol id="lu-file-input" viewBox="0 0 24 24"><path d="M4 11V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.706.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-1"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M2 15h10"/><path d="m9 18 3-3-3-3"/></symbol>
+  <symbol id="lu-files" viewBox="0 0 24 24"><path d="M15 2h-4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/><path d="M16.706 2.706A2.4 2.4 0 0 0 15 2v5a1 1 0 0 0 1 1h5a2.4 2.4 0 0 0-.706-1.706z"/><path d="M5 7a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h8a2 2 0 0 0 1.732-1"/></symbol>
+  <symbol id="lu-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+  <symbol id="lu-arrow-left-right" viewBox="0 0 24 24"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></symbol>
+  <symbol id="lu-list-checks" viewBox="0 0 24 24"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></symbol>
+  <symbol id="lu-file-check" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/></symbol>
+  <symbol id="lu-split" viewBox="0 0 24 24"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3"/><path d="m15 9 6-6"/></symbol>
+  <symbol id="lu-tag" viewBox="0 0 24 24"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></symbol>
+  <symbol id="lu-terminal" viewBox="0 0 24 24"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></symbol>
+  <symbol id="lu-workflow" viewBox="0 0 24 24"><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></symbol>
 </svg>
 <div class="wrap">
 <header>
-  <div class="eyebrow">TODO: an agent skill · one short descriptor chip</div>
+  <div class="eyebrow">an agent skill · system design, contracts, NFR budgets &amp; ADRs</div>
   <nav class="toplinks" aria-label="external links">
     <a href="https://github.com/gabros20/architecture-skill" target="_blank" rel="noopener">GitHub</a>
     <a href="https://github.com/gabros20/architecture-skill#install" target="_blank" rel="noopener">Install</a>
     <a href="/llms.txt">llms.txt</a>
   </nav>
   <h1><span class="sl">/</span>architecture</h1>
-  <p class="lede">TODO sentence 1 — the generic, forgettable result an agent produces without this
-  skill. TODO sentence 2 — what architecture replaces that with, ending on Shape the system: boundaries, contracts, and NFR budgets.</p>
-  <div class="term" style="margin-top:22px"><span class="c"># that's the whole start</span>
-<span class="p">/architecture</span> TODO — the shortest real ask that would trigger this skill</div>
+  <p class="lede">Point an agent at a PRD and it starts writing code — inventing boundaries, contracts,
+  and data stores one file at a time. <b>architecture</b> makes it decide the <i>shape</i> first —
+  service boundaries, interface contracts, NFR budgets as real numbers, a threat model, and the ADRs
+  that record why — at the Shape stage between <b>product</b> and the build skills, precisely enough
+  that frontend, backend, data, and ai build the right thing in parallel without re-deriving it.</p>
+  <div class="term" style="margin-top:22px"><span class="c"># natural language — no flags, no fixed pipeline</span>
+<span class="p">/architecture</span> design a multi-tenant refund-automation agent — boundaries, contracts &amp; SLOs</div>
   <p class="hosts"><span class="hl">runs on</span><span class="ref">Claude Code</span><span>Codex</span><span>Cursor</span><span>Antigravity</span><span>opencode</span><span>Grok Build</span><span>Hermes</span></p>
   <nav class="secnav" aria-label="page sections">
-    <a href="#arc">the arc</a><a href="#laws">the laws</a><a href="#pick">pick by job</a>
-    <a href="#refs">reference map</a><a href="#start">start here</a>
+    <a href="#mission">mission</a><a href="#router">the router</a><a href="#jobs">by job</a>
+    <a href="#overlays">surfaces</a><a href="#agentic">agentic</a><a href="#laws">invariants</a>
+    <a href="#artifacts">artifacts</a><a href="#handoff">handoff</a><a href="#start">start here</a>
   </nav>
-</header>
 
-<section id="arc">
-  <h2><svg class="lu" aria-hidden="true"><use href="#lu-workflow"/></svg>The workflow arc</h2>
-  <p>TODO: state the arc here — how many stages/strategies, and whether the agent can enter at
-  any point or must run it start to finish.</p>
   <div class="vidwrap" id="vidwrap"></div>
   <!-- render from remotion/, see remotion/README -->
-  <div class="poster" role="img" aria-label="TODO: describe the diagram this poster stands in for.">
-    <p class="arcline"><b>TODO stage 1</b> <span class="ar">→</span> <b>TODO stage 2</b> <span class="ar">→</span> <b>TODO stage 3</b></p>
+  <div class="herofallback router" role="img" aria-label="The faceted router: requirements are gated first, then one primary job (design the system) composes with at most one surface overlay (agentic / LLM) to resolve to the smallest sufficient reference set — two files, read fully, out of fourteen.">
+    <div class="gate"><svg class="lu" aria-hidden="true"><use href="#lu-target"/></svg><span><b>Requirements gate first</b> — no design opens until functional + non-functional requirements are captured and contradictions surfaced.</span></div>
+    <div class="rlane">
+      <div class="rlabel">① primary job<small>exactly one</small></div>
+      <div class="chips">
+        <span class="chip on">system design</span><span class="chip">decompose</span><span class="chip">contracts</span>
+        <span class="chip">data</span><span class="chip">nfr budgets</span><span class="chip">security</span>
+        <span class="chip">migration</span><span class="chip">adr</span>
+      </div>
+    </div>
+    <div class="rlane">
+      <div class="rlabel">② surface overlay<small>at most one</small></div>
+      <div class="chips">
+        <span class="chip">web / saas</span><span class="chip">mobile</span>
+        <span class="chip dimon">agentic</span><span class="chip">data-intensive</span><span class="chip">internal</span>
+      </div>
+    </div>
+    <div class="rdown"><span>compose →</span></div>
+    <div class="readset">
+      <code>system-design.md</code><code>surface-agentic.md</code>
+      <span class="cnt"><b>2 of 14</b> loaded · read fully</span>
+    </div>
+    <p class="rrule"><svg class="lu" aria-hidden="true"><use href="#lu-route"/></svg><span><b>Route before acting.</b> Pick one job and at most one surface, read only those references — never the whole library. An LLM/agent system always adds its overlay, because it changes topology, the eval gate, and the security model.</span></p>
   </div>
-  <p class="pcap">TODO: note which stages (if any) also stand alone, entered without the rest of the arc.</p>
+  <p class="pcap"><b>The router is the skill.</b> There is no fixed pipeline to run start-to-finish —
+  each job stands alone and enters where your question is. The animation traces one path; the sections
+  below map the whole surface it routes across.</p>
+</header>
 
-  <div class="steps">
-    <div><b><svg class="lu" aria-hidden="true"><use href="#lu-sliders-horizontal"/></svg>TODO stage 1</b><span>TODO one-line job for this stage. → <code>references/example.md</code></span></div>
-    <div><b><svg class="lu" aria-hidden="true"><use href="#lu-files"/></svg>TODO stage 2</b><span>TODO one-line job for this stage.</span></div>
-    <div><b><svg class="lu" aria-hidden="true"><use href="#lu-file-output"/></svg>TODO stage 3</b><span>TODO one-line job for this stage.</span></div>
+<section id="mission">
+  <h2><svg class="lu" aria-hidden="true"><use href="#lu-git-fork"/></svg>Own the decision, not the code</h2>
+  <p>architecture owns the <i>Shape</i> stage — the consequential, hard-to-reverse decisions between
+  <b>product</b> (what to build and why) and the build skills (the production code): service boundaries,
+  public API shape, data-store and consistency choice, the auth model, SLO targets. It hands those
+  decisions down as a contract, a budget, a threat model, and a durable record — and recommends the
+  build skills by name rather than silently doing their work.</p>
+  <div class="boundary">
+    <div class="bcol own">
+      <h3><svg class="lu" aria-hidden="true"><use href="#lu-shield-check"/></svg>architecture owns</h3>
+      <p class="sub">the decision, contract, budget &amp; threat model</p>
+      <ul class="bitems">
+        <li><b>boundaries</b> <span class="d">— bounded contexts, monolith-vs-micro, coupling</span></li>
+        <li><b>contracts</b> <span class="d">— the API/event interfaces FE + BE build to in parallel</span></li>
+        <li><b>NFR budgets</b> <span class="d">— perf/SLO/scale/cost as numbers, not "-ilities"</span></li>
+        <li><b>threat model</b> <span class="d">— STRIDE register, auth &amp; zero-trust posture</span></li>
+        <li><b>the decision record</b> <span class="d">— ADRs + fitness-function governance</span></li>
+        <li><b>migration shape</b> <span class="d">— strangler-fig, 7 Rs, cutover gate</span></li>
+      </ul>
+    </div>
+    <div class="bcol off">
+      <h3><svg class="lu" aria-hidden="true"><use href="#lu-git-fork"/></svg>hands off to</h3>
+      <p class="sub">contribute to; own none</p>
+      <ul class="bitems hand">
+        <li><b>product</b> <span class="d">— upstream: discovery, PRD, prioritization</span></li>
+        <li><b>frontend · backend</b> <span class="d">— production code behind the contract</span></li>
+        <li><b>data · ai</b> <span class="d">— pipelines, stores, model/agent implementation</span></li>
+        <li><b>design</b> <span class="d">— UX, UI, interaction &amp; states</span></li>
+        <li><b>quality</b> <span class="d">— load-testing, independent vuln scanning</span></li>
+        <li><b>operate</b> <span class="d">— runtime SLO monitoring, deploy pipelines</span></li>
+      </ul>
+    </div>
   </div>
-  <div class="loopback"><span class="ic"><svg class="lu" aria-hidden="true"><use href="#lu-shield-check"/></svg></span><span>TODO: state the loop-back rule, if this skill has a review/QA gate that can send work back through an earlier stage.</span></div>
+  <p class="bnote"><svg class="lu" aria-hidden="true"><use href="#lu-shield-alert"/></svg><span><b>Own the <i>shape</i>, not the implementation behind it.</b> When compatible upstream artifacts are supplied — a PRD, a product handoff, an existing ADR log — architecture uses them without silently overriding decisions already made.</span></p>
+</section>
+
+<section id="router">
+  <h2><svg class="lu" aria-hidden="true"><use href="#lu-route"/></svg>The faceted router</h2>
+  <p>SKILL.md is a router, not a script. Requirements are gated first; then every request selects the
+  smallest sufficient route: <b>one primary job</b> — the eight below — combined with <b>at most one
+  surface overlay</b> that reshapes boundaries, contracts, and budgets for the system type. Read the
+  selected references completely; load two or three at most, never the whole pack. Eight jobs and five
+  surfaces compose into <b>8 × 5 = 40</b> routes — from a single-ADR two-file read to a full
+  architecture pass — without ever reading all fourteen references at once.</p>
+  <div class="tblwrap"><table>
+    <tr><th>facet</th><th>options</th><th>rule</th></tr>
+    <tr>
+      <td class="job">① Primary job</td>
+      <td class="prod">system design · decomposition · contracts · data · NFR budgets · security · migration · ADR &amp; governance</td>
+      <td class="canon"><b>Exactly one.</b> Pick the single job the request needs; the default entry is system design.</td>
+    </tr>
+    <tr>
+      <td class="job">② Surface overlay</td>
+      <td class="prod">web&nbsp;/&nbsp;SaaS · mobile · <span style="color:var(--tok-dim);font-weight:600">agentic</span> · data-intensive · internal platform</td>
+      <td class="canon"><b>At most one.</b> It reshapes boundaries, contracts, and budgets for the system type — agentic always added when a model acts.</td>
+    </tr>
+  </table></div>
+  <div class="note"><b>Requirements before solution.</b> A route never begins at a design on an
+  unvalidated set of requirements. Functional requirements, NFRs, and constraints are captured — and
+  any contradiction (e.g. "full network isolation" vs "real-time public ingestion") surfaced and
+  resolved — before a single boundary is drawn.</div>
+</section>
+
+<section id="jobs">
+  <h2><svg class="lu" aria-hidden="true"><use href="#lu-files"/></svg>The eight primary jobs</h2>
+  <p>Each job is one reference, read fully only when its route is selected — grounded in named canon,
+  producing a checkable artifact. This is the whole surface, not a headline slice.</p>
+  <div class="tblwrap"><table>
+    <tr><th>I need to…</th><th>Read</th><th>Grounded in</th><th>Produces</th></tr>
+    <tr>
+      <td class="job"><svg class="lu" aria-hidden="true" style="color:var(--accent)"><use href="#lu-pencil-ruler"/></svg> Design / architect the system, or review a design for gaps</td>
+      <td><code><a href="https://github.com/gabros20/architecture-skill/blob/main/skills/architecture/references/system-design.md">system-design.md</a></code></td>
+      <td class="canon"><b>C4</b> model · <b>arc42</b> · 4+1 views · back-of-envelope numbers</td>
+      <td class="prod">Requirements gate, leveled C4/arc42 design, trade-offs, capacity math</td>
+    </tr>
+    <tr>
+      <td class="job"><svg class="lu" aria-hidden="true" style="color:var(--accent)"><use href="#lu-boxes"/></svg> Break this up · "should this be a microservice" · fix coupling</td>
+      <td><code><a href="https://github.com/gabros20/architecture-skill/blob/main/skills/architecture/references/decomposition.md">decomposition.md</a></code></td>
+      <td class="canon"><b>DDD</b> bounded contexts · <b>Khononov</b> coupling · monolith-first (Fowler) · Team Topologies</td>
+      <td class="prod">Bounded contexts, monolith/modular/micro call with a named disintegrator</td>
+    </tr>
+    <tr>
+      <td class="job"><svg class="lu" aria-hidden="true" style="color:var(--accent)"><use href="#lu-braces"/></svg> Design the API · define the contract · version / deprecate</td>
+      <td><code><a href="https://github.com/gabros20/architecture-skill/blob/main/skills/architecture/references/contracts.md">contracts.md</a></code></td>
+      <td class="canon"><b>OpenAPI</b> · <b>AsyncAPI</b> · REST / gRPC / GraphQL trade-offs · versioning</td>
+      <td class="prod">Contract skeleton, versioning + deprecation plan, review checklist</td>
+    </tr>
+    <tr>
+      <td class="job"><svg class="lu" aria-hidden="true" style="color:var(--accent)"><use href="#lu-database"/></svg> Design data flow · choose consistency · CQRS / ES · identifiers</td>
+      <td><code><a href="https://github.com/gabros20/architecture-skill/blob/main/skills/architecture/references/data-architecture.md">data-architecture.md</a></code></td>
+      <td class="canon"><b>CAP / PACELC</b> · DDIA concept map · CQRS / ES · outbox · microservices.io</td>
+      <td class="prod">Consistency decision per flow, CQRS/ES score, store selection</td>
+    </tr>
+    <tr>
+      <td class="job"><svg class="lu" aria-hidden="true" style="color:var(--accent)"><use href="#lu-gauge"/></svg> Set perf / SLO / scaling / cost targets · Well-Architected review</td>
+      <td><code><a href="https://github.com/gabros20/architecture-skill/blob/main/skills/architecture/references/nfr-budgets.md">nfr-budgets.md</a></code></td>
+      <td class="canon"><b>Well-Architected</b> pillars · Google <b>SRE</b> error budget · numeric budgets</td>
+      <td class="prod">Perf-budget table, SLO + error budget, scaling triggers, WA self-audit</td>
+    </tr>
+    <tr>
+      <td class="job"><svg class="lu" aria-hidden="true" style="color:var(--accent)"><use href="#lu-shield"/></svg> Threat-model · decide the auth / authz model · tenant isolation</td>
+      <td><code><a href="https://github.com/gabros20/architecture-skill/blob/main/skills/architecture/references/security-architecture.md">security-architecture.md</a></code></td>
+      <td class="canon"><b>STRIDE</b> · Threat Modeling Manifesto · zero-trust · OWASP</td>
+      <td class="prod">STRIDE register, auth/authz decision, zero-trust posture, data-classification</td>
+    </tr>
+    <tr>
+      <td class="job"><svg class="lu" aria-hidden="true" style="color:var(--accent)"><use href="#lu-git-branch"/></svg> Migrate / replatform · extract a service · deprecate an API</td>
+      <td><code><a href="https://github.com/gabros20/architecture-skill/blob/main/skills/architecture/references/migration.md">migration.md</a></code></td>
+      <td class="canon"><b>Strangler Fig</b> (Fowler) · AWS <b>7 Rs</b> · extraction order · comparison-read cutover</td>
+      <td class="prod">7 Rs / Strangler pick, extraction order, cutover gate, deprecation timeline</td>
+    </tr>
+    <tr>
+      <td class="job"><svg class="lu" aria-hidden="true" style="color:var(--accent)"><use href="#lu-scroll-text"/></svg> Write an ADR · record / govern a decision · detect drift</td>
+      <td><code><a href="https://github.com/gabros20/architecture-skill/blob/main/skills/architecture/references/adr-and-governance.md">adr-and-governance.md</a></code></td>
+      <td class="canon"><b>Nygard / MADR</b> ADR · Y-Statement · <b>fitness functions</b> (Ford / Parsons / Kua)</td>
+      <td class="prod">ADR (right-weight), lifecycle/immutability rule, drift detection, fitness functions</td>
+    </tr>
+  </table></div>
+  <p style="margin-top:12px">Full router table &amp; invariants: <a href="https://github.com/gabros20/architecture-skill/blob/main/skills/architecture/SKILL.md#route-before-acting">SKILL.md</a>.</p>
+
+  <div class="canonband">
+    <div class="canongrp"><h4>system design</h4><div class="cc"><span>C4 model</span><span>arc42 (12 sections)</span><span>4+1 views</span><span>back-of-envelope math</span></div></div>
+    <div class="canongrp"><h4>decomposition</h4><div class="cc"><span>DDD bounded contexts</span><span>context-map patterns</span><span>Khononov Balancing Coupling</span><span>MonolithFirst (Fowler)</span><span>Team Topologies</span></div></div>
+    <div class="canongrp"><h4>contracts</h4><div class="cc"><span>OpenAPI · AsyncAPI</span><span>REST / gRPC / GraphQL</span><span>versioning &amp; deprecation</span><span>zalando / MS API rulebooks</span></div></div>
+    <div class="canongrp"><h4>data</h4><div class="cc"><span>CAP · PACELC</span><span>DDIA concept map</span><span>CQRS / Event Sourcing</span><span>Outbox · Saga</span><span>Data Mesh</span></div></div>
+    <div class="canongrp"><h4>NFR budgets</h4><div class="cc"><span>Well-Architected pillars</span><span>SRE SLO / error budget</span><span>Circuit Breaker · Bulkhead</span><span>12-factor</span></div></div>
+    <div class="canongrp"><h4>security</h4><div class="cc"><span>STRIDE</span><span>Threat Modeling Manifesto</span><span>zero-trust</span><span>OWASP</span></div></div>
+    <div class="canongrp"><h4>migration &amp; governance</h4><div class="cc"><span>Strangler Fig</span><span>AWS 7 Rs</span><span>ADR (Nygard · MADR)</span><span>Y-Statement</span><span>fitness functions</span></div></div>
+  </div>
+</section>
+
+<section id="overlays">
+  <h2><svg class="lu" aria-hidden="true"><use href="#lu-layers"/></svg>Five surface overlays</h2>
+  <p>One overlay, at most, reshapes the job for the system type — the same contract job is bounded
+  differently for a multi-tenant SaaS than for a data platform. Agentic is the first-class
+  differentiator, expanded below.</p>
+  <div class="overlays">
+    <div class="ov">
+      <h3><svg class="lu" aria-hidden="true"><use href="#lu-globe"/></svg>Web / SaaS <span class="file">surface-web-saas.md</span></h3>
+      <p class="reshape">Multi-tenant web app (the default): <b>tenant isolation</b> (silo / pool / bridge),
+      3-tier + per-client BFF, OIDC tenant resolution as first-class structure.</p>
+      <p class="lens"><span class="k">reshapes</span>tenancy model · BFF · isolation tier</p>
+    </div>
+    <div class="ov">
+      <h3><svg class="lu" aria-hidden="true"><use href="#lu-smartphone"/></svg>Mobile <span class="file">surface-mobile.md</span></h3>
+      <p class="reshape">Native client: the <b>client pattern</b> (MVVM / TCA / Clean / RIBs),
+      offline / sync with a stated conflict rule, single source of truth &amp; unidirectional data flow.</p>
+      <p class="lens"><span class="k">reshapes</span>client arch · offline-sync · SSOT/UDF</p>
+    </div>
+    <div class="ov wedge">
+      <h3><svg class="lu" aria-hidden="true"><use href="#lu-bot"/></svg>Agentic / LLM <span class="badge">flagship</span></h3>
+      <p class="reshape">A model acts under non-determinism. <b>Harness design</b>, workflow-vs-agent,
+      multi-agent economics, RAG topology, memory tiers, <b>eval-as-gate</b>, and agent security —
+      it changes topology, not just a component.</p>
+      <p class="lens"><span class="k">reshapes</span>topology · eval gate · agent security</p>
+    </div>
+    <div class="ov">
+      <h3><svg class="lu" aria-hidden="true"><use href="#lu-network"/></svg>Data-intensive <span class="file">surface-data-intensive.md</span></h3>
+      <p class="reshape">Analytics / ML platform: the <b>operational ↔ analytical</b> boundary,
+      batch-vs-stream, and mesh-vs-centralized ownership as the load-bearing decisions.</p>
+      <p class="lens"><span class="k">reshapes</span>op/analytical split · batch/stream · mesh</p>
+    </div>
+    <div class="ov">
+      <h3><svg class="lu" aria-hidden="true"><use href="#lu-server"/></svg>Internal platform <span class="file">surface-internal-platform.md</span></h3>
+      <p class="reshape">Internal tool / developer platform (IDP): Team Topologies bridge,
+      platform-as-product threshold, and the explicit <b>"don't build a platform yet"</b> gate.</p>
+      <p class="lens"><span class="k">reshapes</span>platform threshold · self-service · Conway</p>
+    </div>
+  </div>
+</section>
+
+<section id="agentic">
+  <h2><svg class="lu" aria-hidden="true"><use href="#lu-bot"/></svg>The agentic flagship</h2>
+  <p>Generic system design is well-covered; <b>agentic-system architecture is the open frontier</b>.
+  When a model acts under uncertainty, the architecture questions change: reliability is empirical, the
+  topology is a decision, context is a finite budget, and the eval set is what gates release. The
+  reference carries the 2026 primary material — thin-model / thick-harness, multi-agent economics,
+  agent memory tiers, agent security — that the textbooks don't yet.</p>
+  <div class="wedgehead"><svg class="lu" aria-hidden="true"><use href="#lu-shield-check"/></svg>The harness carries the reliability — and the eval set <i>is</i> the acceptance gate.</div>
+  <div class="wedgebody">
+    <div class="wedgegrid">
+      <div>
+        <h3>An architecture decision, not a prompt tweak</h3>
+<pre class="harnessblock"><span class="c"># the model is thin; the harness is where the reliability lives</span>
+<span class="k">topology</span>:   <span class="s">workflow</span>       <span class="c"># workflow | single-agent | multi-agent</span>
+<span class="k">context</span>:    <span class="s">finite budget</span>  <span class="c"># compaction + JIT retrieval, not a dump</span>
+<span class="k">memory</span>:     <span class="s">[episodic, semantic, procedural]</span>
+<span class="k">retrieval</span>:  <span class="s">RAG + reranker</span> <span class="c"># topology is an architecture choice</span>
+<span class="k">eval_gate</span>:  <span class="s">40-case set</span>   <span class="c"># blocks release on regression</span>
+<span class="k">hitl</span>:       <span class="s">approve on irreversible action</span>
+<span class="k">security</span>:   <span class="s">[prompt-injection, tool-scope, exfil]</span></pre>
+      </div>
+      <div class="wcol">
+        <h3>Escalate topology only when it pays</h3>
+        <ul class="ladder">
+          <li class="good"><span class="t">Workflow</span><span class="d">predefined steps — the default; cheapest, most reliable</span></li>
+          <li class="warn"><span class="t">Single agent</span><span class="d">dynamic tool loop — when the path can't be pre-drawn</span></li>
+          <li class="bad"><span class="t">Multi-agent</span><span class="d">only when parallelizable &amp; value clears the <b>4×/15×</b> token cost</span></li>
+        </ul>
+        <h3>Non-determinism is a design constraint</h3>
+        <ul class="ladder">
+          <li><span class="t">eval-in-loop</span><span class="d">re-run every time the model or prompt changes</span></li>
+          <li><span class="t">memory tiers</span><span class="d">episodic / semantic / procedural, chosen per job</span></li>
+          <li><span class="t">agent security</span><span class="d">tool scope &amp; blast radius before autonomy</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="sharprule"><b>The sharp distinction:</b> the eval set is an <i>acceptance gate</i> —
+    pre-release, pass/fail, blocking on regression — not a QA afterthought and not a runtime dashboard
+    (that belongs to <code>operate</code>). Multi-agent isn't the "modern" default; below roughly a
+    45% single-agent error rate it rarely earns its 4–15× token cost. Agent-specific failure modes are
+    first-class architecture concerns, each mapped to an eval case or a threat-model row:
+      <div class="cc"><span>prompt injection</span><span>tool-scope over-grant</span><span>context poisoning</span><span>data exfiltration</span><span>runaway cost / loops</span></div>
+    </div>
+  </div>
 </section>
 
 <section id="laws">
-  <h2><svg class="lu" aria-hidden="true"><use href="#lu-shield-check"/></svg>The non-negotiable laws</h2>
-  <p>These govern everything in the references below — the load-bearing ones, condensed.</p>
+  <h2><svg class="lu" aria-hidden="true"><use href="#lu-shield-check"/></svg>The universal invariants</h2>
+  <p>Six rules govern every route, whichever references it loads — the behavioral spine, condensed.</p>
   <ul class="rules">
-    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-layers"/></svg>TODO law 1</b>TODO one to two sentences.</li>
-    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-sliders-horizontal"/></svg>TODO law 2</b>TODO one to two sentences.</li>
-    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-gauge"/></svg>TODO law 3</b>TODO one to two sentences, as a full-width capstone if it's the closing rule.</li>
+    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-target"/></svg>Requirements-gate before solutioning</b>No design until functional requirements and NFRs are captured and every contradiction is surfaced and resolved. Ask one question at a time; mark unknowns TBD; never invent a number the requester hasn't approved.</li>
+    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-boxes"/></svg>Don't over-architect</b>Default to a modular monolith and the lightest sufficient artifact. Add a service split, event sourcing, or a platform team only when a <i>named</i> disintegrator justifies it — applying mature-stage architecture to an MVP is the failure mode.</li>
+    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-arrow-left-right"/></svg>Weight analysis by reversibility</b>Treat each decision as a one-way door (data store, public API, org boundary) or a two-way door. One-way doors earn deep analysis and an ADR; two-way doors earn a quick call. Name options and "would choose X if {trigger}."</li>
+    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-split"/></svg>A pick, a "don't build," a trade-off</b>Every recommendation is a concrete choice, an explicit statement of what <i>not</i> to build, and a stated trade-off. Cap each pass at 3–5 decisions — more reads as a document dump, not a decision set.</li>
+    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-list-checks"/></svg>Exhaustive checklists are tables</b>Any "cover N items" task — Well-Architected pillars, STRIDE per element, the API checklist — is a uniform table with a self-audit count, never a narrative. A narrative pass reliably drops rows and stops citing findings before full coverage.</li>
+    <li><b><svg class="lu" aria-hidden="true"><use href="#lu-tag"/></svg>Distinguish facts, decisions, assumptions &amp; proposals</b>Preserve upstream decisions and user constraints, or flag the conflict explicitly; prefer repository and artifact evidence over generic defaults; and name the border — recommend the sibling skills, never silently do their work.</li>
   </ul>
 </section>
 
-<section id="pick">
-  <h2><svg class="lu" aria-hidden="true"><use href="#lu-clipboard-list"/></svg>Pick by job</h2>
-  <p>The SKILL.md is a router — load only the reference your current job needs. A condensed cut of the full table:</p>
-  <div class="tblwrap"><table>
-    <tr><th>I need to…</th><th>Read</th></tr>
-    <tr><td>TODO job 1</td><td><code><a href="https://github.com/gabros20/architecture-skill/blob/main/skills/architecture/references/example.md">example.md</a></code></td></tr>
-    <tr><td>TODO job 2</td><td><code><a href="https://github.com/gabros20/architecture-skill/blob/main/skills/architecture/references/example.md">example.md</a></code></td></tr>
-  </table></div>
-  <p style="margin-top:12px">Full table: <a href="https://github.com/gabros20/architecture-skill/blob/main/skills/architecture/SKILL.md#route-before-acting">SKILL.md</a>.</p>
-  <div class="note"><b>Complementary, not duplicated:</b> TODO — name the adjacent skills this one hands off to instead of duplicating.</div>
+<section id="artifacts">
+  <h2><svg class="lu" aria-hidden="true"><use href="#lu-file-check"/></svg>What a pass produces</h2>
+  <p>Architecture's deliverables are decisions made durable. A full pass emits up to five downstream
+  artifacts — plus the DDD canvases and arc42 skeleton where the job calls for them. Each records the
+  decision and options, the trade-off accepted, facts/decisions/assumptions distinguished, and the
+  reversibility lens on any hard-to-reverse call. Fillable templates ship in the pack.</p>
+  <div class="artgrid">
+    <div class="art">
+      <h3><svg class="lu" aria-hidden="true"><use href="#lu-pencil-ruler"/></svg>Solution architecture doc</h3>
+      <span class="file">assets/solution-architecture-doc.md</span>
+      <p>arc42-shaped: <b>documents decisions and contracts, not implementation</b> — survives a framework change.</p>
+    </div>
+    <div class="art">
+      <h3><svg class="lu" aria-hidden="true"><use href="#lu-braces"/></svg>API / event contracts</h3>
+      <span class="file">OpenAPI · AsyncAPI skeleton</span>
+      <p>The interfaces <b>frontend and backend build to in parallel</b> — versioned, with a deprecation plan.</p>
+    </div>
+    <div class="art">
+      <h3><svg class="lu" aria-hidden="true"><use href="#lu-gauge"/></svg>NFR budget worksheet</h3>
+      <span class="file">assets/nfr-budget-worksheet.md</span>
+      <p>Perf, scale, reliability, and cost <b>as numbers</b> — SLO targets, error budgets, scaling triggers.</p>
+    </div>
+    <div class="art">
+      <h3><svg class="lu" aria-hidden="true"><use href="#lu-scroll-text"/></svg>ADRs</h3>
+      <span class="file">assets/adr-template.md</span>
+      <p>The durable decision log — <b>cite, don't re-litigate</b>. MADR / Nygard / Y-Statement variants.</p>
+    </div>
+    <div class="art">
+      <h3><svg class="lu" aria-hidden="true"><use href="#lu-shield"/></svg>Threat-model register</h3>
+      <span class="file">assets/threat-model-register.md</span>
+      <p>A STRIDE table with a <b>self-audit count</b> — backend implements, quality independently verifies.</p>
+    </div>
+    <div class="art">
+      <h3><svg class="lu" aria-hidden="true"><use href="#lu-boxes"/></svg>DDD canvases &amp; arc42</h3>
+      <span class="file">bounded-context · aggregate-design · arc42-skeleton</span>
+      <p>Boundary and aggregate canvases (ddd-crew) and the arc42 skeleton, <b>where the job calls for them</b>.</p>
+    </div>
+  </div>
 </section>
 
-<section id="refs">
-  <h2><svg class="lu" aria-hidden="true"><use href="#lu-files"/></svg>Reference map</h2>
-  <p>TODO: how many references, grouped by the stage/strategy they serve. Every one is copy-pasteable rather than abstract — the whole point of the router is that you never read all of them at once.</p>
-  <dl class="refmap">
-    <div class="refrow">
-      <dt class="reflabel"><svg class="lu" aria-hidden="true"><use href="#lu-sliders-horizontal"/></svg>TODO stage 1<span class="ct">1</span></dt>
-      <dd class="refchips"><span class="ref"><code>example.md</code></span></dd>
+<section id="handoff">
+  <h2><svg class="lu" aria-hidden="true"><use href="#lu-git-fork"/></svg>The handoff seam</h2>
+  <p>When downstream build work is expected, architecture emits a compact <code>handoff.yaml</code>
+  beside the human artifacts — a routing <i>index</i> into the solution doc, contracts, budgets, ADRs,
+  and threat model, never a copy of them. Standalone by default; the companion appears only in pipeline
+  mode, when a consumer will actually read it.</p>
+  <div class="seam">
+    <div class="seambox">
+      <h3><svg class="lu" aria-hidden="true"><use href="#lu-file-check"/></svg>architecture decides</h3>
+<pre class="seamyaml"><span class="k">skill</span>: <span class="v">architecture</span>
+<span class="k">status</span>: <span class="v">complete</span>
+<span class="req">objective</span>: <span class="v">""</span>   <span style="color:var(--glyph)"># only required field</span>
+<span class="k">artifacts_created</span>: <span class="v">[contracts,</span>
+  <span class="v">nfr-budgets, adrs, threat-model]</span>
+<span class="k">decisions</span>: · <span class="k">assumptions</span>: · <span class="k">constraints</span>:
+<span class="k">risks</span>: <span class="v">[R-01, R-04]</span>  <span style="color:var(--glyph)"># pointers, by id</span>
+<span class="k">validation</span>: <span class="v">performed / remaining</span>
+<span class="k">recommended_next</span>: <span class="v">frontend · backend</span>
+  <span class="v">· data · ai · quality</span></pre>
     </div>
-  </dl>
-  <p style="margin-top:16px">Browse the full set: <a href="https://github.com/gabros20/architecture-skill/tree/main/skills/architecture/references">skills/architecture/references/</a>.</p>
+    <div class="seamarrows"><span>→</span><span>→</span></div>
+    <div class="downstream">
+      <div class="seambox mid">
+        <h3><svg class="lu" aria-hidden="true"><use href="#lu-braces"/></svg>frontend · backend</h3>
+        <p>The API/event contracts, NFR budgets that gate technical choices, and the ADRs — enough to build behind the interface in parallel, without re-deriving the shape.</p>
+      </div>
+      <div class="seambox mid">
+        <h3><svg class="lu" aria-hidden="true"><use href="#lu-shield"/></svg>data · ai · quality</h3>
+        <p>Store &amp; consistency decisions, the threat-model register to implement and independently verify, and the eval thresholds an agentic system must clear.</p>
+      </div>
+    </div>
+  </div>
+  <p class="seamnote"><svg class="lu" aria-hidden="true"><use href="#lu-shield-alert"/></svg><span><b>Seam discipline.</b> The human artifacts are the real deliverables; if a consumer needs more than the index gives, the artifact itself is incomplete — the yaml never grows to compensate. Every downstream skill tolerates every field but <code>objective</code> being absent.</span></p>
 </section>
 
 <section id="start">
   <h2><svg class="lu" aria-hidden="true"><use href="#lu-file-input"/></svg>Start here</h2>
-  <p>Install once. It's a plain <code>SKILL.md</code> router — no flags, no config, no scripts —
-  so it activates on natural-language phrasing (TODO: a couple of real trigger examples) rather
-  than a fixed command.</p>
-  <div class="term"><span class="c"># skills.sh ecosystem</span>
-npx skills add gabros20/architecture-skill
+  <p>Install once. It's a plain <code>SKILL.md</code> router — no flags, no config, no scripts — so it
+  activates on natural-language phrasing ("design the system", "should this be a microservice", "write
+  an ADR", "threat-model this") rather than a fixed command.</p>
+  <div class="term"><span class="c"># skills.sh ecosystem (installs globally to supported clients)</span>
+npx skills add gabros20/architecture-skill -g -y
 
 <span class="c"># clone + installer (per-host targets)</span>
-git clone https://github.com/gabros20/architecture-skill && cd architecture-skill
-./install.sh codex   <span class="c"># or: claude | agents | cursor | antigravity | opencode | grok | hermes | all</span>
+git clone https://github.com/gabros20/architecture-skill &amp;&amp; cd architecture-skill
+./install.sh codex   <span class="c"># or: claude | cursor | antigravity | opencode | grok | hermes | agents | all</span>
 
-<span class="c"># use</span>
-<span class="p">/architecture</span> TODO — a real, short invocation example
-<span class="p">/architecture</span> TODO — a second real, short invocation example</div>
+<span class="c"># use — natural language, any host</span>
+<span class="p">/architecture</span> design the API contract for our billing service, versioned
+<span class="p">/architecture</span> architect our support agent — topology, eval gate &amp; agent security   <span class="c"># → agentic overlay</span>
+<span class="p">/architecture</span> set SLO + perf budgets and run a Well-Architected self-audit</div>
   <p style="margin-top:14px">The same install runs on any <a href="https://agentskills.io">Agent&nbsp;Skills</a>
-  host. Codex installs to <code>${CODEX_HOME:-$HOME/.codex}/skills</code>; <code>agents</code>
-  remains a separate cross-agent installation target.</p>
+  host. Codex installs to <code>${CODEX_HOME:-$HOME/.codex}/skills</code> and triggers with
+  <code>$architecture</code>; <code>agents</code> remains a separate cross-agent installation target.</p>
   <details class="disc">
     <summary>install targets by host</summary>
     <div>
       <div class="tblwrap"><table>
         <tr><th>host</th><th>install target</th><th>command</th></tr>
-        <tr><td class="dim">Claude Code</td><td><code>~/.claude/skills</code></td><td><code>./install.sh claude</code></td></tr>
-        <tr><td class="dim">Codex</td><td><code>${CODEX_HOME:-$HOME/.codex}/skills</code></td><td><code>./install.sh codex</code></td></tr>
-        <tr><td class="dim">Cross-agent path</td><td><code>~/.agents/skills</code></td><td><code>./install.sh agents</code></td></tr>
-        <tr><td class="dim">Cursor CLI</td><td><code>~/.cursor/skills</code></td><td><code>./install.sh cursor</code></td></tr>
-        <tr><td class="dim">Antigravity (IDE + agy)</td><td><code>~/.gemini/…/skills</code></td><td><code>./install.sh antigravity</code></td></tr>
-        <tr><td class="dim">opencode</td><td><code>~/.config/opencode/skills</code></td><td><code>./install.sh opencode</code></td></tr>
-        <tr><td class="dim">Grok Build</td><td><code>~/.grok/skills</code></td><td><code>./install.sh grok</code></td></tr>
-        <tr><td class="dim">Hermes</td><td><code>~/.hermes/skills</code></td><td><code>./install.sh hermes</code></td></tr>
+        <tr><td class="job">Claude Code</td><td><code>~/.claude/skills</code></td><td><code>./install.sh claude</code></td></tr>
+        <tr><td class="job">Codex</td><td><code>${CODEX_HOME:-$HOME/.codex}/skills</code></td><td><code>./install.sh codex</code></td></tr>
+        <tr><td class="job">Cross-agent path</td><td><code>~/.agents/skills</code></td><td><code>./install.sh agents</code></td></tr>
+        <tr><td class="job">Cursor CLI</td><td><code>~/.cursor/skills</code></td><td><code>./install.sh cursor</code></td></tr>
+        <tr><td class="job">Antigravity (IDE + agy)</td><td><code>~/.gemini/…/skills</code></td><td><code>./install.sh antigravity</code></td></tr>
+        <tr><td class="job">opencode</td><td><code>~/.config/opencode/skills</code></td><td><code>./install.sh opencode</code></td></tr>
+        <tr><td class="job">Grok Build</td><td><code>~/.grok/skills</code></td><td><code>./install.sh grok</code></td></tr>
+        <tr><td class="job">Hermes</td><td><code>~/.hermes/skills</code></td><td><code>./install.sh hermes</code></td></tr>
       </table></div>
-      <p style="margin-top:12px">Prefer <code>npx skills add gabros20/architecture-skill</code> when you have Node — it maps supported clients itself.</p>
+      <p style="margin-top:12px">Prefer <code>npx skills add gabros20/architecture-skill -g -y</code> when you have Node — it maps supported clients itself.</p>
     </div>
   </details>
   <details class="disc">
     <summary>what's in the repo</summary>
     <div>
-      <div class="files"><span class="hl">skills/architecture/</span>          <span class="d">the skill: SKILL.md (router) + references/</span>
+      <div class="files"><span class="hl">skills/architecture/</span>       <span class="d">the skill: SKILL.md (router) + 14 references/ + assets/</span>
 <span class="hl">docs/</span>                      <span class="d">installation · usage · recipes</span>
-<span class="hl">site/</span>                      <span class="d">optional guide — deploys to architecture-skill.vercel.app</span>
+<span class="hl">site/</span>                      <span class="d">this guide — deploys to architecture-skill.vercel.app</span>
 install.sh                 <span class="d">installer (claude | codex | cursor | antigravity | opencode | grok | hermes | agents | all)</span>
 README.md · CHANGELOG.md · LICENSE</div>
       <p>More docs: <a href="https://github.com/gabros20/architecture-skill/blob/main/docs/installation.md">docs/installation.md</a> ·
@@ -350,17 +732,16 @@ README.md · CHANGELOG.md · LICENSE</div>
 </section>
 
 <footer>
-  <span><span class="mono">/architecture</span> — Shape the system: boundaries, contracts, and NFR budgets</span>
+  <span><span class="mono">/architecture</span> — decide the shape of the system.</span>
   <span><a href="https://github.com/gabros20/architecture-skill">github.com/gabros20/architecture-skill</a> · <a href="/llms.txt">llms.txt</a> · MIT</span>
 </footer>
 </div>
 <script>
 (function () {
-  // Progressive enhancement over the static .arcline fallback above: swaps in the
-  // hero Remotion video (light/dark). On any load error it removes the
-  // slot and leaves the static arc line in place.
+  // Progressive enhancement over the static router fallback above: swaps in the hero Remotion
+  // video (light/dark). On any load error it removes the slot, leaving the static router in place.
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  if (innerWidth < 720) return; // the static line reads better on phones
+  if (innerWidth < 720) return; // the static router reads better on phones
   var wrap = document.getElementById("vidwrap");
   if (!wrap || !document.createElement("video").canPlayType) return;
   var mq = matchMedia("(prefers-color-scheme: dark)");
@@ -370,7 +751,7 @@ README.md · CHANGELOG.md · LICENSE</div>
   v.autoplay = true;
   v.playsInline = true;
   v.setAttribute("playsinline", "");
-  v.setAttribute("aria-label", "TODO: describe what the hero animation shows.");
+  v.setAttribute("aria-label", "The architecture skill in motion: a PRD arrives, passes the requirements gate, routes through the faceted router (one primary job by at most one surface), hits the agentic harness-and-eval-gate beat, produces contracts, NFR budgets, ADRs and a threat model, and hands the decision off to the build skills.");
   v.addEventListener("loadeddata", function () { document.body.classList.add("has-vid"); });
   v.addEventListener("error", function () { wrap.remove(); });
   function apply() {

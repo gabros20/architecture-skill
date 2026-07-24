@@ -1,30 +1,58 @@
 # architecture
 
-> Shape the system: boundaries, contracts, and NFR budgets. Installs as an agent skill.
+> Decide the shape of the system — boundaries, contracts, NFR budgets, threat model, and ADRs — at
+> the Shape stage between product and the build skills. Installs as an agent skill.
 
-TODO — one paragraph: what problem this replaces, the workflow it runs (stages/strategies, in
-order), and what "read only what you need" the router gives you. Claude Code is the reference
-host; it's plain Agent Skills format (agentskills.io), so it installs on Codex, Cursor,
-Antigravity, opencode, Grok Build, and Hermes too.
+Point an agent at a PRD and it starts writing code, inventing boundaries and data stores one file at
+a time. architecture makes it decide the shape first. It is a faceted router, not a fixed pipeline:
+requirements are gated before any solutioning, then each request selects one primary job (system
+design · decomposition · contracts · data architecture · NFR budgets · security · migration · ADR &
+governance) combined with at most one surface overlay (web/SaaS · mobile · agentic/LLM ·
+data-intensive · internal platform) — 8 × 5 = 40 routes. Only the two or three references a route
+needs are read, never the whole pack. Agentic/LLM-system architecture is the first-class
+differentiator: harness design, workflow-vs-agent, multi-agent economics, RAG topology, memory
+tiers, eval-as-gate, and agent security. Claude Code is the reference host; it's plain Agent Skills
+format (agentskills.io), so it installs on Codex, Cursor, Antigravity, opencode, Grok Build, and
+Hermes too.
 
 ## Install
 
-- npm/skills.sh: `npx skills add gabros20/architecture-skill`
+- npm/skills.sh: `npx skills add gabros20/architecture-skill -g -y`
 - Clone + installer (per-host targets: claude | codex | cursor | antigravity | opencode | grok | hermes | agents | all): `git clone https://github.com/gabros20/architecture-skill && cd architecture-skill && ./install.sh codex`
 - Manual copy: `cp -R skills/architecture ~/.claude/skills/architecture`
 
 ## Docs
 
 - [README.md](https://raw.githubusercontent.com/gabros20/architecture-skill/main/README.md): overview, install, workflow, and repository map.
-- [skills/architecture/SKILL.md](https://raw.githubusercontent.com/gabros20/architecture-skill/main/skills/architecture/SKILL.md): runtime router, workflow, artifact contract, and completion rules.
+- [skills/architecture/SKILL.md](https://raw.githubusercontent.com/gabros20/architecture-skill/main/skills/architecture/SKILL.md): runtime router, invariants, artifact contract, and completion rules.
 - [docs/installation.md](https://raw.githubusercontent.com/gabros20/architecture-skill/main/docs/installation.md): installation and verification by client.
 - [docs/usage.md](https://raw.githubusercontent.com/gabros20/architecture-skill/main/docs/usage.md): activation boundary, routes, outputs, and completion.
 - [docs/recipes.md](https://raw.githubusercontent.com/gabros20/architecture-skill/main/docs/recipes.md): representative starting prompts.
 
 ## Reference inventory (`skills/architecture/references/`)
 
-- `example.md` — TODO: what job this reference answers.
+Primary jobs (pick one):
+- `system-design.md` — requirements-gated entry spine: C4/arc42, high-level → deep-dive, trade-offs, back-of-envelope numbers.
+- `decomposition.md` — bounded contexts, monolith-vs-modular-vs-micro (monolith-first), quantified coupling, paradigm selection.
+- `contracts.md` — API/event contract-first (OpenAPI/AsyncAPI), REST/gRPC/GraphQL trade-offs, versioning and deprecation.
+- `data-architecture.md` — data flow, consistency (CAP/PACELC), CQRS/ES, outbox, identifier scheme, store selection.
+- `nfr-budgets.md` — the -ilities as numbers: perf budgets, SLO/error budget, scaling triggers, Well-Architected self-audit.
+- `security-architecture.md` — STRIDE threat modeling, auth/authz model, tenant isolation, zero-trust, data governance.
+- `migration.md` — 7 Rs / Strangler Fig, extraction order, comparison-read cutover gate, deprecation timeline.
+- `adr-and-governance.md` — ADR templates/lifecycle, decision drift detection, fitness-function governance.
+
+Surface overlays (add at most one):
+- `surface-web-saas.md` — multi-tenant web app / SaaS: tenant isolation, 3-tier + BFF, OIDC tenant resolution.
+- `surface-mobile.md` — native mobile client: MVVM/TCA/Clean/RIBs, offline/sync + conflict rule, SSOT/UDF.
+- `surface-agentic.md` — FLAGSHIP: LLM/agent systems — harness design, workflow-vs-agent, multi-agent economics, RAG topology, memory tiers, eval-as-gate, agent security.
+- `surface-data-intensive.md` — data/analytics/ML platforms: operational/analytical boundary, batch-vs-stream, mesh-vs-centralized.
+- `surface-internal-platform.md` — internal tools / IDP: Team Topologies bridge, platform-as-product threshold.
+
+Pipeline:
+- `handoff.md` — standalone vs pipeline behavior and the `handoff.yaml` companion consumed by frontend, backend, data, ai, and quality.
+
+Assets (`skills/architecture/assets/`): solution-architecture-doc.md (arc42-shaped) · arc42-skeleton.md · adr-template.md · nfr-budget-worksheet.md · threat-model-register.md · bounded-context-canvas.md · aggregate-design-canvas.md · handoff.yaml.
 
 ## Optional
 
-- [Visual guide](https://architecture-skill.vercel.app): the workflow, boundaries, and reference map on one page.
+- [Visual guide](https://architecture-skill.vercel.app): the router, boundaries, invariants, artifacts, and handoff seam on one page.

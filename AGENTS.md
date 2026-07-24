@@ -1,37 +1,42 @@
-# Agent guide — creating an independent skill repository
+# Agent guide — architecture-skill
 
-This repository is the source template for one `<skill>-skill` repository. The runtime skill name
-remains short and lives under `skills/<skill>/`; repository and plugin names use the `-skill`
-suffix. Work [TEMPLATE-CHECKLIST.md](TEMPLATE-CHECKLIST.md) top to bottom after initialization.
+This repository is the released `architecture` skill: the Shape stage of the Digital Product
+Skills family. The runtime skill lives under `skills/architecture/`; repository and plugin names
+use the `-skill` suffix. Version metadata lives in `.codex-plugin/plugin.json`, `CHANGELOG.md`, and
+tags — never in `SKILL.md`.
 
-## Detect state first
+## What this skill owns
 
-- `skills/architecture/` exists in the actual `gabros20/skill-template` repository: maintain the
-  source template and run `scripts/check-sync` to exercise the initializer regression test.
-- `skills/architecture/` exists anywhere else: stop and run `scripts/init`; the gate must fail
-  until this happens.
-- `skills/<real-name>/` exists with the checklist: populate and validate the derived repository.
-- No checklist: treat it as an ordinary released skill repository and follow its local README.
+The *shape* of a software system: service boundaries and coupling, API/event contracts, data
+architecture and consistency, NFR budgets (perf/SLO/capacity/cost), threat modeling and the
+auth/authz model, migration/deprecation strategy, and ADR governance — across web/SaaS, mobile,
+agentic/LLM systems, data platforms, and internal tools. It sits between `product` (which decides
+what to build and why) and the build skills (which write the production code). It owns the
+decision, the contract, the budget, and the threat model — not the implementation. It recommends
+siblings (`design`, `frontend`, `backend`, `data`, `ai`, `quality`, `operate`) for work it does not
+own and never silently invokes them.
 
-## Required behavior
+## Maintainer rules
 
-1. Run the generic `scripts/check-sync` gate before specialized repository checks. Never replace
-   packaging and navigation validation with domain-specific assertions.
-2. Keep runtime frontmatter to `name` and `description`. Keep versions and repository metadata in
-   `.codex-plugin/plugin.json`, `CHANGELOG.md`, tags, and releases.
-3. Keep `SKILL.md` as the direct router. References are flat, directly linked, self-describing, and
-   loaded only when their observable conditions apply.
-4. Keep repository documentation, evaluation data, release files, and optional site assets outside
-   `skills/<name>/`.
-5. Make standalone behavior complete. Recommend adjacent skills without silently invoking them.
-6. Add deterministic scripts only for fragile or repeated mechanics and execute them in tests.
-7. Treat README as the primary storefront. Site and Remotion profiles are optional publishing
-   work — but when kept, follow the [site/README.md](site/README.md) design brief: design the
-   sections, components, and hero visualization for this skill's own mental model inside the
-   shared family chrome and accent identity. Never ship the skeleton with its `TODO`s filled.
-8. Release through matching plugin version, changelog entry, tag, and GitHub Release, and
-   configure the GitHub About area (family-style description, canonical site alias as homepage,
-   base + domain topics). Do not put a version string back into `SKILL.md`.
+1. Run `scripts/check-sync` before any release; it validates packaging, routes, references,
+   metadata, and eval fixtures. Run `scripts/lint-skill` and `scripts/count-skill-tokens` too.
+2. `SKILL.md` is the direct router: a faceted table of one primary job × at most one surface
+   overlay. References are flat under `references/`, directly linked, self-describing, and loaded
+   only when their observable condition applies. No required second-hop navigation.
+3. Requirements-gate before solutioning is load-bearing, not a nit: never propose a design before
+   functional requirements and NFRs are captured and contradictions surfaced.
+4. Every method must be grounded in its named framework with a source in `SOURCES.md`. Fix a wrong
+   formula, a misattribution, or a license-posture error as a correctness bug, not a nit.
+5. Keep the boundary discipline: reference sibling territory by backtick name and recommend it;
+   never absorb design/frontend/backend/data/ai/quality/operate work.
+6. Keep the eval contract current: `evals/{activation,traversal,output,compression-ablation}` must
+   reflect the router. Add near-miss activation cases when a new sibling overlap appears.
+7. Treat README as the primary storefront. The `site/` and `remotion/` profiles follow the
+   `site/README.md` design brief — designed for this skill's faceted-router model inside the shared
+   family chrome and its own accent, never a filled-in skeleton.
+8. Release through matching plugin version + changelog entry + `v<version>` tag + GitHub Release,
+   and keep the GitHub About area configured (family-style description, canonical site alias as
+   homepage, base + domain topics).
 
-Do not mark the repository complete merely because structural lint passes. Activation, traversal,
-and representative output evaluations must also show that the skill changes agent behavior usefully.
+Do not mark a change complete merely because lint passes. Activation, traversal, and output
+evaluations must show the skill still changes agent behavior usefully.
