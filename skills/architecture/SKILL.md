@@ -24,7 +24,8 @@ auth model, SLO targets — not the implementation behind them.
 Own the decision, the contract, the budget, and the threat model; not the code. Production
 frontend/backend/data/ai code belongs to the build skills; UX and UI to `design`; discovery, PRDs,
 and prioritization to `product`; independent load-testing and vulnerability scanning to `quality`;
-runtime SLO monitoring, dashboards, and deploy pipelines to `operate`. Contribute to those; own none.
+runtime SLO monitoring, dashboards, and deploy pipelines to `operate`; cross-system business
+processes spanning systems you do not own to `automation`. Contribute to those; own none.
 Operate independently when invoked alone; when compatible upstream artifacts are supplied (a PRD, a
 product handoff, an existing ADR log or design doc), use them without silently overriding established
 decisions. Recommend adjacent skills when useful; do not invoke them automatically unless the user

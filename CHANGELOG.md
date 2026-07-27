@@ -10,6 +10,13 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ### Added
 - Queue unreleased changes here.
 
+## [0.1.2] — 2026-07-27
+
+### Fixed
+- SKILL.md Mission and boundary: named `automation` alongside the other sibling routes — cross-system
+  business processes spanning systems you do not own now route there, closing the one sibling this
+  skill omitted.
+
 ## [0.1.1] — 2026-07-24
 
 ### Changed
@@ -31,5 +38,6 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
   `ai`/`quality`, and activation/traversal/output/compression evals. Requirements-gated, decision-first,
   monolith-first by default.
 
+[0.1.2]: https://github.com/gabros20/architecture-skill/releases/tag/v0.1.2
 [0.1.1]: https://github.com/gabros20/architecture-skill/releases/tag/v0.1.1
 [0.1.0]: https://github.com/gabros20/architecture-skill/releases/tag/v0.1.0
