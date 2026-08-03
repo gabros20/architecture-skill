@@ -157,3 +157,11 @@ Load only what the selected route requires; never preload.
 - Assets: fillable templates in [assets/](assets/) — solution-architecture doc, arc42 skeleton, ADR
   templates, NFR budget worksheet, threat-model register, bounded-context and aggregate-design
   canvases, and the `handoff.yaml` envelope.
+
+## Artifact home
+
+Deliverables this skill produces default to `digital-product/architecture/` at the working repository's
+root, with cross-skill state in `digital-product/LEDGER.md` — created on first use and committed
+with the repo. The `digital-product` composer skill owns this convention; solo use writes to the
+same place. Never write into `.orchestrate/` — that folder belongs to an orchestration run's
+execution state, not to this family's deliverables.
