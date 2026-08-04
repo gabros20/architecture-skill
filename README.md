@@ -1,5 +1,7 @@
 # architecture — Product Architecture
 
+**Family hub:** [digital-product-skill.vercel.app](https://digital-product-skill.vercel.app) — the 15-skill Digital Product family and its composer.
+
 Decide **the shape of a software system** — boundaries, contracts, NFR budgets, threat model, and
 ADRs — precisely enough that `frontend`, `backend`, `data`, and `ai` can build the right thing in
 parallel without re-deriving it. `architecture` is the Shape stage of the
