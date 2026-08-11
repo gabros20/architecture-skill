@@ -1,0 +1,85 @@
+# Architecture skill — discovery shards (GitHub search queries)
+# --- System design / architecture primers & awesome-lists ---
+topic:software-architecture stars:>200
+topic:system-design stars:>500
+system design primer in:name,description stars:>300
+awesome architecture in:name,description stars:>200
+topic:architecture-patterns stars:>100
+software architecture book in:name,description stars:>150
+topic:distributed-systems stars:>300
+# --- ADR / decision records ---
+architecture decision record in:name,description,readme stars:>50
+topic:adr stars:>30
+topic:architecture-decision-records stars:>20
+adr-tools in:name,description stars:>50
+# --- C4 / arc42 / diagrams-as-code ---
+topic:c4-model stars:>50
+topic:diagrams-as-code stars:>100
+topic:architecture-diagrams stars:>50
+arc42 in:name,description stars:>20
+structurizr in:name,description stars:>50
+# --- DDD / bounded context ---
+topic:domain-driven-design stars:>200
+domain driven design in:name,description stars:>200
+topic:ddd stars:>150
+bounded context in:name,description stars:>30
+# --- Microservices / distributed patterns ---
+topic:microservices stars:>1000
+microservices patterns in:name,description stars:>200
+topic:microservice-architecture stars:>200
+topic:cloud-native stars:>500
+# --- Event-driven / CQRS / event sourcing ---
+topic:event-driven stars:>100
+topic:cqrs stars:>100
+topic:event-sourcing stars:>200
+event driven architecture in:name,description stars:>100
+# --- API design / contract-first ---
+topic:openapi stars:>500
+topic:asyncapi stars:>100
+topic:api-design stars:>100
+topic:graphql-federation stars:>50
+api design guide in:name,description stars:>200
+# --- Cloud / well-architected / 12-factor ---
+well-architected in:name,description stars:>50
+topic:cloud-architecture stars:>100
+twelve factor in:name,description stars:>100
+# --- Security architecture / threat modeling ---
+topic:threat-modeling stars:>100
+threat modeling in:name,description stars:>100
+topic:zero-trust stars:>200
+security architecture in:name,description stars:>50
+# --- Data architecture ---
+topic:data-engineering stars:>2000
+data mesh in:name,description stars:>50
+# --- Resilience / reliability / SRE patterns ---
+topic:site-reliability-engineering stars:>200
+resilience patterns in:name,description stars:>50
+topic:sre stars:>300
+# --- Evolutionary architecture / fitness functions / governance ---
+fitness functions architecture in:name,description stars:>10
+evolutionary architecture in:name,description stars:>10
+# --- Clean / hexagonal / ports & adapters ---
+topic:clean-architecture stars:>300
+topic:hexagonal-architecture stars:>100
+ports and adapters in:name,description stars:>20
+# --- Micro-frontends / module federation ---
+topic:micro-frontends stars:>200
+module federation in:name,description stars:>200
+# --- Mobile architecture ---
+ios architecture in:name,description stars:>100
+android architecture in:name,description stars:>500
+topic:mvvm stars:>300
+# --- LLM / agentic / RAG architecture ---
+topic:llm-agents stars:>1000
+multi-agent architecture in:name,description stars:>200
+topic:rag stars:>1000
+agentic architecture in:name,description stars:>50
+topic:ai-agents stars:>2000
+llm application architecture in:name,description stars:>30
+# --- Platform engineering / IDP ---
+topic:platform-engineering stars:>100
+internal developer platform in:name,description stars:>50
+# --- Architecture agent-skills (dedup hunt) ---
+architecture claude skill in:name,description,readme stars:>5
+claude-code skill architecture in:name,description stars:>2
+agent skill in:name,description stars:>50
