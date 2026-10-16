@@ -75,6 +75,13 @@ internal-service p95 benchmarks worth cross-checking a budget against: DB query 
 [nfr-budget-worksheet.md](../assets/nfr-budget-worksheet.md) when the deliverable is a standalone
 budget document rather than an inline answer.
 
+**Benchmark equal work before setting a target.** Measure a baseline per workload class (one-record
+read, paged search, bulk export, media job): cold start, first-result latency, total time, peak
+process-tree memory, network calls, bytes. Compare only runs with equal results and coverage —
+speed bought by dropping records is not the same work (Brendan Gregg's active-benchmarking warning:
+"you benchmark A, but actually measure B, and conclude you've measured C"). Optimize the dominant
+cost first; a rewrite in a faster language needs that measurement behind it.
+
 ### 2. Reliability as SLO + error budget
 Ground: Google SRE, *Embracing Risk* — https://sre.google/sre-book/embracing-risk/. **Error budget =
 1 − SLO.** A 99.999% quarterly SLO leaves a 0.001% error budget; failing 0.0002% of that quarter's
@@ -108,7 +115,10 @@ for a data-layer rewrite to fix an indexing problem. Size capacity with `(peak R
 CPU%` (vasilyu1983) and the rule-of-thumb **~100 RPS per instance with headroom, 50% compute headroom
 multiplier** (patricio) as a first pass, not a final answer. Model cost in named tiers so the tradeoff
 is explicit — cost-optimized (limited headroom) vs balanced (redundancy, default) vs
-performance-optimized (max HA) — and state the capacity each tier buys, not just its price.
+performance-optimized (max HA) — and state the capacity each tier buys, not just its price. Price the
+whole model, not just compute: usage-billed third-party APIs, plan tiers whose terms exclude
+commercial use, domains/DNS, and operator time — at low volume, model-token cost is rarely the
+deciding line.
 
 ### 4. Well-Architected pillars as an NFR checklist
 Ground: AWS Well-Architected (6 pillars — aws.amazon.com/architecture/well-architected) · Azure
@@ -150,12 +160,22 @@ explicitly ("checkout falls back to cached pricing, not a 500") — a resilience
 fallback is not a decision. Implementation (the retry library, the breaker state machine) is
 `backend`'s border; runtime trip-rate monitoring is `operate`'s.
 
+**Third-party quota is a budget.** Budget calls per provider × account identity, not per process:
+reserve allowance atomically before dispatch, keep reserved and actually-used apart, persist
+cooldowns across restarts, and after a crash mid-dispatch record an uncertain attempt rather than
+refunding it. Several credentials for one account share one budget identity. Serialize same-identity
+mutations (GitHub's REST guidance: "make requests serially instead of concurrently" to avoid
+secondary limits) while independent providers proceed inside a global budget, and show a plan plus a
+capped sample before any unbounded external call. Rotating accounts or proxies to keep a throttled
+or blocked job running is evasion, not resilience.
+
 ## Validation
 - Every budget row has a number, not an adjective — "fast" is not a budget.
 - Reliability is stated as SLI→SLO→SLA per critical path with the error-budget percentage computed.
 - Every scaling trigger names a warn AND critical threshold plus the action taken at each.
 - The Well-Architected pass is a table with a self-audit count, never a narrative "looks good."
 - Every resilience-pattern call names the boundary, the pattern, and the degrade-gracefully target.
+- Every third-party dependency names its quota budget identity and reservation rule.
 
 ## Failure modes and handoff
 - **Budgets set with no enforcement mechanism** — a budget with no CI gate decays; name the gate or
