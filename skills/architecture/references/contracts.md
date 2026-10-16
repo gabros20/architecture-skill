@@ -9,6 +9,7 @@ Read when:
 - A service boundary from [decomposition.md](decomposition.md) needs its inter-service or
   inter-team interface made explicit.
 - An existing API needs a versioning or deprecation plan.
+- The boundary wraps an upstream you don't control — a vendor API, a scraped page, a browser flow.
 
 Skip when:
 - The boundary itself (which service owns what) isn't decided yet — use
@@ -33,6 +34,7 @@ Produces:
 - An OpenAPI (sync) or AsyncAPI (event) skeleton, or a pointer to write one.
 - A versioning + deprecation plan with dates.
 - A completed API-contract review checklist.
+- For a wrapped upstream, the contract / recipe / validation-record / binding split (§5).
 
 ## Contents
 
@@ -40,6 +42,7 @@ Produces:
 - REST vs gRPC vs GraphQL-federation
 - Versioning + deprecation
 - API-contract review checklist
+- Contracts over an upstream you don't control
 
 ## Procedure
 
@@ -53,7 +56,9 @@ https://swagger.io/specification/; AsyncAPI, https://www.asyncapi.com/docs/conce
 `user/signedup`), `operations` (`send`|`receive` on a channel — the 3.0 replacement for
 publish/subscribe), `messages` (payload schema), `servers` (the broker). Both serve the same
 purpose for a different transport — "a communication contract between senders and receivers."
-Broker config and consumer-group tuning are impl → `backend`.
+Broker config and consumer-group tuning are impl → `backend`. A client on a laptop or behind NAT
+cannot receive a webhook — specify polling the provider's event API from a stored cursor, not an
+inbound endpoint the deployment can't host.
 
 ### 2. REST vs gRPC vs GraphQL-federation
 Architecture picks the contract style; build skills implement it. Decision drivers: data-model
@@ -104,20 +109,48 @@ before calling the contract review done.
 | Pagination | One strategy declared (offset / cursor / `Range` header) and applied everywhere |
 | Filtering & sorting | Query-param convention documented once, reused everywhere |
 | Versioning | One mechanism (§3), no implicit default |
-| Error handling | One JSON error shape everywhere: machine `id`, human `message`, optional docs `url` |
+| Error handling | One JSON error shape everywhere: machine `id`, human `message`, optional docs `url`; add `retryable`, `retry_after`, and on a mutation `effect_outcome` (applied / not-applied / unknown) as extension members (RFC 9457 §3.2); source-specific codes extend the shared categories, never replace them |
 | AuthN/AuthZ | Security scheme declared in `components.securitySchemes`, referenced per operation |
 | Rate limiting | Limits documented, remaining-quota header exposed |
-| Idempotency | Mutating retries are safe (idempotency keys on POST that may be retried) |
-| Docs | Generated from the spec, not hand-maintained twice |
+| Idempotency | Mutating retries are safe — a caller-supplied idempotency key on any POST that may be retried (AWS Builders' Library, *Making retries safe with idempotent APIs*). A timeout after submit means outcome **unknown**: verify state before retrying; a `Retry-After` hint is not permission to resubmit, and a local job ID is not upstream exactly-once |
+| Completeness | Partial results are explicit — what was unreachable, capped, or filtered (Google AIP-217 `unreachable`); "complete" is stated relative to a scope; a null cursor alone does not prove exhaustion; true-empty ≠ unavailable |
+| Identifiers | IDs travel as strings — JSON integers beyond ±(2^53−1) are not interoperable (RFC 8259 §6) |
+| Representations | When humans and agents read one resource, negotiate HTML vs Markdown on `Accept` *and* publish a deterministic variant (`<url>.md`, the llms.txt proposal) advertised via `Link: rel="alternate"`; render every representation at publish time so the edge never transforms |
+| Docs | Docs, client types, and CLI/MCP tool metadata generated from the one spec, not hand-maintained twice |
 
 Condensed from wshobson/agents `api-design-principles` `assets/api-design-checklist.md` (~80 items,
 MIT); use zalando/restful-api-guidelines and microsoft/api-guidelines (both CC-BY-4.0) for a fuller
 numbered rulebook when the team wants one.
 
+### 5. Contracts over an upstream you don't control
+When the boundary wraps a vendor API, a scraped page, or a browser flow, put an Anticorruption Layer
+in front of it ([decomposition.md](decomposition.md) §2) and keep four artifacts apart: (1) the
+**public operation contract** consumers code against; (2) the **upstream recipe** — endpoint IDs,
+request preparation, page-derived values (expiring, target-bound local state, never constants in a
+schema); (3) a **validation record** — what was observed, when, for which account class, against
+which semantic assertions; (4) the **local binding** — credentials and session. Only 1–3 ship in a
+distributable package. Version the operation contract, recipe, parser, and persisted job/cache
+schema independently: upstream drift ships as a new recipe revision while the public contract
+holds, and a job pins its revisions — resuming across a changed recipe needs an explicit migration,
+never a silent cursor replay.
+- **A 200 is not verification.** Promote a recipe only after semantic checks pass on two varied
+  inputs plus the negative set — true-empty, denied, malformed, continuation failure, wrong
+  projection; one trace cannot separate essential parameters from incidental ones.
+- **Classify effects independently of the HTTP method** — `read` / `local-write` / `remote-write`
+  plus incidental effects (opening marks read; an upload succeeds while the publish fails) — POST
+  can query and GET can change state.
+- **Track capability lifecycle** — planned → mapped → validated → degraded → retired; a planned
+  operation is not coverage. On drift return a bounded diagnostic and mark degraded; the fix is a
+  reviewed recipe change ([surface-agentic.md](surface-agentic.md) §9).
+- **Descriptors are data, behavior is pinned code.** Schemas, limits, and effect class live in a
+  portable descriptor; preparation, parsing, and retry decisions are module code identified by
+  version and digest — no executable code in manifests, no invented recipe language.
+
 ## Validation
 - Every named consumer can build against the spec without a clarifying question back to this team.
 - The versioning mechanism is singular and stated; deprecation dates exist for anything replaced.
 - The §4 checklist is a filled table with a row count, not a paragraph.
+- A wrapped upstream separates contract, recipe, validation record, and binding (§5).
 
 ## Failure modes and handoff
 - **Contract drafted before the boundary is settled** — return to
