@@ -80,6 +80,12 @@ Single-Agent/Coordinator/Hierarchical-Decomposition/Swarm; **iterative reasoning
 ReAct/Loop/Review-and-Critique; **special-purpose** → Human-in-the-Loop/Custom-Logic. Start
 single-agent; graduate as complexity demands, measured.
 
+**Deterministic core, model at the judgment points.** Scoring, routing, retries, and state
+transitions are code; call the model only for language or judgment, behind a golden set that tracks
+abstention and drift (§8), with a no-model fallback that degrades rather than fails. Every caller —
+human, scheduler, agent — drives one command surface (12-Factor Factor 11): no private agent API, no
+hidden second agent inside a tool.
+
 ## 3. When multi-agent is worth it
 
 Anthropic's internal build ("How We Built Our Multi-Agent Research System") gives real decision
@@ -176,7 +182,9 @@ State four things per gated capability: **task-set size/source** (real usage or 
 not invented cases), the **evaluator** (exact-match / LLM-as-judge / human review / tool-trace
 check), the **pass threshold**, and the **regression gate** — the agentic system's contract the way
 [contracts.md](contracts.md) is the deterministic one's. `ai` implements the harness and judge;
-architecture owns which threshold gates a release.
+architecture owns which threshold gates a release. For an agent-facing contract (AGENTS.md, a skill,
+a tool manifest), add a **cross-harness check**: two different models given the same contract must
+route, file, and refuse identically — divergence marks ambiguous instructions to fix in the text.
 
 ## 9. Agent security
 
@@ -194,6 +202,20 @@ Prompt injection via retrieved content is the concrete instance at the RAG layer
 **XML-delimit untrusted content** so the model separates instruction from data structurally, not by
 inferring from prose that a retrieved paragraph is untrusted.
 
+**Action safety — gate by effect class in the execution layer, never the prompt** (OWASP LLM06
+*Excessive Agency*: "implement authorization in downstream systems rather than relying on an LLM").
+Classes, declared per tool and enforced by one dispatcher: read → free · reversible local write →
+run and log · draft → produce the artifact, a human transmits · external or irreversible (send, push,
+deploy, pay, delete) → explicit human confirm · out-of-scope paths and secret values → deny. New
+tools default to confirm; only reversible classes run unattended. An approval binds the exact payload
+— content hash, target, sender, version, approver, time — and any edit voids it (CWE-367,
+time-of-check/time-of-use). Multi-route actions (API →
+browser → computer use) fall back only when a route is unavailable *before* submit or verification
+proves no change; post-submit ambiguity is `unknown` — verify, don't resubmit
+([contracts.md](contracts.md) §4). Auth challenges and account restrictions stop the action: never
+route around a refusal by switching driver, account, or proxy, and a running job never rewrites its
+own adapter or escalates its access. The agent holds credential handles, never values.
+
 ## Validation
 
 - The harness names its context-management strategy (§4) — "a bigger context window" is not a design.
@@ -201,7 +223,7 @@ inferring from prose that a retrieved paragraph is untrusted.
 - The eval gate (§8) states task-set size/source, evaluator, pass threshold, and regression gate.
 - The RAG topology (§7) names its rung and why a cheaper rung wasn't sufficient.
 - The security model (§9) names its authz composition and the prompt-injection mitigation for every
-  untrusted-content path.
+  untrusted-content path, and each tool's effect class and where it is enforced.
 
 ## Failure modes and handoff
 

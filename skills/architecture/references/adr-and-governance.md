@@ -98,7 +98,12 @@ Grounding wshobson's ADR Review Checklist (verbatim substance, re-expressed) —
 phases:
 - **Before submission**: options were genuinely considered, not just the chosen one written up
   after the fact; security implications considered; reversibility assessed (Bezos one-way/two-way
-  doors lens — is this decision cheap or expensive to undo?).
+  doors lens — is this decision cheap or expensive to undo?); evidence is pinned (commit/version +
+  observation date) and corroboration counted by independent source family, not by page — an absence
+  of reported failures is not evidence of safety; an **exit** is stated — what reverting would cost
+  (convenience or data) and the chosen dependency's maturity and maintainer risk; a decision taken
+  *against* the analysis' top pick says so and carries a **guard**, a named acceptance test whose
+  failure reopens it (§7).
 - **During review**: at least 2 senior engineers reviewed; consequences (positive and negative)
   are both stated, not just the upside.
 - **After acceptance**: index updated; any related/superseded ADR linked both ways.
@@ -133,7 +138,8 @@ active ADR; the ADR's wording no longer matches the code's actual shape.
 - [?] <file> — no ADR coverage (consider creating one)
 ```
 Run this whenever reviewing a PR that touches a file with an existing ADR reference, or as a
-periodic health check on the whole log.
+periodic health check on the whole log. Keep the log in the repo it governs (`docs/adr/` or
+`docs/decisions.md`) so an architecture change and its ADR land in the same change.
 
 ### 7. Governance: fitness functions
 
@@ -166,6 +172,11 @@ layeredArchitecture()
 // cycle detection across module slices
 slices().matching("com.company.app.(*)..").should().beFreeOfCycles();
 ```
+
+Two rule shapes beyond layering pay off quickly: **import isolation** — the core or CLI startup path
+never imports optional adapters (MCP, browser, media), a dependency-cruiser `forbidden` rule — and
+**generated-contract sync** — the generated capability manifest or OpenAPI matches the
+implementation, failing the build on drift.
 
 Border: this reference owns *naming* the fitness function as part of the decision (which rule,
 what it enforces, which ADR it confirms); wiring the ArchUnit-family test into the build and
