@@ -66,7 +66,7 @@ The fillable canvas/template assets that adapt these carry their own inline CC-B
 | [ddd-crew/context-mapping](https://github.com/ddd-crew/context-mapping) — 9 context-map patterns | decomposition |
 | [ddd-crew/bounded-context-canvas](https://github.com/ddd-crew/bounded-context-canvas) | bounded-context-canvas asset |
 | [ddd-crew/aggregate-design-canvas](https://github.com/ddd-crew/aggregate-design-canvas) | aggregate-design-canvas asset |
-| [humanlayer/12-factor-agents](https://github.com/humanlayer/12-factor-agents) — Factor 8, Factor 12 | surface-agentic |
+| [humanlayer/12-factor-agents](https://github.com/humanlayer/12-factor-agents) — Factors 8, 11, 12 | surface-agentic |
 
 ## Cited, not copied — concepts, standards, and restrictive/no-license material
 
@@ -88,11 +88,31 @@ drawn from the open standard or the primary concept, not from these renderings' 
   Olaf Zimmermann (Y-Statement); SwirlAI (agent-memory taxonomy); Weaviate (Agentic RAG); Palantir
   Tech and X long-form harness authors (Vtrivedy10, himanshutwtxs) — agent-harness and agent-security
   theses.
+- **Integration, reliability, and agent-safety guidance (cited, not copied):** Hohpe & Woolf, *Enterprise Integration Patterns* —
+  [Process Manager](https://www.enterpriseintegrationpatterns.com/patterns/messaging/ProcessManager.html)
+  (data-architecture); David Harel's statecharts — orthogonal regions, via
+  [statecharts.dev](https://statecharts.dev/glossary/parallel-state.html) (data-architecture);
+  Cartwright, Horn & Lewis, [*Patterns of Legacy Displacement* — Feature Parity](https://martinfowler.com/articles/patterns-legacy-displacement/feature-parity.html)
+  (migration); Per Brinch Hansen's separation of mechanism and policy (RC 4000) (migration);
+  [AWS Builders' Library — Making retries safe with idempotent APIs](https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/)
+  (contracts); [GitHub REST API best practices](https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api)
+  (nfr-budgets); Brendan Gregg, [Active Benchmarking](https://www.brendangregg.com/activebenchmarking.html)
+  (nfr-budgets); [OWASP Top 10 for LLM Applications — LLM06 Excessive Agency](https://genai.owasp.org/llmrisk/llm062025-excessive-agency/)
+  and [CWE-367](https://cwe.mitre.org/data/definitions/367.html) (surface-agentic);
+  [OWASP SSRF Prevention](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html)
+  and [Secrets Management](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html)
+  cheat sheets, [W3C TAG — Good Practices for Capability URLs](https://www.w3.org/TR/capability-urls/)
+  (draft), [GDPR Recital 26](https://gdpr-info.eu/recitals/no-26/) (security-architecture).
 - **Open standards & specs:** [OpenAPI](https://swagger.io/specification/),
   [AsyncAPI](https://www.asyncapi.com), [arc42](https://docs.arc42.org),
   [OWASP Threat Modeling Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html),
   [Threat Modeling Manifesto](https://www.threatmodelingmanifesto.org),
-  [RAGAS](https://docs.ragas.io), [CNCF](https://www.cncf.io).
+  [RAGAS](https://docs.ragas.io), [CNCF](https://www.cncf.io),
+  [RFC 8259 §6](https://www.rfc-editor.org/rfc/rfc8259#section-6) (JSON number interoperability),
+  [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) (problem details),
+  [RFC 9111](https://www.rfc-editor.org/rfc/rfc9111) (HTTP caching),
+  [Google AIP-217](https://google.aip.dev/217) (unreachable resources),
+  [llms.txt proposal](https://llmstxt.org) (Markdown page variants) — contracts / system-design.
 - **CC-BY-NC-ND — link only, never re-expressed as prose:**
   [karanpratapsingh/system-design](https://github.com/karanpratapsingh/system-design) (the 7-step
   method and PACELC framing are cited; text is not lifted).

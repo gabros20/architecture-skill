@@ -76,5 +76,36 @@
       "Distinguishes facts about the current support workflow from assumptions about model capability",
       "States autonomy boundaries (what the agent may do unsupervised vs. what requires human approval) as an explicit decision"
     ]
+  },
+  {
+    "id": "agentic-action-safety",
+    "prompt": "Architect an agent that posts to our social accounts and fills in job applications on the user's behalf, falling back to the browser when an API is missing.",
+    "assertions": [
+      "Classifies each tool/action by effect (read, reversible write, draft, external/irreversible) and enforces the gate in the execution layer, not the prompt",
+      "Binds any human approval to the exact payload (content, target, version, approver) and voids it on edit",
+      "Treats a post-submit timeout or ambiguous response as an unknown outcome that must be verified before any retry or route switch",
+      "Refuses to route around an auth challenge or account restriction by switching driver, account, or proxy",
+      "Keeps credential values out of the agent's context, passing handles or references instead"
+    ]
+  },
+  {
+    "id": "data-architecture-one-system-of-record",
+    "prompt": "Our pipeline keeps state in a local append-only ledger and we want to mirror it into a CRM once a second operator joins — how should the data be owned?",
+    "assertions": [
+      "Names exactly one system of record per entity per phase and rejects a two-way mirror between peer stores",
+      "Treats the move to the CRM as a tested one-way migration, not an ongoing sync",
+      "Identifies the second concurrent writer, not a volume threshold, as the trigger, and names single-writer or lease semantics",
+      "Marks every other store (index, cache, view) as derived and rebuildable from the system of record"
+    ]
+  },
+  {
+    "id": "contracts-upstream-wrapper",
+    "prompt": "Spec the contract for a CLI that wraps several third-party sites' unofficial web APIs for our agents to call.",
+    "assertions": [
+      "Separates the public operation contract, the upstream recipe revision, the validation record, and the local credential binding, and keeps the binding out of anything distributable",
+      "Requires semantic validation including negative cases (true-empty, denied, malformed, continuation failure) rather than accepting a successful response as verified",
+      "Classifies each operation's effect independently of its HTTP method",
+      "Makes result completeness explicit (partial, capped, unreachable) and carries large identifiers as strings"
+    ]
   }
 ]

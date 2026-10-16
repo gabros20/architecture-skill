@@ -48,8 +48,8 @@ explicitly requested a composition workflow.
 |---|---|---|
 | "Design/architect/spec the system" from scratch, or review a design for gaps — the default entry | [system-design](references/system-design.md) | Requirements gate, leveled C4/arc42 design, trade-offs, back-of-envelope numbers |
 | "Break this up," "should this be a microservice," define modules/bounded contexts, fix coupling | [decomposition](references/decomposition.md) | Bounded contexts, monolith/modular/micro call with a named disintegrator, quantified coupling read |
-| "Design the API," "define the contract," spec endpoints/events, version/deprecate an interface | [contracts](references/contracts.md) | REST/gRPC/GraphQL pick, OpenAPI/AsyncAPI skeleton, versioning + deprecation plan, review checklist |
-| Design data flow, choose a consistency model, decide CQRS/ES, pick an identifier scheme | [data-architecture](references/data-architecture.md) | Consistency decision per flow, CQRS/ES score, outbox/dual-write call, store selection |
+| "Design the API," "define the contract," spec endpoints/events, version/deprecate an interface | [contracts](references/contracts.md) | REST/gRPC/GraphQL pick, OpenAPI/AsyncAPI skeleton, versioning + deprecation plan, review checklist, upstream-wrapper contract |
+| Design data flow, choose a consistency model, decide CQRS/ES, pick an identifier scheme | [data-architecture](references/data-architecture.md) | Consistency decision per flow, CQRS/ES score, outbox/dual-write call, store selection, one system of record |
 | Set perf/latency/reliability targets, an SLO, a scaling/capacity/cost plan, a Well-Architected review | [nfr-budgets](references/nfr-budgets.md) | Performance-budget table, SLO + error budget, scaling triggers, WA self-audit, resilience strategy |
 | Threat-model, decide the auth/authz model, tenant isolation, a privacy/data-governance stance | [security-architecture](references/security-architecture.md) | STRIDE register, auth/authz decision, zero-trust posture, data-classification statement |
 | Migrate/replatform, extract a service, deprecate an API, modernize a legacy system | [migration](references/migration.md) | 7 Rs / Strangler-Fig pick, extraction order, comparison-read cutover gate, deprecation timeline |
@@ -65,7 +65,7 @@ replace it (per the invariant below, it changes topology, the eval gate, and the
 |---|---|---|
 | Multi-tenant web app / SaaS (default) | [surface-web-saas](references/surface-web-saas.md) | Tenant isolation (silo/pool/bridge), 3-tier + per-client BFF, OIDC tenant resolution |
 | Native mobile client (iOS/Android) | [surface-mobile](references/surface-mobile.md) | Client pattern (MVVM/TCA/Clean/RIBs), offline/sync + conflict rule, SSOT/UDF |
-| **Agentic / LLM system** | [surface-agentic](references/surface-agentic.md) | **Harness design, workflow-vs-agent, multi-agent economics, RAG topology, memory tiers, eval-as-gate, agent security** |
+| **Agentic / LLM system** | [surface-agentic](references/surface-agentic.md) | **Harness design, workflow-vs-agent, multi-agent economics, RAG topology, memory tiers, eval-as-gate, agent security + action safety** |
 | Data / analytics / ML platform | [surface-data-intensive](references/surface-data-intensive.md) | Operational/analytical boundary, batch-vs-stream, mesh-vs-centralized ownership |
 | Internal tool / developer platform (IDP) | [surface-internal-platform](references/surface-internal-platform.md) | Team Topologies bridge, platform-as-product threshold, "don't build a platform yet" gate |
 

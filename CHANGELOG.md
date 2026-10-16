@@ -8,7 +8,26 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [Unreleased]
 
 ### Added
-- Queue unreleased changes here.
+- Practitioner know-how folded into the existing references, each rule grounded in a cited source
+  (SOURCES.md): **contracts** gains §5 *Contracts over an upstream you don't control*
+  (contract / recipe / validation record / binding split, layer-by-layer versioning, semantic
+  validation with negative cases, effect class independent of HTTP method, capability lifecycle) and
+  checklist rows for completeness, string identifiers, dual human/agent representations, and
+  outcome-unknown idempotency; **data-architecture** gains one system of record per entity per phase,
+  rebuildable derived stores, the single-writer/second-writer trigger, durable-execution vs
+  Process-Manager-plus-sweep with a durability acceptance test, and orthogonal state fields;
+  **migration** gains the capability inventory, mechanism-not-policy consolidation, variance-axis
+  slices, and one authority for shared allowances during coexistence; **nfr-budgets** gains
+  equal-work benchmarking, whole-cost pricing, and third-party quota as a per-identity budget;
+  **security-architecture** gains capability URLs, resolved-IP SSRF validation, secret references,
+  stage × jurisdiction residency, export boundaries, and native-TTL retention; **system-design**
+  gains pinned-revision current state, verified dependency access, cache-key completeness, and
+  package/daemon restraint; **adr-and-governance** gains evidence pinning, exit and guard in the
+  review checklist, in-repo ADR logs, and two fitness-function shapes; **surface-agentic** gains the
+  deterministic-core rule, a cross-harness eval check, and §9 action safety (effect-class gating in
+  the execution layer, payload-bound approvals, outcome-unknown fallback, no routing around
+  refusals, credential handles). Router contribution cells updated; 2 traversal + 3 output eval
+  cases added.
 
 ## [0.1.2] — 2026-07-27
 

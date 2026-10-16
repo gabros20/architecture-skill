@@ -128,5 +128,25 @@
       "references/surface-internal-platform.md",
       "references/migration.md"
     ]
+  },
+  {
+    "id": "agentic-action-safety",
+    "prompt": "Architect an agent that posts to our social accounts and fills in job applications on the user's behalf, falling back to the browser when an API is missing.",
+    "expected_references": ["references/surface-agentic.md"],
+    "forbidden_references": [
+      "references/surface-mobile.md",
+      "references/migration.md",
+      "references/surface-data-intensive.md"
+    ]
+  },
+  {
+    "id": "data-architecture-system-of-record",
+    "prompt": "Our pipeline keeps state in a local append-only ledger and we want to mirror it into a CRM once a second operator joins — how should the data be owned?",
+    "expected_references": ["references/data-architecture.md"],
+    "forbidden_references": [
+      "references/surface-mobile.md",
+      "references/surface-agentic.md",
+      "references/contracts.md"
+    ]
   }
 ]
