@@ -53,6 +53,10 @@ big-bang rewrite "goes down in flames" — a long parallel build drifts from a m
 nothing until the very end, while Strangler Fig ships value continuously and can be stopped or
 reversed at any point. Treat the façade and any dual-running components as a **deliberately temporary
 transitional architecture** — name it as temporary in the ADR so it isn't mistaken for the final shape.
+While both run, keep **one authority for shared stateful allowances** — rate-limit budgets, cooldowns,
+quotas, counters: either the legacy path calls the new runtime, or old and new never execute
+concurrently until that state has migrated. Copying the state file and running both doubles the
+allowance.
 
 ### 2. The 7 Rs — pick the migration strategy per component
 Ground: AWS `migration-readiness` (MIT-0, aws-samples/sample-well-architected-skills-and-steering).
@@ -109,6 +113,24 @@ downstream — sequence so early mistakes are cheap and late extractions inherit
 process. Weight the actual order by the real dependency graph and business criticality; the ordering
 *principle* (lowest blast radius first) transfers, not the literal service list.
 
+**Inventory before ordering.** Baseline current capability from code at a pinned revision — commands,
+payload shapes, effects, state/cache formats, runtime dependencies, authorization settings — not from
+READMEs, comments, or an older installed build; mark retired contracts so they don't become
+requirements by accident. Acceptance: every existing capability has an owner and an explicit keep/drop
+decision — nothing dropped implicitly, nothing carried by default (Cartwright, Horn & Lewis,
+*Patterns of Legacy Displacement* — Feature Parity is a pattern they generally advise against, since
+blanket replication rebuilds unused features). Approval/authorization configuration migrates
+explicitly, never reset to a default.
+
+**Consolidating N similar systems into one core.** Extract the byte-identical helpers first, behind
+compatibility adapters that preserve legacy output, and **share mechanism, not policy** (Brinch
+Hansen's separation of mechanism and policy): the core owns scheduling, bounded I/O, and
+cancellation; each source keeps whether a retry is permitted and what its errors mean — a shared
+auto-retry middleware erases deliberate per-source behavior. Then migrate one operation per
+variance axis (each protocol/engine type, plus one existing write path with its approval behavior)
+before generalizing, and accept on matching semantic output *and coverage* — compare network calls,
+not just elapsed time.
+
 ### 6. Deprecation — retiring an old contract or API version
 Ground: patricio0312rev/skills `api-versioning-deprecation-planner` (MIT). Use standard deprecation
 response headers instead of silent breakage: `Deprecation: true`, `Sunset: <date>`, `Link:
@@ -123,11 +145,13 @@ reference owns the retirement timeline and header contract, not the versioning s
 - **Premature Decomposition** — extracting before the shared-DB and dependency questions (§2–3) are
   resolved.
 - **No Rollback** — cutting over without a tested rollback path; every gate in §4 must have one.
+- **Dual allowance** — legacy and new paths both live on copied quota/cooldown state (§1).
 
 ## Validation
 - The strategy pick names one of the 7 Rs (or a Strangler Fig extraction) and states why — not just
   "we're migrating."
 - Every extraction lists its dependency risk, with shared-DB dependencies called out explicitly.
+- Every existing capability has an owner and a keep/drop decision before cutover (§5).
 - A cutover gate exists with named go/no-go thresholds before any traffic-shift is proposed.
 - Any retired contract has a stated deprecation timeline and header contract.
 
