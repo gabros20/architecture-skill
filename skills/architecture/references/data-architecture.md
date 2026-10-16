@@ -28,7 +28,8 @@ Produces:
 - A consistency-model decision (linearizable vs eventual, per data flow) with its tradeoff named.
 - A CQRS/Event-Sourcing go/no-go, scored against §3.
 - An outbox/dual-write decision wherever a write must cross a service boundary.
-- A store-selection decision (polyglot-persistence rule) and an identifier scheme.
+- A store-selection decision (polyglot-persistence rule), the system of record per entity, an
+  identifier scheme, and the state-field shape.
 
 ## Contents
 
@@ -36,8 +37,8 @@ Produces:
 - Consistency: CAP/PACELC
 - CQRS + Event Sourcing — scored, not defaulted
 - The dual-writes problem → Transactional Outbox
-- Polyglot persistence — the restraint rule
-- Schema decisions: identifiers
+- Polyglot persistence and the system of record
+- Schema decisions: identifiers and state fields
 
 ## Procedure
 
@@ -95,9 +96,20 @@ no coordinator, or orchestration = central coordinator) for long-running process
 tolerate temporary inconsistency; 2PC only when you control every participant and need atomicity
 now (rare in microservices — the coordinator is a single point of failure); Process Manager when
 the orchestration has enough branching logic to need its own explicit state machine, not just a
-saga script.
+saga script. Compensation must be an operation the upstream defines and the caller is authorized to
+run — otherwise a multi-step external action (upload, then publish) is not transactional: checkpoint
+each step's receipt so a retry reuses a still-valid one.
 
-### 5. Polyglot persistence — the restraint rule
+For a process that outlives any one run (multi-day human gates, a timed outreach sequence), pick a
+shape: a **durable-execution workflow engine**, or a **Process Manager** (Hohpe & Woolf, *Enterprise
+Integration Patterns* — holds the sequence state and picks the next step) whose state lives in the
+system of record, advanced by short scheduled sweeps that query for due actions. Prefer the sweep on
+an intermittent host (a laptop, a single cron box) — it catches up after downtime, and the entity
+record, not a run, is the checkpoint. Gate either with a **durability acceptance test**: a pending
+approval survives an orchestrator restart, and a retried send never double-fires. Paged ingestion
+follows the same order — commit the records, then advance the cursor.
+
+### 5. Polyglot persistence and the system of record
 **Start with one Postgres. Add a specialized store only when Postgres demonstrably can't meet a
 pattern** (vasilyu1983 `data-architecture-patterns.md`) — not because a NoSQL/graph/search store
 is trendier. Justify each addition against a named failure: full-text search at scale (→ a
@@ -105,7 +117,16 @@ dedicated search index), graph-traversal queries (→ a graph store), write-heav
 column/time-series store). Every added store is an added consistency boundary (back to §4) and an
 added operational surface — the tradeoff is real, not hypothetical.
 
-### 6. Schema decisions: identifiers
+**One system of record per entity, per phase.** Every other copy — search index, cache, embeddings,
+a CRM view — is derived data (Kleppmann's systems-of-record vs derived-data split) and must be
+rebuildable from the system of record; a derived store that can't be rebuilt is a bug, and a two-way
+"mirror" between peers is two systems of record with no conflict rule. Moving the system of record
+is a tested one-way migration ([migration.md](migration.md)), not a sync. Concurrent writers need
+one authoritative writer per scope, or transactions plus leases — atomic file replacement makes a
+write atomic, not a read-modify-write. The trigger to leave a single-writer store is often the
+*second writer* (a second operator or process), well before any volume threshold.
+
+### 6. Schema decisions: identifiers and state fields
 Pick the identifier scheme for its actual failure mode, not habit (Sairyss/system-design-patterns;
 wshobson/agents `postgresql`, MIT):
 
@@ -121,12 +142,19 @@ Default: `BIGINT GENERATED ALWAYS AS IDENTITY` for a single-writer table; UUIDv7
 generated client-side or across services without coordination and index locality still matters;
 UUIDv4 only when opacity (no enumeration, no leaked creation-order) is a real requirement.
 
+Model independent lifecycles as separate state fields (disposition, build, delivery, …), not one
+linear status enum — the orthogonal-region idea from Harel statecharts (statecharts.dev: four
+independent switches need 8 states as parallel regions vs 16 states and 64 transitions flattened).
+Conversely, states that differ only in *why* (blocked, failed, awaiting approval) collapse into one
+state plus a reason field.
+
 ## Validation
 - The operational/analytical split is named explicitly, even if the answer is "not needed yet."
 - Every consistency choice is per-data-flow, not one system-wide declaration.
 - CQRS/ES is backed by the §3 score, not asserted.
 - Any cross-service write names its outbox/dual-write handling.
 - Store additions beyond the single Postgres are each justified against a named failure mode.
+- Each entity names one system of record; every other store is marked derived and rebuildable.
 
 ## Failure modes and handoff
 - **CQRS/ES proposed with no read:write imbalance or audit need** — score it (§3); if it doesn't
@@ -135,5 +163,7 @@ UUIDv4 only when opacity (no enumeration, no leaked creation-order) is a real re
   ships (§4).
 - **Store sprawl with no named failure driving each addition** — apply the polyglot-persistence
   rule (§5) and consolidate.
+- **A "mirror" or "sync" between two stores of the same entity** — name the one system of record;
+  the other is derived or migrated one-way (§5).
 - **The real ask is pipeline/dbt/governance work** — hand off to `data`.
 - **The real ask is DDL/index/query tuning** — hand off to `backend`.
