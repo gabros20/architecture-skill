@@ -51,7 +51,8 @@ non-functional requirements are captured and locked.** Proposing solutions early
 products/technologies prematurely and creates confirmation bias in every step that follows.
 Capture, in order: (1) functional requirements, (2) NFRs — scale, latency, availability, cost,
 security/compliance, DR — and *why each one matters for this system*, (3) current state and
-dependencies, (4) constraints (team size, timeline, existing stack). Then run an explicit
+dependencies — read from code at a pinned revision, not READMEs or comments, and verify (don't
+recall) each dependency's API access and entitlement before scheduling work on it, (4) constraints (team size, timeline, existing stack). Then run an explicit
 **contradiction check** — e.g. "complete network isolation" vs "real-time ingestion from public
 APIs" — surface the conflict, name the trade-off, and force a decision before any component is
 named. Ask one question at a time for missing inputs; mark unknowns TBD rather than inventing them.
@@ -99,8 +100,8 @@ Hierarchy: **Person → Software System → Container → Component → Code.**
 | System Landscape | a portfolio | a context diagram with no single focus system | Yes, for portfolios |
 | Deployment | one environment | systems/containers mapped onto infrastructure | Yes |
 
-Every diagram needs a title (type + scope) and a key; every element states its type and
-technology; every relationship line is labeled with direction and protocol/intent — never a bare
+Every diagram needs a title (type + scope) and a key; every element states its type,
+technology, and build/buy/reuse call; every relationship line is labeled with direction and protocol/intent — never a bare
 "Uses." Component and Code diagrams are optional depth, not required deliverables — stop at
 Container unless the request specifically needs finer resolution.
 
@@ -130,7 +131,11 @@ not to replace a real load test.
   write latency, data never stale), write-behind/write-back (write cache, async-flush to DB —
   fastest writes, risk of loss on cache failure), refresh-ahead (predictively refresh before
   expiry — wasted work if the prediction is wrong). Pick by write-latency tolerance vs
-  staleness/loss tolerance, not by default.
+  staleness/loss tolerance, not by default. Key every
+  cache by everything that changes the answer — operation, input, projection, locale, parser
+  version, and the account for private data (HTTP's `Vary` and `private`, RFC 9111 §4.1/§5.2.2.7);
+  account-scoped data never lands in a shared entry, and a signed, expiring URL is not a content
+  identity.
 - **Latency orders of magnitude** — L1 cache ~1 ns · main memory read ~100 ns · SSD random read
   ~16 μs · round trip in same datacenter ~500 μs · disk seek ~4 ms · round trip CA↔Netherlands
   ~150 ms. Use these to sanity-check whether a proposed design's critical path is memory-bound,
@@ -147,6 +152,14 @@ event-sourcing, or a service mesh only when a named disintegrator (team scaling,
 conflict, load, tech mismatch) justifies it — see
 [Decomposition](decomposition.md) for the monolith-first rule and the coupling model that
 quantifies when a split is warranted.
+
+The same restraint holds below the service level: start with a few workspace packages and plain
+folders, and split a package only when it needs its own dependency set or release lifecycle — no
+empty packages for the roadmap. Expose the core as an importable library that CLI/MCP/HTTP adapters
+wrap; add a resident server or broker only when persistent connections, pooling, or concurrent
+clients demand it, since a daemon adds lifecycle and authorization work. A manual procedure or CSV
+import is a legitimate first adapter behind the same port — automate it once it has repeated — and
+each deferred item is recorded with its trigger.
 
 ## Validation
 

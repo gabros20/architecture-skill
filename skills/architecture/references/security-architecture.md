@@ -90,8 +90,8 @@ a blank page per element:
 | Authentication & sessions | Credential stuffing, token replay, session fixation | Rate limiting, short-lived rotating tokens, `HttpOnly`/`Secure`/`SameSite` cookies, MFA |
 | Authorization / IDOR | Object-reference tampering, privilege escalation | Centralized authz policy layer, tenant isolation via row-level security, audit privileged-endpoint access |
 | Injection | SQL/NoSQL/command injection | Parameterized queries, schema validation, no dynamic eval on untrusted input |
-| XSS / CSRF / SSRF | Stored/reflected script injection, forged requests, internal-service probing | CSP + output encoding, CSRF tokens + `SameSite`, egress allowlists + metadata-service protection |
-| Secrets / key management | Leaked credentials, stale keys | CI secret scanning, secret-manager rotation, least-privilege IAM |
+| XSS / CSRF / SSRF | Stored/reflected script injection, forged requests, internal-service probing | CSP + output encoding, CSRF tokens + `SameSite`, egress allowlists + metadata-service protection; validate the *resolved* IP and connect to it — domain allowlists alone don't stop DNS rebinding (OWASP SSRF cheat sheet); never expose a generic authenticated fetch proxy |
+| Secrets / key management | Leaked credentials, stale keys | CI secret scanning, secret-manager rotation, least-privilege IAM; agents, CI, and logs carry a secret *reference*, never the value (OWASP Secrets Management cheat sheet) |
 | Supply chain | Compromised dependency or build step | Pinned deps + lockfiles, SBOM/SLSA provenance, restricted and signed CI |
 | Availability / DoS | Resource exhaustion, retry storms | Rate limits/quotas, timeouts + backoff, circuit breakers, bulkheads |
 | Logging / repudiation | Log tampering, missing audit trail | Append-only audit logs, centralized access-controlled storage, request-ID + actor-identity on every audit event |
@@ -111,6 +111,11 @@ state which one and why, and what would trigger moving to the next tier (e.g., a
 requirement for physical data separation). Record the choice as an ADR
 ([adr-and-governance.md](adr-and-governance.md)) — auth/authz model is exactly the kind of
 hard-to-reverse decision that belongs in the decision record, not just this reference.
+
+**Capability URLs** (W3C TAG draft, *Good Practices for Capability URLs*) fit when a recipient must
+need nothing but the link: the URL *is* the credential — unguessable, HTTPS-only, expiring
+(`404`/`410` after), individually revocable, unindexed, no third-party links or scripts to leak it via
+`Referer`, secret in logs. The host can read the content; gate the write endpoint separately.
 
 ### 4. Zero-trust and defense-in-depth
 
@@ -161,6 +166,15 @@ State explicitly which data categories exist and which regulatory regime applies
 etc.) — if unstated by the requester, ask; do not assume "no sensitive data" as a default.
 Retention, deletion, and cross-border transfer constraints belong in the same design pass as the
 threat model, since they shape the data-store and trust-boundary decisions in step 2.
+
+Decide residency per **pipeline stage × data jurisdiction**: before any third-party processor key
+exists, state which provider may see which data class per region; fail closed where the legal basis
+is absent. "Anonymized" is a specified redaction policy, not an assumption — free text,
+URLs, rare attributes, and embedded names re-identify (GDPR Recital 26 judges identifiability by
+"all the means reasonably likely to be used"). An export (a share link, a published bundle) carries
+only the selected content — links to unshared items degrade to text, no external fetches. Every
+generated public artifact gets a TTL and a takedown path, enforced by the store's native expiry where
+it exists — a cleanup cron is one more system that fails silently.
 
 ## Validation
 
