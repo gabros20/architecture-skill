@@ -45,17 +45,18 @@ Produces:
 
 ### 1. The requirements gate (Google's discipline)
 
-Google's `google-cloud-solution-architecture` skill (Apache-2.0 — github.com/google/skills)
-enforces a hard rule: **do not propose, outline, or recommend any design until functional and
-non-functional requirements are captured and locked.** Proposing solutions early anchors on
-products/technologies prematurely and creates confirmation bias in every step that follows.
-Capture, in order: (1) functional requirements, (2) NFRs — scale, latency, availability, cost,
-security/compliance, DR — and *why each one matters for this system*, (3) current state and
-dependencies — read from code at a pinned revision, not READMEs or comments, and verify (don't
-recall) each dependency's API access and entitlement before scheduling work on it, (4) constraints (team size, timeline, existing stack). Then run an explicit
-**contradiction check** — e.g. "complete network isolation" vs "real-time ingestion from public
-APIs" — surface the conflict, name the trade-off, and force a decision before any component is
-named. Ask one question at a time for missing inputs; mark unknowns TBD rather than inventing them.
+Google's `google-cloud-solution-architecture` skill (Apache-2.0 — github.com/google/skills) enforces
+a hard rule: **do not propose, outline, or recommend any design until functional and non-functional
+requirements are captured and locked.** Proposing solutions early anchors on products/technologies
+prematurely and creates confirmation bias in every step that follows. Capture, in order: (1)
+functional requirements, (2) NFRs — scale, latency, availability, cost, security/compliance, DR —
+and *why each one matters for this system*, (3) current state and dependencies — read from code at a
+pinned revision, not READMEs or comments, and verify (don't recall) each dependency's API access and
+entitlement before scheduling work on it, (4) constraints (team size, timeline, existing stack).
+Then run an explicit **contradiction check** — e.g. "complete network isolation" vs "real-time
+ingestion from public APIs" — surface the conflict, name the trade-off, and force a decision before
+any component is named. Ask one question at a time for missing inputs; mark unknowns TBD rather than
+inventing them.
 
 ### 2. The design method (five steps)
 
@@ -100,9 +101,9 @@ Hierarchy: **Person → Software System → Container → Component → Code.**
 | System Landscape | a portfolio | a context diagram with no single focus system | Yes, for portfolios |
 | Deployment | one environment | systems/containers mapped onto infrastructure | Yes |
 
-Every diagram needs a title (type + scope) and a key; every element states its type,
-technology, and build/buy/reuse call; every relationship line is labeled with direction and protocol/intent — never a bare
-"Uses." Component and Code diagrams are optional depth, not required deliverables — stop at
+Every diagram needs a title (type + scope) and a key; every element states its type, technology, and
+build/buy/reuse call; every relationship line is labeled with direction and protocol/intent — never
+a bare "Uses." Component and Code diagrams are optional depth, not required deliverables — stop at
 Container unless the request specifically needs finer resolution.
 
 ### 4. arc42 — the document skeleton

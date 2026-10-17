@@ -112,7 +112,7 @@ before calling the contract review done.
 | Error handling | One JSON error shape everywhere: machine `id`, human `message`, optional docs `url`; add `retryable`, `retry_after`, and on a mutation `effect_outcome` (applied / not-applied / unknown) as extension members (RFC 9457 §3.2); source-specific codes extend the shared categories, never replace them |
 | AuthN/AuthZ | Security scheme declared in `components.securitySchemes`, referenced per operation |
 | Rate limiting | Limits documented, remaining-quota header exposed |
-| Idempotency | Mutating retries are safe — a caller-supplied idempotency key on any POST that may be retried (AWS Builders' Library, *Making retries safe with idempotent APIs*). A timeout after submit means outcome **unknown**: verify state before retrying; a `Retry-After` hint is not permission to resubmit, and a local job ID is not upstream exactly-once |
+| Idempotency | Mutating retries are safe — a caller-supplied idempotency key on any POST that may be retried (AWS Builders' Library, *Making retries safe with idempotent APIs*). A timeout after submit means outcome **unknown**: verify state before retrying, and if no verification exists, park the action as pending for a human rather than resubmitting; a `Retry-After` hint is not permission to resubmit, and a local job ID is not upstream exactly-once |
 | Completeness | Partial results are explicit — what was unreachable, capped, or filtered (Google AIP-217 `unreachable`); "complete" is stated relative to a scope; a null cursor alone does not prove exhaustion; true-empty ≠ unavailable |
 | Identifiers | IDs travel as strings — JSON integers beyond ±(2^53−1) are not interoperable (RFC 8259 §6) |
 | Representations | When humans and agents read one resource, negotiate HTML vs Markdown on `Accept` *and* publish a deterministic variant (`<url>.md`, the llms.txt proposal) advertised via `Link: rel="alternate"`; render every representation at publish time so the edge never transforms |
@@ -141,7 +141,10 @@ never a silent cursor replay.
   can query and GET can change state.
 - **Track capability lifecycle** — planned → mapped → validated → degraded → retired; a planned
   operation is not coverage. On drift return a bounded diagnostic and mark degraded; the fix is a
-  reviewed recipe change ([surface-agentic.md](surface-agentic.md) §9).
+  reviewed recipe change — a running job never rewrites its own adapter or escalates its access.
+- **Multi-route actions** (API → browser → computer use) carry one intent; each route declares which
+  intent fields it can represent, and fallback happens only when a route is unavailable *before*
+  submit or verification proves no change — post-submit ambiguity is `unknown` (§4 Idempotency).
 - **Descriptors are data, behavior is pinned code.** Schemas, limits, and effect class live in a
   portable descriptor; preparation, parsing, and retry decisions are module code identified by
   version and digest — no executable code in manifests, no invented recipe language.

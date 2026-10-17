@@ -122,9 +122,10 @@ a CRM view — is derived data (Kleppmann's systems-of-record vs derived-data sp
 rebuildable from the system of record; a derived store that can't be rebuilt is a bug, and a two-way
 "mirror" between peers is two systems of record with no conflict rule. Moving the system of record
 is a tested one-way migration ([migration.md](migration.md)), not a sync. Concurrent writers need
-one authoritative writer per scope, or transactions plus leases — atomic file replacement makes a
-write atomic, not a read-modify-write. The trigger to leave a single-writer store is often the
-*second writer* (a second operator or process), well before any volume threshold.
+one authoritative writer per scope, transactions plus leases, or optimistic concurrency (a version
+checked on every write — Kleppmann's compare-and-set remedy for lost updates); atomic file
+replacement makes a write atomic, not a read-modify-write. The trigger to leave a single-writer
+store is often the *second writer* (a second operator or process), well before any volume threshold.
 
 ### 6. Schema decisions: identifiers and state fields
 Pick the identifier scheme for its actual failure mode, not habit (Sairyss/system-design-patterns;
