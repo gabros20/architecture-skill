@@ -7,8 +7,9 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 
 ## [Unreleased]
 
-### Added
-- Queue unreleased changes here.
+### Fixed
+- `surface-agentic` voice-platform build vs buy: the framework pick, not only the components, is
+  pointed to `ai`, so the answer never ranks frameworks itself.
 
 ## [0.4.0] — 2026-10-17
 
