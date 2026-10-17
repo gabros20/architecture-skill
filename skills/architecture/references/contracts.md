@@ -115,7 +115,7 @@ before calling the contract review done.
 | Idempotency | Mutating retries are safe — a caller-supplied idempotency key on any POST that may be retried (AWS Builders' Library, *Making retries safe with idempotent APIs*). A timeout after submit means outcome **unknown**: verify state before retrying, and if no verification exists, park the action as pending for a human rather than resubmitting; a `Retry-After` hint is not permission to resubmit, and a local job ID is not upstream exactly-once |
 | Completeness | Partial results are explicit — what was unreachable, capped, or filtered (Google AIP-217 `unreachable`); "complete" is stated relative to a scope; a null cursor alone does not prove exhaustion; true-empty ≠ unavailable |
 | Identifiers | IDs travel as strings — JSON integers beyond ±(2^53−1) are not interoperable (RFC 8259 §6) |
-| Representations | When humans and agents read one resource, negotiate HTML vs Markdown on `Accept` *and* publish a deterministic variant (`<url>.md`, the llms.txt proposal) advertised via `Link: rel="alternate"`; render every representation at publish time so the edge never transforms |
+| Representations | When humans and agents read one resource, negotiate HTML vs Markdown on `Accept` *and* publish a deterministic variant (`<url>.md`, the llms.txt proposal — for agents that request it, not a search-visibility lever; that is `marketing`'s ai-search) advertised via `Link: rel="alternate"`; render every representation at publish time so the edge never transforms |
 | Docs | Docs, client types, and CLI/MCP tool metadata generated from the one spec, not hand-maintained twice |
 
 Condensed from wshobson/agents `api-design-principles` `assets/api-design-checklist.md` (~80 items,
