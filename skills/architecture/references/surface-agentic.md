@@ -83,7 +83,8 @@ single-agent; graduate as complexity demands, measured.
 **Deterministic core, model at the judgment points.** Scoring, routing, retries, and state
 transitions are code; the model is called only for language or judgment, behind a golden set
 tracking abstention and drift, with a no-model fallback that degrades rather than fails. Human,
-scheduler, and agent drive one command surface (§1), and no tool hides a second agent (12-Factor Factor 8, §6).
+scheduler, and agent drive one command surface (§1), and no tool hides a second agent
+(12-Factor Factor 8, §6).
 
 ## 3. When multi-agent is worth it
 

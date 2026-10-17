@@ -94,7 +94,7 @@
     "assertions": [
       "Names exactly one system of record per entity per phase and rejects a two-way mirror between peer stores",
       "Treats the move to the ERP as a tested one-way migration, not an ongoing sync",
-      "Identifies the second concurrent writer, not a volume threshold, as the trigger, and names single-writer or lease semantics",
+      "Identifies the second concurrent writer, not a volume threshold, as the trigger, and names single-writer, lease, or optimistic-concurrency semantics",
       "Marks every other store (index, cache, view) as derived and rebuildable from the system of record"
     ]
   },
