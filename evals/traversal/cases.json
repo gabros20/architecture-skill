@@ -170,5 +170,17 @@
       "references/surface-mobile.md",
       "references/migration.md"
     ]
+  },
+  {
+    "id": "agentic-voice-platform-build-vs-buy",
+    "prompt": "We run a phone voice agent on a managed voice platform at about 40,000 minutes a month and now need EU data residency. Should we keep buying or build our own stack on an open framework?",
+    "expected_references": [
+      "references/surface-agentic.md",
+      "references/nfr-budgets.md"
+    ],
+    "forbidden_references": [
+      "references/surface-mobile.md",
+      "references/migration.md"
+    ]
   }
 ]

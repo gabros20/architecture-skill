@@ -8,7 +8,18 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [Unreleased]
 
 ### Added
-- Queue unreleased changes here.
+- **Voice platform build vs buy** (`surface-agentic.md` "Runtime ownership — build vs buy, thin
+  clients, separate lifecycles"): the data-contract check now asks which features are sold only on
+  an enterprise tier; a voice platform's margin is its orchestration fee, with a derived break-even
+  method (minutes × (fee − self-hosting) against build engineering), build-sooner triggers
+  (sales-gated compliance, a turn-taking floor, language components), and a cheap exit (own numbers
+  or SIP trunk, flows and prompts as data, transcripts and recordings exported before zero
+  retention). Dated Vapi example only; components point to `ai` `surface-voice.md`. Router row,
+  Read-when, Validation line, traversal and output evals, SOURCES.
+
+### Changed
+- Tightened `surface-agentic.md` §1–§10 wording to hold the file near its ceiling (3,577 tokens,
+  +34 net).
 
 ## [0.3.0] — 2026-10-17
 

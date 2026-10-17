@@ -104,7 +104,9 @@ drawn from the open standard or the primary concept, not from these renderings' 
   as dated examples, checked 2026-10-17:
   [OpenAI Agents API](https://developers.openai.com/api/docs/guides/agents-api/overview),
   [Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview),
-  [LangSmith Managed Deep Agents](https://github.com/langchain-ai/managed-deepagents) (surface-agentic §10);
+  [LangSmith Managed Deep Agents](https://github.com/langchain-ai/managed-deepagents), and for the
+  voice-platform check Vapi [pricing](https://vapi.ai/pricing), [EU region](https://docs.vapi.ai/security-and-privacy/eu-region)
+  and [Zero data retention](https://docs.vapi.ai/security-and-privacy/zero-data-retention) (surface-agentic §10);
   [OWASP SSRF Prevention](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html)
   and [Secrets Management](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html)
   cheat sheets, [W3C TAG — Good Practices for Capability URLs](https://www.w3.org/TR/capability-urls/)

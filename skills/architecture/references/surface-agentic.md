@@ -10,7 +10,8 @@ Read when:
   a deterministic feature with a model call bolted on.
 - A primary reference ([system-design.md](system-design.md), [decomposition.md](decomposition.md),
   [nfr-budgets.md](nfr-budgets.md), [security-architecture.md](security-architecture.md)) hits an
-  agentic component needing deeper treatment, or the team weighs a managed agent runtime.
+  agentic component needing deeper treatment, or the team weighs a managed agent runtime or voice
+  platform.
 
 Skip when:
 - The request is eval/prompt/retrieval *implementation* — `ai`'s territory; this file owns the
@@ -35,10 +36,9 @@ runtime build-vs-buy and lifecycle-ownership decision (§10).
 ## 1. Thin-model / thick-harness thesis
 
 **Agent = Model + Harness** (Viv, "The Anatomy of an Agent Harness," x.com/Vtrivedy10). The harness
-is everything that isn't the model: system prompts, tools/skills/MCPs, bundled infra (filesystem,
-sandbox, browser), orchestration, hooks/middleware. **Architecture decisions live in the harness,
-not the model** — derive each component from a specific model limitation, never add one
-speculatively:
+is everything else: prompts, tools/skills/MCPs, bundled infra (filesystem, sandbox, browser),
+orchestration, hooks. **Architecture decisions live in the harness** — derive each component from a
+specific model limitation, never speculatively:
 
 | Model limitation | Harness component |
 |---|---|
@@ -51,17 +51,17 @@ speculatively:
 Same-model, different-harness deltas prove this: Opus 4.5 went 42%→78% on CORE-Bench across two
 harnesses; Vercel deleted 80% of an agent's tools and it went from failing to succeeding (145K→67K
 tokens, 100→19 steps) (Himanshu, "Agent Harness is the Real Product," x.com/himanshutwtxs). Every
-production harness runs the same core loop — `while (model returns tool calls) { execute → capture
-→ append → call again }`; all differentiation surrounds it. Consensus across Claude Code /
-Cursor / Manus / Devin: flat loop over complex DAG, filesystem as memory, errors kept in context,
-primitives over pre-built integrations — and keep *simplifying* over time.
+harness runs the core loop `while (tool calls) { execute → capture → append → call again }`.
+Consensus across Claude Code / Cursor / Manus / Devin: flat loop over
+complex DAG, filesystem as memory, errors kept in context, primitives over pre-built integrations,
+and keep *simplifying*.
 
 ## 2. Workflow vs agent — pattern selection
 
-**Workflows** = LLMs/tools orchestrated through predefined code paths (predictable, cheaper).
-**Agents** = an LLM dynamically directs its own process and tool use (flexible, costlier, errors
-compound) (Anthropic, "Building Effective Agents"). Default to a workflow; graduate to an agent only
-when step count is genuinely unpredictable and the environment tolerates compounding error.
+**Workflows** = LLMs/tools on predefined code paths (predictable, cheaper). **Agents** = an LLM
+directs its own process and tool use (flexible, costlier, errors compound) (Anthropic, "Building
+Effective Agents"). Default to a workflow; graduate to an agent only
+when step count is unpredictable and the environment tolerates compounding error.
 
 **5 workflow patterns:**
 
@@ -73,12 +73,11 @@ when step count is genuinely unpredictable and the environment tolerates compoun
 | Orchestrator-Workers | lead LLM decides subtasks at runtime | subtasks aren't knowable in advance (e.g. a multi-file code change) |
 | Evaluator-Optimizer | generate → critique → refine loop | evaluation criteria are clear and iteration measurably improves output |
 
-Google Cloud's 12-pattern selection matrix extends this to full topologies
+Google Cloud's 12-pattern matrix extends this to topologies
 (cloud.google.com/architecture/choose-design-pattern-agentic-ai-system): **deterministic ordering**
 → Sequential/Parallel/Iterative-Refinement; **dynamic orchestration** →
-Single-Agent/Coordinator/Hierarchical-Decomposition/Swarm; **iterative reasoning** →
-ReAct/Loop/Review-and-Critique; **special-purpose** → Human-in-the-Loop/Custom-Logic. Start
-single-agent; graduate as complexity demands, measured.
+Single-Agent/Coordinator/Hierarchical/Swarm; **iterative reasoning** → ReAct/Loop/Review-and-Critique;
+**special-purpose** → Human-in-the-Loop/Custom-Logic. Start single-agent; graduate when measured.
 
 **Deterministic core, model at the judgment points.** Scoring, routing, retries, and state
 transitions are code; the model is called only for language or judgment, behind a golden set
@@ -88,9 +87,9 @@ scheduler, and agent drive one command surface (§1), and no tool hides a second
 
 ## 3. When multi-agent is worth it
 
-Anthropic's internal build ("How We Built Our Multi-Agent Research System") gives real decision
-data: a lead-agent/subagent orchestrator beat single-Opus by **+90.2%** on a breadth-first eval —
-but a single agent's tokens run ~4× a chat turn's, and multi-agent runs ~**15×**. **Token usage
+Anthropic's "How We Built Our Multi-Agent Research System" gives decision data: a lead/subagent
+orchestrator beat single-Opus by **+90.2%** on a breadth-first eval — but a single agent's tokens run
+~4× a chat turn's, multi-agent ~**15×**. **Token usage
 explains ~80% of eval-score variance** — cost is the dominant lever, not incidental.
 
 | Signal | Multi-agent wins | Single agent wins |
@@ -100,17 +99,15 @@ explains ~80% of eval-score variance** — cost is the dominant lever, not incid
 | Per-step reliability | — | Per-step error rate **>45%** (Google/GPT/Gemini/Claude, 180 experiments) |
 
 The **45% per-step-error threshold** is the sharpest gate: below it, decomposing into more agents
-pays off; above it, fix the step first (better prompt, tool, or model) — stacking agents on a broken
-step multiplies the failure, not averages it out. Scale effort to complexity: a simple fact 1 agent/
-3–10 calls; a comparison 2–4 subagents/10–15 calls; complex work 10+ subagents with divided
-responsibilities.
+pays off; above it, fix the step first — stacking agents on a broken step multiplies the failure.
+Scale effort to complexity: a simple fact 1 agent/3–10 calls; a comparison 2–4 subagents/10–15
+calls; complex work 10+ subagents.
 
 ## 4. Context engineering as a design constraint
 
-**Context rot**: recall degrades as tokens grow — a gradient, not a cliff, since attention has n²
-pairwise relations and finite long-range parameters (Anthropic, "Effective Context Engineering for
-AI Agents"). Treat context as a **finite attention budget**: it bounds what a single agent/turn can
-own, and so bounds the harness and topology decisions in §1–3.
+**Context rot**: recall degrades as tokens grow — a gradient, not a cliff (Anthropic, "Effective
+Context Engineering for AI Agents"). Treat context as a **finite attention budget**: it bounds what
+one agent/turn can own, and so the harness and topology decisions in §1–3.
 
 Techniques, in order of first resort: **compaction** (summarize near the limit; keep architectural
 decisions and unresolved bugs, drop redundant tool output); **tool-result clearing** (lowest-risk
@@ -120,7 +117,7 @@ retrieval** (load identifiers, fetch full content on demand); **structured note-
 memory outside the context window, not more tokens inside it).
 
 Rule of thumb (Manus, via harness surveys): past **~40% of nominal input capacity** agents enter a
-"dumb zone" — size the working-context budget with real headroom, not the advertised window limit.
+"dumb zone" — budget working context with headroom, not to the advertised window.
 
 ## 5. Agent memory tiers
 
@@ -129,18 +126,16 @@ tiers, one pattern — **store → embed → retrieve-on-demand → inject** int
 (past actions, vector-stored, retrieved semantically — "RAG over the agent's own history"),
 **Semantic** (external knowledge plus self-identity facts), **Procedural** (system prompt, tools,
 guardrails, topology; codified in git/registries, not retrieved at runtime).
-Working memory is the current turn's context window, not a fourth store. Palantir (§9) governs all
-four types — including working — through **one substrate**, so the prompt-injection surface isn't
-fragmented across stores: a security argument, not only a performance one.
+Working memory is the turn's context window, not a fourth store. Palantir (§9) governs all four
+through **one substrate**, so the prompt-injection surface isn't fragmented across stores.
 
 ## 6. 12-Factor Agents — the reliability stance
 
 Two factors are load-bearing for architecture (humanlayer/12-factor-agents, CC-BY-SA-4.0 —
 re-expressed, attribute if quoting directly): **Factor 8, own your control flow** — don't delegate
 orchestration to an opaque framework that hides the prompt/response cycle. **Factor 12, make your
-agent a stateless reducer** — `(state, event) → new_state`; the loop is a pure function over explicit
-state, not an object silently accumulating hidden context. Both point the same direction as §1:
-control belongs in code the team owns, not a black-box framework.
+agent a stateless reducer** — `(state, event) → new_state` over explicit state, not hidden
+accumulated context. Both point where §1 does: control belongs in code the team owns.
 
 ## 7. RAG topology and eval
 
@@ -151,9 +146,9 @@ retrieval) **→ Corrective/CRAG** (self-grade retrieved docs, web-search fallba
 to retrieve, looping retrieve → evaluate → re-retrieve → generate). Climb only when the cheaper
 stage's failure mode is *observed*.
 
-**Two-stage retrieve-then-rerank is near-mandatory at scale**: over-retrieve ~5× candidates, rerank
-with a cross-encoder — "no reranking" is named the single most common cause of RAG hallucination
-(omer-metin, llm-architect skill). Hybrid search combines dense + BM25 via
+**Two-stage retrieve-then-rerank is near-mandatory at scale**: over-retrieve ~5×, rerank with a
+cross-encoder — "no reranking" is the most common cause of RAG hallucination (omer-metin,
+llm-architect skill). Hybrid search combines dense + BM25 via
 **Reciprocal Rank Fusion**, `score += 1/(k + rank + 1)`, `k=60`. Set an explicit relevance threshold
 (~0.7) below which the system answers "I don't know" rather than answering ungrounded.
 
@@ -166,17 +161,16 @@ with a cross-encoder — "no reranking" is named the single most common cause of
 | Faithfulness | answer grounded in retrieved context | prompt constraints, grounding instructions |
 | Answer relevancy | answer addresses the actual question | synthesis-model prompt, query rewriting |
 
-Low precision/recall is a retrieval problem; low faithfulness/relevancy with good context is a
-generation problem.
+Low precision/recall is retrieval; low faithfulness/relevancy with good context is generation.
 
 ## 8. Eval-in-the-loop as acceptance criteria
 
-Non-determinism means an agentic system can't be accepted by inspection — only by a stated pass rate
-against a task set. Architecture's job is to specify the eval as a **release gate** (one layer down
-from `product`'s own `surface-agentic.md` §3). Anthropic's multi-agent build starts evals at ~20
-queries, scores with an LLM-as-judge rubric (accuracy, citations,
-completeness, source quality, tool efficiency) plus human eval for judge bias, and gates production
-on a **regression check** against the last committed run, not a one-time pass/fail.
+A non-deterministic system is accepted only by a stated pass rate against a task set, so
+architecture specifies the eval as a **release gate** (one layer down from `product`'s own
+`surface-agentic.md` §3). Anthropic's multi-agent build starts evals at ~20
+queries, scores with an LLM-as-judge rubric (accuracy, citations, completeness, source quality, tool
+efficiency) plus human eval for judge bias, and gates on a **regression check** against the last
+committed run.
 
 State four things per gated capability: **task-set size/source** (real usage or pilot transcripts,
 not invented cases), the **evaluator** (exact-match / LLM-as-judge / human review / tool-trace
@@ -190,9 +184,8 @@ Palantir's production agent-runtime work ("Securing Agents in Production," x.com
 gives 5 dimensions as a checklist: (1) secure/resilient access to the reasoning core; (2) insulated
 orchestration of executors; (3) granular policy across all memory forms; (4) governed multimodal
 tool access; (5) real-time observability plus post-hoc audit. **Provenance-based authorization**
-resolves permission at the whole call-chain level, at runtime *and* publish-time (a provenance-
-violating tool version can't even be published) — closing the gap where a nested sub-call leaks
-marked data through an intermediate agent that individually looks compliant. **Agent permission =
+resolves permission across the whole call chain, at runtime *and* publish-time — so a nested
+sub-call cannot leak marked data through an intermediate agent that looks compliant alone. **Agent permission =
 composition of 3 identities**: the owner, the agent's own service/SDK scope, and the user it's acting
 for — authorize and audit against all three, never just the service credential.
 
@@ -214,7 +207,7 @@ account, or proxy. Fallback routes and adapter drift: [contracts.md](contracts.m
 
 **Buying the harness is a data-contract decision.** Before committing to a managed agent service,
 check per enabled feature: residency and regions, retention and ZDR eligibility, session and file
-deletion, state export, beta status. Buy when it removes measured operational work and passes this
+deletion, state export, beta status, and which of them are sold only on an enterprise tier. Buy when it removes measured operational work and passes this
 check; self-host when its cost is below the hosted premium or a contract requires it. Dated examples
 (vendor docs, 2026-10-17 — re-verify): OpenAI's Agents API is US-residency-only with no ZDR, even
 with a self-hosted sandbox; Claude Managed Agents is beta and outside ZDR and HIPAA-BAA coverage;
@@ -225,9 +218,19 @@ database does not make models, search, browser, memory extraction, telemetry, ba
 access EU-processed — run [security-architecture.md](security-architecture.md) §6 across the whole
 flow.
 
+**A voice platform is the same check plus one margin.** Speech is cheap per minute, so the margin is
+the platform's orchestration fee: break-even is monthly minutes × (fee − self-hosting cost) against
+the engineering a build needs (derived; use your own quotes).
+Build sooner when compliance is sales-gated (Vapi: EU region Premier-tier only, organizations
+single-region, HIPAA a paid add-on — vendor docs, 2026-10-17, re-verify), turn-taking must beat the
+platform's floor, or the language needs components it lacks. Keep the exit cheap: your own numbers
+or SIP trunk, flows and prompts as data in your repository, transcripts and recordings exported to
+your store before any zero-retention mode. Components are `ai`'s (`surface-voice.md` "Surface: Voice
+(additive)").
+
 **Thin clients, server owns truth.** Every client speaks one versioned API and event contract
 (conversation, run, event, artifact, approval — [contracts.md](contracts.md)); prompts, credentials,
-policy, and run state stay server-side, and framework graph state never leaks out. Boundaries are
+policy, run state, and framework graph state stay server-side. Boundaries are
 modules before services ([decomposition.md](decomposition.md)). Run engine, conversation/event
 store, sandbox, and object storage keep **independent lifecycles** and reference each other (Cursor,
 *What we've learned building cloud agents*, 2026). Architecture assigns ownership; the
@@ -243,7 +246,7 @@ linked lifecycles".
 - The security model (§9) names its authz composition and the prompt-injection mitigation for every
   untrusted-content path, and each tool's effect class and where its gate is enforced.
 - A bought runtime (§10) passes its data-contract check; product records stay outside provider
-  sessions.
+  sessions; a voice platform's decision states the fee margin, sales-gated features, and exit path.
 - Component coverage — context management, retrieval, memory, tools/MCP, durable-execution owner,
   sandbox, approvals and action ledger, streaming/event contract, evals, guardrails,
   observability/cost: each states its decision or "N/A because …"; a silent gap fails.

@@ -118,5 +118,15 @@
       "States that EU database hosting does not make the whole flow EU-processed, and walks models, search, browser, memory extraction, telemetry, backups and support access",
       "States each agentic component's decision or 'N/A because …' rather than leaving components silently unaddressed"
     ]
+  },
+  {
+    "id": "agentic-voice-platform-build-vs-buy",
+    "prompt": "We run a phone voice agent on a managed voice platform at about 40,000 minutes a month and now need EU data residency. Should we keep buying or build our own stack on an open framework?",
+    "assertions": [
+      "Frames the margin as the platform's orchestration fee less self-hosting cost, and computes break-even from the user's own minutes and quotes against the build's engineering cost rather than citing a vendor number",
+      "Checks whether EU residency (and any HIPAA or zero-retention need) is sold only on an enterprise tier, treating a sales-gated compliance feature as a build trigger",
+      "Names the exit path: own numbers or SIP trunk, flows and prompts kept as data, transcripts and recordings exported before zero retention",
+      "Points component and framework choice to ai rather than ranking frameworks or platforms"
+    ]
   }
 ]
