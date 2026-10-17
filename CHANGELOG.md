@@ -8,6 +8,11 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [Unreleased]
 
 ### Added
+- Queue unreleased changes here.
+
+## [0.4.0] — 2026-10-17
+
+### Added
 - **Voice platform build vs buy** (`surface-agentic.md` "Runtime ownership — build vs buy, thin
   clients, separate lifecycles"): the data-contract check now asks which features are sold only on
   an enterprise tier; a voice platform's margin is its orchestration fee, with a derived break-even
@@ -86,6 +91,7 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
   `ai`/`quality`, and activation/traversal/output/compression evals. Requirements-gated, decision-first,
   monolith-first by default.
 
+[0.4.0]: https://github.com/gabros20/architecture-skill/releases/tag/v0.4.0
 [0.3.0]: https://github.com/gabros20/architecture-skill/releases/tag/v0.3.0
 [0.2.0]: https://github.com/gabros20/architecture-skill/releases/tag/v0.2.0
 [0.1.2]: https://github.com/gabros20/architecture-skill/releases/tag/v0.1.2
