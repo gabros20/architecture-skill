@@ -7,6 +7,11 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 
 ## [Unreleased]
 
+### Added
+- Queue unreleased changes here.
+
+## [0.4.1] — 2026-10-17
+
 ### Fixed
 - `surface-agentic` voice-platform build vs buy: the framework pick, not only the components, is
   pointed to `ai`, so the answer never ranks frameworks itself.
@@ -92,6 +97,7 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
   `ai`/`quality`, and activation/traversal/output/compression evals. Requirements-gated, decision-first,
   monolith-first by default.
 
+[0.4.1]: https://github.com/gabros20/architecture-skill/releases/tag/v0.4.1
 [0.4.0]: https://github.com/gabros20/architecture-skill/releases/tag/v0.4.0
 [0.3.0]: https://github.com/gabros20/architecture-skill/releases/tag/v0.3.0
 [0.2.0]: https://github.com/gabros20/architecture-skill/releases/tag/v0.2.0
