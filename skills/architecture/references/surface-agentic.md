@@ -205,9 +205,9 @@ Agency*, complete mediation: authorize in downstream systems, not the LLM). Each
 declares its effect class ([contracts.md](contracts.md) §5); one dispatcher enforces the gate
 `product`'s capability/risk brief assigns per class, and `ai` implements it — with no brief, assume
 external/irreversible and new tools need confirmation, and say so. An approval binds the exact
-payload (hash, target, version, approver, time); any edit voids it (CWE-367 TOCTOU). Refusals stop
-the action — never route around an auth challenge by switching driver, account, or proxy. Fallback
-routes and adapter drift: [contracts.md](contracts.md) §5; credentials:
+payload (hash, target, version, approver, time, expiry, one-use nonce); any edit voids it (CWE-367
+TOCTOU). Refusals stop the action — never route around an auth challenge by switching driver,
+account, or proxy. Fallback routes and adapter drift: [contracts.md](contracts.md) §5; credentials:
 [security-architecture.md](security-architecture.md) §2.
 
 ## 10. Runtime ownership — build vs buy, thin clients, separate lifecycles
@@ -215,22 +215,24 @@ routes and adapter drift: [contracts.md](contracts.md) §5; credentials:
 **Buying the harness is a data-contract decision.** Before committing to a managed agent service,
 check per enabled feature: residency and regions, retention and ZDR eligibility, session and file
 deletion, state export, beta status. Buy when it removes measured operational work and passes this
-check; self-host when its cost is below the hosted premium or a contract requires it. Dated examples (vendor docs, 2026-10-17 — re-verify): OpenAI's
-Agents API is US-residency-only with no ZDR, even with a self-hosted sandbox; Claude Managed Agents
-is beta and outside ZDR and HIPAA-BAA coverage; LangSmith Managed Deep Agents is a US-only public
-beta. Bought or built, product records (tenancy, approvals, action ledger, canonical preferences)
-and integration permissions stay in your system of record
-([data-architecture.md](data-architecture.md) §5), outside provider sessions. An EU-hosted database
-does not make models, search, browser, memory extraction, telemetry, backups, or support access
-EU-processed — run [security-architecture.md](security-architecture.md) §6 across the whole flow.
+check; self-host when its cost is below the hosted premium or a contract requires it. Dated examples
+(vendor docs, 2026-10-17 — re-verify): OpenAI's Agents API is US-residency-only with no ZDR, even
+with a self-hosted sandbox; Claude Managed Agents is beta and outside ZDR and HIPAA-BAA coverage;
+LangSmith Managed Deep Agents is a US-only public beta. Bought or built, product records (tenancy,
+approvals, action ledger, canonical preferences) and integration permissions stay in your system of
+record ([data-architecture.md](data-architecture.md) §5), outside provider sessions. An EU-hosted
+database does not make models, search, browser, memory extraction, telemetry, backups, or support
+access EU-processed — run [security-architecture.md](security-architecture.md) §6 across the whole
+flow.
 
 **Thin clients, server owns truth.** Every client speaks one versioned API and event contract
-(conversation, run, event, artifact, approval — [contracts.md](contracts.md)); prompts,
-credentials, policy, and run state stay server-side, and framework graph state never leaks out.
-Boundaries are modules before services ([decomposition.md](decomposition.md)). Run engine,
-conversation/event store, sandbox, and object storage keep **independent lifecycles** and reference
-each other (Cursor, *What we've learned building cloud agents*, 2026). Architecture assigns ownership; the implementation is `backend`'s
-`surface-agentic.md` "Run control: approvals, version pins, budgets, linked lifecycles".
+(conversation, run, event, artifact, approval — [contracts.md](contracts.md)); prompts, credentials,
+policy, and run state stay server-side, and framework graph state never leaks out. Boundaries are
+modules before services ([decomposition.md](decomposition.md)). Run engine, conversation/event
+store, sandbox, and object storage keep **independent lifecycles** and reference each other (Cursor,
+*What we've learned building cloud agents*, 2026). Architecture assigns ownership; the
+implementation is `backend`'s `surface-agentic.md` "Run control: approvals, version pins, budgets,
+linked lifecycles".
 
 ## Validation
 
