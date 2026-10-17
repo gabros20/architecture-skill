@@ -207,7 +207,7 @@ account, or proxy. Fallback routes and adapter drift: [contracts.md](contracts.m
 
 **Buying the harness is a data-contract decision.** Before committing to a managed agent service,
 check per enabled feature: residency and regions, retention and ZDR eligibility, session and file
-deletion, state export, beta status, and which of them are sold only on an enterprise tier. Buy when it removes measured operational work and passes this
+deletion, state export, beta status, and which are sold only on an enterprise tier. Buy when it removes measured operational work and passes this
 check; self-host when its cost is below the hosted premium or a contract requires it. Dated examples
 (vendor docs, 2026-10-17 — re-verify): OpenAI's Agents API is US-residency-only with no ZDR, even
 with a self-hosted sandbox; Claude Managed Agents is beta and outside ZDR and HIPAA-BAA coverage;
@@ -218,15 +218,16 @@ database does not make models, search, browser, memory extraction, telemetry, ba
 access EU-processed — run [security-architecture.md](security-architecture.md) §6 across the whole
 flow.
 
-**A voice platform is the same check plus one margin.** Speech is cheap per minute, so the margin is
-the platform's orchestration fee: break-even is monthly minutes × (fee − self-hosting cost) against
-the engineering a build needs (derived; use your own quotes).
-Build sooner when compliance is sales-gated (Vapi: EU region Premier-tier only, organizations
-single-region, HIPAA a paid add-on — vendor docs, 2026-10-17, re-verify), turn-taking must beat the
-platform's floor, or the language needs components it lacks. Keep the exit cheap: your own numbers
-or SIP trunk, flows and prompts as data in your repository, transcripts and recordings exported to
-your store before any zero-retention mode. Components are `ai`'s (`surface-voice.md` "Surface: Voice
-(additive)").
+**A voice platform is the same check plus one margin.** Components cost the same bought or built
+(unbundle a bundled quote first), so the margin is the platform's orchestration fee: break-even is
+minutes × (fee − self-hosting) against the build's engineering (derived; use your own quotes). The
+check adds per-tier concurrency caps and a model menu the platform limits. Build sooner when
+compliance is sales-gated or a priced add-on (Vapi: EU region Premier-only, organizations
+single-region, HIPAA a paid add-on exclusive with zero retention — vendor docs, 2026-10-17,
+re-verify), turn-taking must beat the platform's floor, or the language needs components it lacks.
+Keep the exit cheap: your own numbers or SIP trunk, flows and prompts as data in your repository,
+recordings and transcripts exported before any zero-retention mode. Components are `ai`'s
+(`surface-voice.md` "Surface: Voice (additive)").
 
 **Thin clients, server owns truth.** Every client speaks one versioned API and event contract
 (conversation, run, event, artifact, approval — [contracts.md](contracts.md)); prompts, credentials,
