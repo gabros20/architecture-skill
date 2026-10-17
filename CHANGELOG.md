@@ -8,6 +8,11 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [Unreleased]
 
 ### Added
+- Queue unreleased changes here.
+
+## [0.2.0] — 2026-10-17
+
+### Added
 - Practitioner know-how folded into the existing references, each rule grounded in a cited source
   (SOURCES.md): **contracts** gains §5 *Contracts over an upstream you don't control*
   (contract / recipe / validation record / binding split, layer-by-layer versioning, semantic
@@ -57,6 +62,7 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
   `ai`/`quality`, and activation/traversal/output/compression evals. Requirements-gated, decision-first,
   monolith-first by default.
 
+[0.2.0]: https://github.com/gabros20/architecture-skill/releases/tag/v0.2.0
 [0.1.2]: https://github.com/gabros20/architecture-skill/releases/tag/v0.1.2
 [0.1.1]: https://github.com/gabros20/architecture-skill/releases/tag/v0.1.1
 [0.1.0]: https://github.com/gabros20/architecture-skill/releases/tag/v0.1.0
