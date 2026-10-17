@@ -231,7 +231,7 @@ conversation/event store, sandbox, and object storage keep **independent lifecyc
 each other — a transcript cannot restore a lost process, and a workflow cannot recover a file never
 persisted (Cursor decouples agent loop, machine state, and conversation state — "What we've learned
 building cloud agents," 2026). Architecture assigns ownership; the implementation is `backend`'s
-`surface-agentic.md` "Durable execution as the default control plane, not an afterthought".
+`surface-agentic.md` "Run control: approvals, version pins, budgets, linked lifecycles".
 
 ## Validation
 
