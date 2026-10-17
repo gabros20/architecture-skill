@@ -131,7 +131,7 @@
   },
   {
     "id": "agentic-action-safety",
-    "prompt": "Architect an agent that posts to our social accounts and fills in job applications on the user's behalf, falling back to the browser when an API is missing.",
+    "prompt": "Architect an agent that files support tickets and books appointments in our customers' vendor portals, falling back to driving the browser where a portal has no API.",
     "expected_references": ["references/surface-agentic.md"],
     "forbidden_references": [
       "references/surface-mobile.md",
@@ -141,12 +141,22 @@
   },
   {
     "id": "data-architecture-system-of-record",
-    "prompt": "Our pipeline keeps state in a local append-only ledger and we want to mirror it into a CRM once a second operator joins — how should the data be owned?",
+    "prompt": "Our inventory service keeps state in a local event log and we want to sync it into an ERP once a second warehouse starts writing to it — how should the data be owned?",
     "expected_references": ["references/data-architecture.md"],
     "forbidden_references": [
       "references/surface-mobile.md",
       "references/surface-agentic.md",
       "references/contracts.md"
+    ]
+  },
+  {
+    "id": "contracts-upstream-wrapper",
+    "prompt": "Spec the contract for a service that wraps several partner portals without public APIs so our internal tools can call them.",
+    "expected_references": ["references/contracts.md"],
+    "forbidden_references": [
+      "references/surface-mobile.md",
+      "references/migration.md",
+      "references/surface-data-intensive.md"
     ]
   }
 ]

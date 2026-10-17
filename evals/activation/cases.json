@@ -93,5 +93,15 @@
     "id": "negative-quality-load-test",
     "prompt": "Run a load test against the checkout service and report where it falls over.",
     "should_trigger": false
+  },
+  {
+    "id": "negative-ai-approval-gate",
+    "prompt": "Implement the human-approval gate on our agent's send_email tool so it pauses for a reviewer before sending.",
+    "should_trigger": false
+  },
+  {
+    "id": "negative-automation-browser-fallback",
+    "prompt": "Build the browser-automation fallback that fills and submits this vendor form when their API is down.",
+    "should_trigger": false
   }
 ]
