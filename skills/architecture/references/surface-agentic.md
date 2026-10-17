@@ -226,8 +226,9 @@ compliance is sales-gated or a priced add-on (Vapi: EU region Premier-only, orga
 single-region, HIPAA a paid add-on exclusive with zero retention — vendor docs, 2026-10-17,
 re-verify), turn-taking must beat the platform's floor, or the language needs components it lacks.
 Keep the exit cheap: your own numbers or SIP trunk, flows and prompts as data in your repository,
-recordings and transcripts exported before any zero-retention mode. Components are `ai`'s
-(`surface-voice.md` "Surface: Voice (additive)").
+recordings and transcripts exported before any zero-retention mode (`operate` `observability.md`
+"AI-system observability — same discipline, one new signal"). Components are `ai`'s
+(`surface-voice.md` "Speech components: language, finalization, billing unit").
 
 **Thin clients, server owns truth.** Every client speaks one versioned API and event contract
 (conversation, run, event, artifact, approval — [contracts.md](contracts.md)); prompts, credentials,
