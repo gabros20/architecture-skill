@@ -8,7 +8,15 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [Unreleased]
 
 ### Added
-- Queue unreleased changes here.
+- **surface-agentic** gains §10 *Runtime ownership*: buying the agent harness as a data-contract
+  check (residency/regions, retention and ZDR eligibility, session and file deletion, state export,
+  beta status; dated managed-runtime examples to re-verify), product records and integration
+  permissions kept outside provider sessions, EU database hosting ≠ EU processing for the whole flow;
+  thin clients over one versioned API and event contract with the server owning truth; run engine,
+  conversation/event store, sandbox, and object storage as independent lifecycles (implementation
+  pointed to `backend`). Validation gains the build-vs-buy check and a component-coverage line
+  (each agentic component states its decision or "N/A because …"). Router row, SOURCES, and an
+  output + traversal eval case (`agentic-runtime-build-vs-buy`) follow.
 
 ## [0.2.0] — 2026-10-17
 

@@ -3,15 +3,14 @@
 Purpose: Shape the architecture of a system whose core behavior is an LLM or agent acting under
 uncertainty — the harness it runs inside, the workflow-vs-agent decision, multi-agent topology,
 context/memory design, RAG topology, and the eval gate and security model that make a
-non-deterministic system's shape decidable. Agentic-system architecture is the open frontier generic
-system-design canon doesn't yet cover.
+non-deterministic system's shape decidable, and who owns the runtime.
 
 Read when:
 - The system has an LLM or agent doing real work — deciding, calling tools, multi-step action — not
   a deterministic feature with a model call bolted on.
 - A primary reference ([system-design.md](system-design.md), [decomposition.md](decomposition.md),
   [nfr-budgets.md](nfr-budgets.md), [security-architecture.md](security-architecture.md)) hits an
-  agentic component needing deeper treatment.
+  agentic component needing deeper treatment, or the team weighs a managed agent runtime.
 
 Skip when:
 - The request is eval/prompt/retrieval *implementation* — `ai`'s territory; this file owns the
@@ -25,12 +24,13 @@ Inputs: the job(s) the agent performs and its harness; any capability/risk brief
 `surface-agentic.md` — state explicitly when none exists; existing eval/pilot evidence if any.
 
 Produces: harness design; workflow-vs-agent decision; multi-agent go/no-go (§3); RAG-topology pick +
-eval quadrant; memory-tier design; eval-as-acceptance-criteria gate; agent-security model.
+eval quadrant; memory-tier design; eval-as-acceptance-criteria gate; agent-security model;
+runtime build-vs-buy and lifecycle-ownership decision (§10).
 
 ## Contents
 1 Thin/thick-harness thesis · 2 Workflow-vs-agent patterns · 3 When multi-agent is worth it ·
 4 Context engineering · 5 Memory tiers · 6 12-Factor Agents · 7 RAG topology and eval ·
-8 Eval-as-acceptance-criteria · 9 Agent security
+8 Eval-as-acceptance-criteria · 9 Agent security · 10 Runtime ownership
 
 ## 1. Thin-model / thick-harness thesis
 
@@ -52,7 +52,7 @@ Same-model, different-harness deltas prove this: Opus 4.5 went 42%→78% on CORE
 harnesses; Vercel deleted 80% of an agent's tools and it went from failing to succeeding (145K→67K
 tokens, 100→19 steps) (Himanshu, "Agent Harness is the Real Product," x.com/himanshutwtxs). Every
 production harness runs the same core loop — `while (model returns tool calls) { execute → capture
-→ append → call again }` — all differentiation is what surrounds it. Consensus across Claude Code /
+→ append → call again }`; all differentiation surrounds it. Consensus across Claude Code /
 Cursor / Manus / Devin: flat loop over complex DAG, filesystem as memory, errors kept in context,
 primitives over pre-built integrations — and keep *simplifying* over time.
 
@@ -210,6 +210,29 @@ the action — never route around an auth challenge by switching driver, account
 routes and adapter drift: [contracts.md](contracts.md) §5; credentials:
 [security-architecture.md](security-architecture.md) §2.
 
+## 10. Runtime ownership — build vs buy, thin clients, separate lifecycles
+
+**Buying the harness is a data-contract decision.** Before committing to a managed agent service,
+check per enabled feature: residency and regions, retention and ZDR eligibility, session and file
+deletion, state export, beta status. Dated examples (vendor docs, 2026-10-17 — re-verify): OpenAI's
+Agents API is US-residency-only with no ZDR, even with a self-hosted sandbox; Claude Managed Agents
+is beta and outside ZDR and HIPAA-BAA coverage; LangSmith Managed Deep Agents is a US-only public
+beta. Bought or built, product records (tenancy, approvals, action ledger, canonical preferences)
+and integration permissions stay in your system of record
+([data-architecture.md](data-architecture.md) §5), outside provider sessions. An EU-hosted database
+does not make models, search, browser, memory extraction, telemetry, backups, or support access
+EU-processed — run [security-architecture.md](security-architecture.md) §6 across the whole flow.
+
+**Thin clients, server owns truth.** Every client speaks one versioned API and event contract
+(conversation, run, event, artifact, approval — [contracts.md](contracts.md)); prompts,
+credentials, policy, and run state stay server-side, and framework graph state never leaks out.
+Boundaries are modules before services ([decomposition.md](decomposition.md)). Run engine,
+conversation/event store, sandbox, and object storage keep **independent lifecycles** and reference
+each other — a transcript cannot restore a lost process, and a workflow cannot recover a file never
+persisted (Cursor decouples agent loop, machine state, and conversation state — "What we've learned
+building cloud agents," 2026). Architecture assigns ownership; the implementation is `backend`'s
+`surface-agentic.md` "Durable execution as the default control plane, not an afterthought".
+
 ## Validation
 
 - The harness names its context-management strategy (§4) — "a bigger context window" is not a design.
@@ -218,6 +241,11 @@ routes and adapter drift: [contracts.md](contracts.md) §5; credentials:
 - The RAG topology (§7) names its rung and why a cheaper rung wasn't sufficient.
 - The security model (§9) names its authz composition and the prompt-injection mitigation for every
   untrusted-content path, and each tool's effect class and where its gate is enforced.
+- A bought runtime (§10) names its residency/retention/deletion/export/beta check; product records
+  stay outside provider sessions.
+- Component coverage — context management, retrieval, memory, tools/MCP, durable-execution owner,
+  sandbox, approvals and action ledger, streaming/event contract, evals, guardrails,
+  observability/cost: each states its decision or "N/A because …"; a silent gap fails.
 
 ## Failure modes and handoff
 
@@ -229,7 +257,8 @@ routes and adapter drift: [contracts.md](contracts.md) §5; credentials:
   30+ points purely from harness changes (§1); route it through this reference first.
 
 <!-- grounding: Anthropic Building Effective Agents / Multi-Agent Research System / Effective
-Context Engineering · Google Cloud agentic design-pattern matrix · humanlayer/12-factor-agents
-(CC-BY-SA-4.0) · SwirlAI memory taxonomy · RAG_Techniques + athina-ai/rag-cookbooks (MIT) · RAGAS ·
+Context Engineering · Cursor cloud-agent lessons · managed-runtime vendor docs (dated) · Google
+Cloud agentic design-pattern matrix · humanlayer/12-factor-agents (CC-BY-SA-4.0) · SwirlAI memory
+taxonomy · RAG_Techniques + athina-ai/rag-cookbooks (MIT) · RAGAS ·
 omer-metin llm-architect skill (Apache-2.0) · Palantir agent-runtime security · X long-form harness
 articles (Vtrivedy10, himanshutwtxs) — see research/architecture/x-corpus.md §B, D. -->

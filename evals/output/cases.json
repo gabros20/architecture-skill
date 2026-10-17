@@ -107,5 +107,16 @@
       "Classifies each operation's effect independently of its HTTP method",
       "Makes result completeness explicit (partial, capped, unreachable) and carries large identifiers as strings"
     ]
+  },
+  {
+    "id": "agentic-runtime-build-vs-buy",
+    "prompt": "We're an EU B2B SaaS. Should we build our own agent runtime or put our research assistant on a managed agent service? Our Postgres is already hosted in Frankfurt.",
+    "assertions": [
+      "Captures requirements (customer data terms, residency, retention, deletion obligations) before recommending build or buy",
+      "Checks the managed service's residency/regions, retention and ZDR eligibility, session and file deletion, state export, and beta status as a contract, and marks any vendor fact as dated and to re-verify",
+      "Keeps product records (tenancy, approvals, action ledger, canonical preferences) and integration permissions in the product's own system of record, outside provider sessions",
+      "States that EU database hosting does not make the whole flow EU-processed, and walks models, search, browser, memory extraction, telemetry, backups and support access",
+      "States each agentic component's decision or 'N/A because …' rather than leaving components silently unaddressed"
+    ]
   }
 ]

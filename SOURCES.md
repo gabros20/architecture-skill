@@ -99,6 +99,12 @@ drawn from the open standard or the primary concept, not from these renderings' 
   (nfr-budgets); Brendan Gregg, [Active Benchmarking](https://www.brendangregg.com/activebenchmarking.html)
   (nfr-budgets); [OWASP Top 10 for LLM Applications — LLM06 Excessive Agency](https://genai.owasp.org/llmrisk/llm062025-excessive-agency/)
   and [CWE-367](https://cwe.mitre.org/data/definitions/367.html) (surface-agentic);
+  Cursor, [What we've learned building cloud agents](https://cursor.com/blog/cloud-agent-lessons)
+  (2026 — decoupled agent loop, machine, and conversation state) and the managed-runtime docs used
+  as dated examples, checked 2026-10-17:
+  [OpenAI Agents API](https://developers.openai.com/api/docs/guides/agents-api/overview),
+  [Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview),
+  [LangSmith Managed Deep Agents](https://github.com/langchain-ai/managed-deepagents) (surface-agentic §10);
   [OWASP SSRF Prevention](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html)
   and [Secrets Management](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html)
   cheat sheets, [W3C TAG — Good Practices for Capability URLs](https://www.w3.org/TR/capability-urls/)

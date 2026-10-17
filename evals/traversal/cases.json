@@ -158,5 +158,17 @@
       "references/migration.md",
       "references/surface-data-intensive.md"
     ]
+  },
+  {
+    "id": "agentic-runtime-build-vs-buy",
+    "prompt": "We're an EU B2B SaaS. Should we build our own agent runtime or put our research assistant on a managed agent service? Our Postgres is already hosted in Frankfurt.",
+    "expected_references": [
+      "references/surface-agentic.md",
+      "references/security-architecture.md"
+    ],
+    "forbidden_references": [
+      "references/surface-mobile.md",
+      "references/migration.md"
+    ]
   }
 ]

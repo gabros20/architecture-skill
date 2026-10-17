@@ -65,7 +65,7 @@ replace it (per the invariant below, it changes topology, the eval gate, and the
 |---|---|---|
 | Multi-tenant web app / SaaS (default) | [surface-web-saas](references/surface-web-saas.md) | Tenant isolation (silo/pool/bridge), 3-tier + per-client BFF, OIDC tenant resolution |
 | Native mobile client (iOS/Android) | [surface-mobile](references/surface-mobile.md) | Client pattern (MVVM/TCA/Clean/RIBs), offline/sync + conflict rule, SSOT/UDF |
-| **Agentic / LLM system** | [surface-agentic](references/surface-agentic.md) | **Harness design, workflow-vs-agent, multi-agent economics, RAG topology, memory tiers, eval-as-gate, agent security + action safety** |
+| **Agentic / LLM system** | [surface-agentic](references/surface-agentic.md) | **Harness design, workflow-vs-agent, multi-agent economics, RAG topology, memory tiers, eval-as-gate, agent security + action safety, runtime build-vs-buy + lifecycle ownership** |
 | Data / analytics / ML platform | [surface-data-intensive](references/surface-data-intensive.md) | Operational/analytical boundary, batch-vs-stream, mesh-vs-centralized ownership |
 | Internal tool / developer platform (IDP) | [surface-internal-platform](references/surface-internal-platform.md) | Team Topologies bridge, platform-as-product threshold, "don't build a platform yet" gate |
 
