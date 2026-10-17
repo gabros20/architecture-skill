@@ -8,6 +8,11 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [Unreleased]
 
 ### Added
+- Queue unreleased changes here.
+
+## [0.3.0] — 2026-10-17
+
+### Added
 - **surface-agentic** gains §10 *Runtime ownership*: buying the agent harness as a data-contract
   check (residency/regions, retention and ZDR eligibility, session and file deletion, state export,
   beta status; dated managed-runtime examples to re-verify), product records and integration
@@ -70,6 +75,7 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
   `ai`/`quality`, and activation/traversal/output/compression evals. Requirements-gated, decision-first,
   monolith-first by default.
 
+[0.3.0]: https://github.com/gabros20/architecture-skill/releases/tag/v0.3.0
 [0.2.0]: https://github.com/gabros20/architecture-skill/releases/tag/v0.2.0
 [0.1.2]: https://github.com/gabros20/architecture-skill/releases/tag/v0.1.2
 [0.1.1]: https://github.com/gabros20/architecture-skill/releases/tag/v0.1.1
