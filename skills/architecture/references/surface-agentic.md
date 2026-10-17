@@ -214,7 +214,8 @@ routes and adapter drift: [contracts.md](contracts.md) §5; credentials:
 
 **Buying the harness is a data-contract decision.** Before committing to a managed agent service,
 check per enabled feature: residency and regions, retention and ZDR eligibility, session and file
-deletion, state export, beta status. Dated examples (vendor docs, 2026-10-17 — re-verify): OpenAI's
+deletion, state export, beta status. Buy when it removes measured operational work and passes this
+check; self-host when its cost is below the hosted premium or a contract requires it. Dated examples (vendor docs, 2026-10-17 — re-verify): OpenAI's
 Agents API is US-residency-only with no ZDR, even with a self-hosted sandbox; Claude Managed Agents
 is beta and outside ZDR and HIPAA-BAA coverage; LangSmith Managed Deep Agents is a US-only public
 beta. Bought or built, product records (tenancy, approvals, action ledger, canonical preferences)
@@ -228,9 +229,7 @@ EU-processed — run [security-architecture.md](security-architecture.md) §6 ac
 credentials, policy, and run state stay server-side, and framework graph state never leaks out.
 Boundaries are modules before services ([decomposition.md](decomposition.md)). Run engine,
 conversation/event store, sandbox, and object storage keep **independent lifecycles** and reference
-each other — a transcript cannot restore a lost process, and a workflow cannot recover a file never
-persisted (Cursor decouples agent loop, machine state, and conversation state — "What we've learned
-building cloud agents," 2026). Architecture assigns ownership; the implementation is `backend`'s
+each other (Cursor, *What we've learned building cloud agents*, 2026). Architecture assigns ownership; the implementation is `backend`'s
 `surface-agentic.md` "Run control: approvals, version pins, budgets, linked lifecycles".
 
 ## Validation
@@ -241,8 +240,8 @@ building cloud agents," 2026). Architecture assigns ownership; the implementatio
 - The RAG topology (§7) names its rung and why a cheaper rung wasn't sufficient.
 - The security model (§9) names its authz composition and the prompt-injection mitigation for every
   untrusted-content path, and each tool's effect class and where its gate is enforced.
-- A bought runtime (§10) names its residency/retention/deletion/export/beta check; product records
-  stay outside provider sessions.
+- A bought runtime (§10) passes its data-contract check; product records stay outside provider
+  sessions.
 - Component coverage — context management, retrieval, memory, tools/MCP, durable-execution owner,
   sandbox, approvals and action ledger, streaming/event contract, evals, guardrails,
   observability/cost: each states its decision or "N/A because …"; a silent gap fails.
