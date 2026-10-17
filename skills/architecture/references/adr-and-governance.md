@@ -98,15 +98,17 @@ Grounding wshobson's ADR Review Checklist (verbatim substance, re-expressed) —
 phases:
 - **Before submission**: options were genuinely considered, not just the chosen one written up
   after the fact; security implications considered; reversibility assessed (Bezos one-way/two-way
-  doors lens — is this decision cheap or expensive to undo?); evidence is pinned (commit/version +
-  observation date) and corroboration counted by independent source family, not by page — an absence
-  of reported failures is not evidence of safety; an **exit** is stated — what reverting would cost
-  (convenience or data) and the chosen dependency's maturity and maintainer risk; a decision taken
-  *against* the analysis' top pick says so and carries a **guard**, a named acceptance test whose
-  failure reopens it (§7).
+  doors lens — is this decision cheap or expensive to undo?).
 - **During review**: at least 2 senior engineers reviewed; consequences (positive and negative)
   are both stated, not just the upside.
 - **After acceptance**: index updated; any related/superseded ADR linked both ways.
+- **Beyond wshobson (this pack's rules)**: evidence in Context is pinned (commit/version +
+  observation date) and corroboration is counted by independent source family, not by page — an
+  absence of reported failures is not evidence of safety (the facts-vs-assumptions invariant); an
+  **exit** is stated — what reverting would cost (convenience or data) and the chosen dependency's
+  maturity and maintainer risk (the one-way/two-way door lens above); a decision taken *against* the
+  analysis' top pick says so and carries a **guard** — a named acceptance test in MADR's
+  Confirmation section whose failure reopens it (§7).
 
 ### 5. Immutability rule
 

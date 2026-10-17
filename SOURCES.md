@@ -66,7 +66,7 @@ The fillable canvas/template assets that adapt these carry their own inline CC-B
 | [ddd-crew/context-mapping](https://github.com/ddd-crew/context-mapping) — 9 context-map patterns | decomposition |
 | [ddd-crew/bounded-context-canvas](https://github.com/ddd-crew/bounded-context-canvas) | bounded-context-canvas asset |
 | [ddd-crew/aggregate-design-canvas](https://github.com/ddd-crew/aggregate-design-canvas) | aggregate-design-canvas asset |
-| [humanlayer/12-factor-agents](https://github.com/humanlayer/12-factor-agents) — Factors 8, 11, 12 | surface-agentic |
+| [humanlayer/12-factor-agents](https://github.com/humanlayer/12-factor-agents) — Factor 8, Factor 12 | surface-agentic |
 
 ## Cited, not copied — concepts, standards, and restrictive/no-license material
 
