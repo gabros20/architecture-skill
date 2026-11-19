@@ -3,7 +3,7 @@
     "id": "system-design-requirements-gate",
     "prompt": "Design the system for our new order-management platform.",
     "assertions": [
-      "Does not propose or outline a design until functional requirements and NFRs are captured, asking one missing-input question at a time",
+      "Does not propose or outline a design until functional requirements and NFRs are captured, asking for missing inputs in one round of at most four, each with a recommended answer",
       "Surfaces any contradiction between stated constraints instead of silently picking a side",
       "Unknown inputs are marked TBD rather than filled in with an invented number",
       "Once requirements are gated, states explicit options considered for each major decision, not just the final pick",
@@ -127,6 +127,16 @@
       "Checks whether EU residency (and any HIPAA or zero-retention need) is sold only on an enterprise tier, treating a sales-gated compliance feature as a build trigger",
       "Names the exit path: own numbers or SIP trunk, flows and prompts kept as data, transcripts and recordings exported before zero retention",
       "Points component and framework choice to ai rather than ranking frameworks or platforms"
+    ]
+  },
+  {
+    "id": "standalone-context-check",
+    "prompt": "Design the backend architecture for a booking app I'm building.",
+    "assertions": [
+      "Before proposing anything it reads any digital-product/LEDGER.md Context, the repo and the conversation, and asks nothing already answered there.",
+      "It asks at most four questions in one round (for example scale in numbers, the team and the stack it knows, what must never be lost and how long it may be down, rules on the data), each with a recommended answer — or, if it cannot ask, proceeds and opens the design with the assumptions that would change it most.",
+      "An unanswered number stays TBD with a recorded working assumption; no design is outlined before the requirements gate, and the default is a modular monolith unless a named reason justifies more.",
+      "Answers and assumptions are recorded in the LEDGER's Context block, each assumption with its basis and cost to reverse."
     ]
   }
 ]

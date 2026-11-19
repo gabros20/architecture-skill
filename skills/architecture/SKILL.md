@@ -31,6 +31,37 @@ product handoff, an existing ADR log or design doc), use them without silently o
 decisions. Recommend adjacent skills when useful; do not invoke them automatically unless the user
 explicitly requested a composition workflow.
 
+## Standalone context check
+
+Before producing anything the user will have to live with:
+1. **Look first.** Read `digital-product/LEDGER.md` (Context), `digital-product/<pack>/`, upstream
+   artifacts, the repo and this conversation. A fact found is never asked; a fact recorded is never
+   re-asked.
+2. **Size it.** Reversible and small → proceed, stating assumptions. New, costly or hard to undo →
+   check.
+3. **Ask only what the owner alone knows**, in their words: one round, at most four, highest
+   leverage first, each with a recommended answer ("ok" accepts all). Two rounds at most.
+4. **No or thin answers → decide as the expert.** Record each assumption with its basis and cost to
+   reverse; prefer the reversible option; show the cheapest proof early.
+5. **No way to ask → never block.** Proceed, and open the artifact with the assumptions and the
+   answers that would change it most.
+6. **Write it down.** Answers and assumptions go to the LEDGER's Context block.
+
+This pack's questions:
+1. Roughly how many users, requests and how much data in a year? (Recommended: design for that
+   estimate, not a hoped-for peak.)
+2. Who builds and runs it, and which stack do they already know? (Recommended: keep that stack, one
+   deployable.)
+3. What must never be lost, and how long may it be down? (Recommended: no lost data; the downtime
+   is yours to name.)
+4. Which rules apply: personal, payment or health data, or a country the data must stay in?
+   (Recommended: standard privacy law only, until you name one.)
+5. What is already decided and can't change: host, vendors, systems it must connect to?
+
+These are the owner's part of the requirements gate ([System design](references/system-design.md)
+"1. The requirements gate (Google's discipline)"): asked in this one round, not one at a time; a
+number nobody gives stays TBD with its working assumption recorded, never presented as given.
+
 ## Route before acting
 
 1. Capture requirements first (see invariants) — do not open a reference to solution before functional
@@ -78,8 +109,8 @@ When downstream build work is expected, read [handoff](references/handoff.md) an
 
 - **Requirements-gate before solutioning.** Do not propose, outline, or recommend a design until
   functional requirements and NFRs are captured and any contradiction (e.g. "full network isolation"
-  vs "real-time public ingestion") is surfaced and resolved. Ask one question at a time for missing
-  inputs; mark unknowns TBD; never invent a number the requester hasn't given or approved.
+  vs "real-time public ingestion") is surfaced and resolved. Ask for missing inputs in the context
+  check's one round; mark unknowns TBD; never invent a number the requester hasn't given or approved.
 - **Don't over-architect.** Default to a modular monolith and the lightest sufficient artifact — a
   single ADR often beats a full arc42, a shared library often beats a platform team. Add complexity
   (a service split, event sourcing, a platform team) only when a *named* disintegrator justifies it,

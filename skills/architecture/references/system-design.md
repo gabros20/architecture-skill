@@ -55,8 +55,8 @@ pinned revision, not READMEs or comments, and verify (don't recall) each depende
 entitlement before scheduling work on it, (4) constraints (team size, timeline, existing stack).
 Then run an explicit **contradiction check** — e.g. "complete network isolation" vs "real-time
 ingestion from public APIs" — surface the conflict, name the trade-off, and force a decision before
-any component is named. Ask one question at a time for missing inputs; mark unknowns TBD rather than
-inventing them.
+any component is named. Ask for missing inputs in one round (SKILL.md "Standalone context check");
+mark unknowns TBD rather than inventing them.
 
 ### 2. The design method (five steps)
 

@@ -8,7 +8,14 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [Unreleased]
 
 ### Added
-- Queue unreleased changes here.
+- SKILL.md **Standalone context check** (before routing): the family's common core (look first,
+  size it, ask at most four owner-only questions with recommended answers, decide as the expert,
+  never block, record in the LEDGER) and five architecture questions (scale, team and known stack,
+  loss and downtime tolerance, rules on data, fixed decisions). They are the owner's part of
+  `system-design.md` "1. The requirements gate (Google's discipline)", asked in one round instead of
+  one at a time; the invariant, that gate's own sentence and the
+  `system-design-requirements-gate` assertion now say so.
+  Output eval `standalone-context-check`.
 
 ## [0.4.1] — 2026-10-17
 
