@@ -123,7 +123,7 @@ const SceneGate: React.FC<{ t: Theme; dur: number }> = ({ t, dur }) => {
           </div>
         </div>
         <div style={{ marginTop: 20, fontFamily: MONO, fontSize: 16.5, color: t.muted, opacity: cap, textAlign: "center" }}>
-          one question at a time · mark unknowns TBD · <span style={{ color: t.accent }}>never invent a number</span>
+          one round, four at most · mark unknowns TBD · <span style={{ color: t.accent }}>never invent a number</span>
         </div>
       </div>
     </AbsoluteFill>
