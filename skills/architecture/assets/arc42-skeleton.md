@@ -5,8 +5,8 @@ Fillable 12-section skeleton for a full architecture document, used from
 template, license unclear — NOASSERTION on the template repo; headings and structure re-expressed
 here in original prompts, not copied from the template text — https://arc42.org).
 
-Hard rules (oocx/tfplan2md, MIT — github.com/oocx/tfplan2md): don't fabricate a section's content;
-ask one question at a time for what's missing. Mark an incomplete section `TBD`, don't skip it
+Hard rules (adapted from oocx/tfplan2md, MIT — github.com/oocx/tfplan2md): don't fabricate a
+section's content; ask for what's missing in one round (SKILL.md "Standalone context check"). Mark an incomplete section `TBD`, don't skip it
 silently. Link to existing ADRs from §9 — don't duplicate their content here. This document is not
 a substitute for code-level docs. **Don't produce a full arc42 doc for a trivial feature** — a
 single ADR is usually the right weight; reserve this skeleton for a system or a decision large

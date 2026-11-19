@@ -47,7 +47,7 @@ Before producing anything the user will have to live with:
    answers that would change it most.
 6. **Write it down.** Answers and assumptions go to the LEDGER's Context block.
 
-This pack's questions:
+This pack's questions (a pool — ask the top four that step 1 left open):
 1. Roughly how many users, requests and how much data in a year? (Recommended: design for that
    estimate, not a hoped-for peak.)
 2. Who builds and runs it, and which stack do they already know? (Recommended: keep that stack, one
@@ -59,8 +59,9 @@ This pack's questions:
 5. What is already decided and can't change: host, vendors, systems it must connect to?
 
 These are the owner's part of the requirements gate ([System design](references/system-design.md)
-"1. The requirements gate (Google's discipline)"): asked in this one round, not one at a time; a
-number nobody gives stays TBD with its working assumption recorded, never presented as given.
+"1. The requirements gate (Google's discipline)"): asked in one round of at most four (highest
+leverage first; the rest assumed with a recorded basis), not one at a time; a number nobody gives
+stays TBD with its working assumption recorded, never presented as given.
 
 ## Route before acting
 
