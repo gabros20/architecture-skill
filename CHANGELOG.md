@@ -8,6 +8,11 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
 ## [Unreleased]
 
 ### Added
+- Queue unreleased changes here.
+
+## [0.5.0] — 2026-11-19
+
+### Added
 - SKILL.md **Standalone context check** (before routing): the family's common core (look first,
   size it, ask at most four owner-only questions with recommended answers, decide as the expert,
   never block, record in the LEDGER) and five architecture questions (scale, team and known stack,
@@ -16,6 +21,10 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
   one at a time; the invariant, that gate's own sentence and the
   `system-design-requirements-gate` assertion now say so.
   Output eval `standalone-context-check`.
+
+### Changed
+- Site: the requirements-gate invariant and the hero videos' gate caption say one round of at most
+  four (videos re-rendered).
 
 ## [0.4.1] — 2026-10-17
 
@@ -104,6 +113,7 @@ The release procedure synchronizes `.codex-plugin/plugin.json`, this changelog, 
   `ai`/`quality`, and activation/traversal/output/compression evals. Requirements-gated, decision-first,
   monolith-first by default.
 
+[0.5.0]: https://github.com/gabros20/architecture-skill/releases/tag/v0.5.0
 [0.4.1]: https://github.com/gabros20/architecture-skill/releases/tag/v0.4.1
 [0.4.0]: https://github.com/gabros20/architecture-skill/releases/tag/v0.4.0
 [0.3.0]: https://github.com/gabros20/architecture-skill/releases/tag/v0.3.0
